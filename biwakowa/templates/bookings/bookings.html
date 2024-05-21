@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags bookings_tags %}
+{% load static %}
+
+{% block content %}
+
+{% for booking in bookings %}
+{{booking}}
+{% endfor %}
+<a href="{% url 'bookings_app:add-booking'%}">Dodaj rezerwację</a>
+
+{% endblock %}

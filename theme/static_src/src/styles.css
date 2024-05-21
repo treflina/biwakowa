@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cal-item {
+    @apply flex h-10 w-10 justify-center items-center rounded-md pb-1;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    position: absolute;
+    top: 25%;
+    left: calc(50% - 25px);
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid #0000;
+    border-right-color: #ffa50097;
+    animation: l24 1s infinite linear;
+    z-index: 2000;
+}
+
+.loader:before,
+.loader:after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: inherit;
+    animation: inherit;
+    animation-duration: 2s;
+}
+
+.loader:after {
+    animation-duration: 4s;
+}
+
+@keyframes l24 {
+    100% {
+        transform: rotate(1turn);
+    }
+}
