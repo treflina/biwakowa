@@ -1,12 +1,40 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags bookings_tags %}
+{% load wagtailcore_tags bookings_tags querystring_tag filter_tags %}
 {% load static %}
-
 {% block content %}
+{% include 'includes/admin-nav.html' %}
+<main class="flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
+    <h1 class="text-2xl font-semibold text-center my-6 md:my-10">Lista rezerwacji</h1>
+    <div class="flex flex-wrap justify-center items-center gap-2  mb-3">
+        <a href="{% url 'bookings_app:upcoming-bookings' %}"  class="btn-admin cursor-pointer"
+        {%if upcoming %} style="background-color:#fcd34d">{% endif %}
+            <p>Pokaż nadchodzące</p>
+        </a>
+        <form method="get" hx-get="{% url 'bookings_app:bookings' %}" hx-target="#bookings-table"
+            class="flex flex-wrap justify-center gap-2">
+            {{ filter.form.as_p }}
+            <button type="submit" class="btn-admin">Filtruj</button>
+        </form>
+        <a href="{% url 'bookings_app:bookings' %}"
+            class="cursor-pointer inline-block text-blue-600 font-semibold">
+            <p>Wyczyść filtry</p>
+        </a>
+    </div>
+    </div>
+    <div id="bookings-table"
+        class="table-wrapper overflow-x-auto w-full max-w-full lg:max-w-[1100px] md:max-w-[90%] px-2 ">
+        {% include 'bookings/fragments/booking-table.html' %}
+    </div>
+    <!-- {% include 'includes/pagination.html' %} -->
+</main>
 
-{% for booking in bookings %}
-{{booking}}
-{% endfor %}
-<a href="{% url 'bookings_app:add-booking'%}">Dodaj rezerwację</a>
-
+<script src="{%static 'js/modal.js' %}"></script>
+<script src="https://unpkg.com/htmx.org@1.9.12"
+    integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+    crossorigin="anonymous"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+</script>
 {% endblock %}

@@ -1,0 +1,90 @@
+{% load static %}
+<table  class="bookings-table w-full border-collapse border-2 bg-white rounded-md">
+    <thead class="bg-gray-100">
+        <tr>
+            <th scope="col">Nr</th>
+            <th scope="col">Apart.</th>
+            <th scope="col" class="text-center">Od</th>
+            <th scope="col" class="text-center">Do</th>
+            <th scope="col" class="text-center">Noce</th>
+            <th scope="col" class="text-center">Gość</th>
+            <th scope="col" class="text-align-cl info-cell">Uwagi</th>
+            <th scope="col" class="text-align-cl"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <!-- <td data-title="Lp.">{{ forloop.counter0|add:page_obj.start_index }}.</td> -->
+            <td data-title="Lp.">#{{ booking.id }}</td>
+            <td data-title="Apartament:" class="font-semibold">{{ booking.apartment.name}}</td>
+            <td data-title="Od:">{{ booking.date_from|date:"d.m.y" }}</td>
+            <td data-title="Do:">{{ booking.date_to|date:"d.m.y" }}</td>
+            <td data-title="Do:">{{ booking.nights_num }}</td>
+            <td data-title="Gość:">{% if booking.guest %}{{ booking.guest }}{% endif %}</td>
+            <td data-title="Uwagi:">{% if booking.paid %}
+                <svg class="w-6 h-6 inline-block fill-lime-600">
+                    <use xlink:href="{% static 'img/sprite.svg#credit' %}" />
+                </svg>{% endif %}
+                {% if booking.notes %}
+                (...) {% endif %}
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <a href="{% url 'bookings_app:booking' booking.id %}" class="">
+                        <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
+                            <use xlink:href="{% static 'img/sprite.svg#search' %}" />
+                        </svg>
+                    </A>
+                    <a href="{%url 'bookings_app:update-booking' booking.id%}" role="button" class="mx-1 fill-gray-700">
+                        <svg class="w-6 h-6 inline-block">
+                            <use xlink:href="{% static 'img/sprite.svg#pencil' %}" />
+                        </svg>
+                    </a>
+                    <button type="button" class="openModal" data-toggle="modal"
+                        data-target="#deleteModal-{{booking.id}}">
+                        <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
+                            <use xlink:href="{% static 'img/sprite.svg#trash' %}" />
+                        </svg>
+                    </button>
+
+                    <!-- Delete modal -->
+                    <div class="modal hide" id="deleteModal-{{booking.id}}" tabindex="-1"
+                        aria-labelledby="deleteModalLabel{{booking.id}}" aria-hidden="true">
+                        <div class="modal-dialog modal__content">
+                            <div class="modal-content">
+                                <div
+                                    class="flex justify-between items-center p-2 bg-gradient-to-r to-amber-300  from-gray-300">
+                                    <p class="modal-title font-semibold  uppercase text-md"
+                                        id="deleteModalLabel{{booking.id}}">Ostrzeżenie</p>
+                                    <button type="button" class="close text-2xl" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-bod px-2 py-4">
+                                    <p>Czy na pewno chcesz usunąć rezerwację
+                                        <br>w Apartamencie {{booking.apartment.name}}
+                                        <br>od {{booking.date_from|date:"d.m.y"}} do
+                                        {{booking.date_to|date:"d.m.y"}}?
+                                    </p>
+                                </div>
+                                <div class="modal-footer flex justify-center gap-3 px-2 py-4">
+                                    <button type="button" class="close btn-admin"
+                                        data-dismiss="modal">Wróć</button>
+                                    <form method="POST"
+                                        action="{% url 'bookings_app:delete-booking' booking.id %}">
+                                        {%csrf_token%}
+                                        <button type="submit" class="btn-admin">Tak, usuń</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include 'includes/pagination.html' %}

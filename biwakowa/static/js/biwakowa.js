@@ -14,6 +14,7 @@ function handleHamburger() {
 }
 
 function toggleHamburger() {
+    console.log("clicked");
     navMenu.classList.toggle("scale-0");
     navMenu.classList.toggle("scale-1");
     navMenu.classList.toggle("opacity-0");
@@ -40,12 +41,14 @@ const closeNav = () => {
 };
 
 // toggle hamburger menu
-hamburgerBtn.addEventListener("click", toggleHamburger);
+hamburgerBtn?.addEventListener("click", toggleHamburger);
 
 //hide navigation when link clicked
-allTargetNavItems.forEach((item) => {
+allTargetNavItems?.forEach((item) => {
     item.addEventListener("click", closeNav);
 });
+
+// calendars
 
 const calendars = document.querySelectorAll(".calendar-days");
 const firstDayData = document.getElementById("firstDay")?.textContent;

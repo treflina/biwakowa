@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.forms import (
     ModelForm,
     TextInput,
@@ -12,7 +13,9 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Booking
 
-class BookingForm(ModelForm):
+
+
+class BookingBaseForm(ModelForm):
     class Meta:
        model = Booking
        fields = [
@@ -72,3 +75,32 @@ class BookingForm(ModelForm):
                 }),
 
         }
+
+
+class BookingForm(BookingBaseForm):
+
+    def clean(self):
+        super().clean()
+        date_from = self.cleaned_data.get("date_from")
+        date_to = self.cleaned_data.get("date_to")
+        apartment = self.cleaned_data.get("apartment")
+        if date_from >= date_to:
+            raise ValidationError(_("Start date cannot be later or the same as end date"))
+        qs = Booking.objects.filter(
+            apartment__id=apartment.id
+        ).filter(date_to__gte=date_from, date_from__lte=date_to
+                 ).exists()
+        if qs:
+        # if any(set(x.booking_dates_list)&set(self.booking_dates_list) for x in qs):
+            raise ValidationError(_("There is already a booking in the given date range."))
+
+
+class BookingUpdateForm(BookingBaseForm):
+
+    def clean(self):
+        super().clean()
+        date_from = self.cleaned_data.get("date_from")
+        date_to = self.cleaned_data.get("date_to")
+        # apartment = self.cleaned_data.get("apartment")
+        if date_from >= date_to:
+            raise ValidationError(_("Start date cannot be later or the same as end date"))

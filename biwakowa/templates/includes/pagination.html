@@ -1,0 +1,69 @@
+{% load filter_tags querystring_tag %}
+{% if is_paginated %}
+<nav aria-label="Paginacja" class="my-4" style="z-index:20;">
+    <ul class="pagination flex justify-center gap-1">
+        {% if page_obj.has_previous %}
+        <li class="px-2 py-1 border-2">
+            <div class="cursor-pointer"
+                role="link"
+                tabindex="0"
+                hx-get="?{% param_replace page=page_obj.previous_page_number %}"
+                hx-trigger="click"
+                hx-target="#bookings-table"
+                hx-push-url="true"
+                hx-swap="innerHTML"
+            ><p>Poprzednia</p></div>
+        </li>
+        {% else %}
+        <li class="px-2 py-1 border-2 text-gray-500">
+            <a class="" href="#">Poprzednia</a>
+        </li>
+        {% endif %}
+        {% if page_obj.has_previous %}
+        <li class="px-2 py-1 border-2">
+            <div class="cursor-pointer"
+            role="link"
+            tabindex="0"
+            hx-get="?{% param_replace page=page_obj.previous_page_number %}"
+            hx-trigger="click"
+            hx-target="#bookings-table"
+            hx-push-url="true"
+            hx-swap="innerHTML"><p>{{page_obj.previous_page_number}}</p></div>
+        </li>
+        {% endif %}
+        <li class="px-2 py-1 border-2 border-gray-400 bg-amber-300" aria-current="page">
+            <span class="" style="border-color: green;">{{page_obj.number}}</span>
+        </li>
+        {% if page_obj.has_next %}
+        <li class="px-2 py-1 border-2">
+            <div class="cursor-pointer"
+            role="link"
+            tabindex="0"
+            hx-get="?{% param_replace page=page_obj.next_page_number %}"
+            hx-trigger="click"
+            hx-target="#bookings-table"
+            hx-swap="innerHTML"
+            hx-push-url="true"
+            ><p>{{page_obj.next_page_number}}</p></div>
+        </li>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <li class="px-2 py-1 border-2">
+            <div class="cursor-pointer"
+                role="link"
+                tabindex="0"
+                hx-get="?{% param_replace page=page_obj.next_page_number %}"
+                hx-trigger="click"
+                hx-target="#bookings-table"
+                hx-swap="innerHTML"
+                hx-push-url="true"
+            ><p>Następna</p></div>
+        </li>
+        {% else %}
+        <li class="px-2 py-1 border-2 text-gray-400">
+            <a class="page-link" href="#">Następna</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
