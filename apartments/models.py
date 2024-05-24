@@ -5,6 +5,7 @@ from calendar import Calendar
 from django.db import models
 from django.utils.translation import gettext as _
 
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 
@@ -35,6 +36,32 @@ class ApartmentPage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + []
     ajax_template = "includes/calendars.html"
 
+    apartment1 = models.ForeignKey(
+        Apartment,
+        on_delete=models.PROTECT,
+        related_name="apartment1",
+        null=True,
+        blank=True
+        )
+    apartment2 = models.ForeignKey(
+        Apartment,
+        on_delete=models.PROTECT,
+        related_name="apartment2",
+        null=True,
+        blank=True
+        )
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("apartment1"),
+                FieldPanel("apartment2"),
+            ],
+            heading="Apartamenty",
+        ),
+
+    ]
+
     @path('')
     @path('calendar/')
     @path('calendar/<int:year>/<int:month>/')
@@ -59,14 +86,14 @@ class ApartmentPage(RoutablePageMixin, Page):
 #TODO: filter by name defined in choicefield, add name to context
         ap1_bookings_list = (
             Booking.objects
-                .filter(apartment__name="1")
+                .filter(apartment__name=self.apartment1)
                 .filter(date_to__gte=date(year,month,1))
                 .filter(date_from__lt=date(year,next_month,1))
             )
 
         ap2_bookings_list = (
             Booking.objects
-                .filter(apartment__name="2")
+                .filter(apartment__name=self.apartment2)
                 .filter(date_to__gte=date(year,month,1))
                 .filter(date_from__lt=date(year,next_month,1))
             )
@@ -90,7 +117,6 @@ class ApartmentPage(RoutablePageMixin, Page):
             dep_arr_dates = list(set(arrival_dates)&set(departure_dates))
             if dep_arr_dates:
                 dates.append(*dep_arr_dates)
-            print(dates, arrival_dates, departure_dates)
             return dates, arrival_dates, departure_dates
 
         ap1_dates, ap1_arr_dates, ap1_dep_dates = booking_dates_assignment(ap1_bookings_list)
@@ -113,5 +139,7 @@ class ApartmentPage(RoutablePageMixin, Page):
             'b2_dates': ap2_dates,
             'b2_arrival_dates': ap2_arr_dates,
             'b2_departure_dates': ap2_dep_dates,
+            'b1_name': self.apartment1.name,
+            'b2_name': self.apartment2.name
         })
 

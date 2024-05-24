@@ -6,15 +6,15 @@
         <use xlink:href="{% static 'img/sprite.svg#list' %}" />
     </svg>Rezerwacje</a>
 </li>
-<li><a href="{% slugurl 'apartament-typu-midi' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-6 inline-block">
-        <use xlink:href="{% static 'img/sprite.svg#calendar' %}" />
-    </svg>
-    Kalendarz</a></li>
 <li><a href="{% url 'bookings_app:add-booking' %}" class="menu-close flex items-center gap-1">
     <svg class="w-6 h-6 inline-block">
         <use xlink:href="{% static 'img/sprite.svg#plus' %}" />
     </svg>Dodaj</a></li>
+<li><a href="{% slugurl 'midi' %}" class="menu-close flex items-center gap-1">
+    <svg class="w-6 h-6 inline-block">
+        <use xlink:href="{% static 'img/sprite.svg#calendar' %}" />
+    </svg>
+    Kalendarz</a></li>
 <li>
     <a href="{% url 'users_app:logout' %}" class="menu-close flex items-center gap-1">
     <svg class="w-6 h-6 inline-block">
