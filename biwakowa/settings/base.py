@@ -207,3 +207,35 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+LOGGING = {
+    "version": 1,
+    "loggers": {
+        "django": {
+            "handlers": ["logfile"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+    },
+    "handlers": {
+        "logfile": {
+            "level": "WARNING",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 10*1024*1024,
+            "backupCount": 3,
+            "filename": "django.log",
+            "formatter": "verbose",
+            "encoding": "utf-8"
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+}

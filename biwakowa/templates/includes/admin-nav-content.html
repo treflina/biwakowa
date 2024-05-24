@@ -1,5 +1,6 @@
 {% load wagtailcore_tags bookings_tags %}
 {% load static %}
+{% if request.user.is_authenticated %}
 <li><a href="{% url 'bookings_app:bookings' %}" class="menu-close flex items-center gap-1">
     <svg class="w-6 h-8 inline-block">
         <use xlink:href="{% static 'img/sprite.svg#list' %}" />
@@ -21,3 +22,12 @@
 </svg>
 <span>Wyloguj</span></a>
 </li>
+{% else %}
+<li>
+    <a href="{% url 'users_app:user-login' %}" class="menu-close flex items-center gap-1">
+    <svg class="w-6 h-6 inline-block">
+    <use xlink:href="{% static 'img/sprite.svg#logout' %}" />
+</svg>
+<span>Zaloguj</span></a>
+</li>
+{% endif %}

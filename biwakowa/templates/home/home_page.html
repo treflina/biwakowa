@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags bookings_tags i18n %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/admin-nav.html' %}
+<main class="flex justify-center items-center w-full min-h-[calc(100dvh-80px)]">
+    {% if page.banner_image %}
+    {% image page.banner_image width-600 %}
+    {% endif %}
+</main>
+{% endblock %}
