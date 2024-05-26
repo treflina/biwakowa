@@ -1,6 +1,8 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
+from .managers import BookingManager
+
 
 
 class Booking(models.Model):
@@ -14,6 +16,8 @@ class Booking(models.Model):
     total_price = models.DecimalField(_("total price"), decimal_places=2, max_digits=7, null=True, blank=True)
     paid = models.BooleanField(_("paid"), default=False)
     notes = models.TextField(_("additional information"), null=True, blank=True)
+
+    objects = BookingManager()
 
     def __str__(self):
         return f"{self.apartment.name}: {self.date_from} - {self.date_to}"

@@ -1,8 +1,9 @@
+import calendar
 from collections import Counter
 from datetime import date, timedelta
-import calendar
-from calendar import Calendar
+
 from django.db import models
+from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
@@ -10,6 +11,8 @@ from wagtail.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 
 from bookings.models import Booking
+from .forms import OnlineBookingForm
+from .utils import booking_dates_assignment
 
 
 APARTMENT_TYPES = [
@@ -34,7 +37,7 @@ class ApartmentPage(RoutablePageMixin, Page):
 
     template = "apartments/apartment.html"
     content_panels = Page.content_panels + []
-    ajax_template = "includes/calendars.html"
+    ajax_template = "apartments/fragments/booking-calendar.html"
 
     apartment1 = models.ForeignKey(
         Apartment,
@@ -62,10 +65,38 @@ class ApartmentPage(RoutablePageMixin, Page):
 
     ]
 
+
+    # def serve(self, request, *args, **kwargs):
+
+    #     if request.method == "POST":
+    #         form = OnlineBookingForm(request.POST)
+    #         if form.is_valid():
+    #             booking = form.save()
+    #             print(booking)
+    #     else:
+    #         form = OnlineBookingForm()
+    #     return render(request, 'apartments/apartment.html', {
+    #         'page': self,
+    #         'form': form,
+    #     })
+
+
     @path('')
     @path('calendar/')
     @path('calendar/<int:year>/<int:month>/')
     def calendar(self, request, year=None, month=None):
+
+        if request.method == "POST":
+            print(request)
+            form = OnlineBookingForm(request.POST)
+            if form.is_valid():
+                print("yes")
+            else:
+                print(form.errors)
+
+        else:
+            form = OnlineBookingForm()
+
         if month is None:
             month = date.today().month
         if year is None:
@@ -85,45 +116,25 @@ class ApartmentPage(RoutablePageMixin, Page):
 
 #TODO: filter by name defined in choicefield, add name to context
         ap1_bookings_list = (
-            Booking.objects
-                .filter(apartment__name=self.apartment1)
-                .filter(date_to__gte=date(year,month,1))
-                .filter(date_from__lt=date(year,next_month,1))
-            )
+            Booking.objects.bookings_per_month(
+                self.apartment1, year, month, next_month
+                ))
 
         ap2_bookings_list = (
-            Booking.objects
-                .filter(apartment__name=self.apartment2)
-                .filter(date_to__gte=date(year,month,1))
-                .filter(date_from__lt=date(year,next_month,1))
-            )
+           Booking.objects.bookings_per_month(
+                self.apartment2, year, month, next_month
+                ))
+
+        ap1_dates, ap1_arr_dates, ap1_dep_dates = booking_dates_assignment(ap1_bookings_list, year, month)
+        ap2_dates, ap2_arr_dates, ap2_dep_dates = booking_dates_assignment(ap2_bookings_list, year, month)
 
 
-        def booking_dates_assignment(bookings_list):
-            c=Calendar()
+        if request.htmx and not request.htmx.history_restore_request:
+            templ = "apartments/fragments/booking-calendar.html"
+        else:
+            templ= "apartments/apartment.html"
 
-            dates = []
-            arrival_dates = []
-            departure_dates = []
-            for d in c.itermonthdates(year, month):
-                for booking in bookings_list:
-                    if d.month==month and d > booking.date_from and d < booking.date_to:
-                        dates.append(d.day)
-                    elif d.month==month and d == booking.date_from:
-                        arrival_dates.append(d.day)
-                    elif d.month==month and d == booking.date_to:
-                        departure_dates.append(d.day)
-
-            dep_arr_dates = list(set(arrival_dates)&set(departure_dates))
-            if dep_arr_dates:
-                dates.append(*dep_arr_dates)
-            return dates, arrival_dates, departure_dates
-
-        ap1_dates, ap1_arr_dates, ap1_dep_dates = booking_dates_assignment(ap1_bookings_list)
-        ap2_dates, ap2_arr_dates, ap2_dep_dates = booking_dates_assignment(ap2_bookings_list)
-
-
-        return self.render(request, context_overrides={
+        return self.render(request, template=templ, context_overrides={
             'year': year,
             'month': month,
             'displayed_month': date(year,month,1),
@@ -140,6 +151,11 @@ class ApartmentPage(RoutablePageMixin, Page):
             'b2_arrival_dates': ap2_arr_dates,
             'b2_departure_dates': ap2_dep_dates,
             'b1_name': self.apartment1.name,
-            'b2_name': self.apartment2.name
+            'b2_name': self.apartment2.name,
+            'form': form
         })
+
+
+
+
 

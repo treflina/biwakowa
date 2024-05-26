@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.widgets import DateInput, Select
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy, reverse
 from django.utils.timezone import datetime
 from django.views.generic import CreateView, UpdateView, DetailView
@@ -164,3 +164,12 @@ def delete_booking(request, pk):
     """Deletes booking."""
     Booking.objects.get(id=pk).delete()
     return HttpResponseRedirect(reverse("bookings_app:bookings"))
+
+
+def onlinebooking(request):
+
+    if request.method == "POST":
+        pass
+
+
+    return render(request, "bookings/book.html")

@@ -1,8 +1,13 @@
+import datetime
+
 from django.core.exceptions import ValidationError
 from django.forms import (
+    Form,
     ModelForm,
     TextInput,
     EmailInput,
+    IntegerField,
+    DateField,
     DateInput,
     NumberInput,
     CheckboxInput,
@@ -10,6 +15,7 @@ from django.forms import (
     Textarea
 )
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import datetime
 
 from .models import Booking
 
@@ -104,3 +110,8 @@ class BookingUpdateForm(BookingBaseForm):
         # apartment = self.cleaned_data.get("apartment")
         if date_from >= date_to:
             raise ValidationError(_("Start date cannot be later or the same as end date"))
+
+
+
+
+

@@ -48,16 +48,6 @@ allTargetNavItems?.forEach((item) => {
     item.addEventListener("click", closeNav);
 });
 
-// calendars
-
-const calendars = document.querySelectorAll(".calendar-days");
-const firstDayData = document.getElementById("firstDay")?.textContent;
-const firstDayNum = firstDayData && JSON.parse(firstDayData);
-
-calendars?.forEach((cal) => {
-    let firstLiTag = cal.querySelector("li");
-    firstLiTag.style.gridColumnStart = firstDayNum + 1;
-});
 
 // document.addEventListener("DOMContentLoaded", function (event) {
 //     const calendarsSection = document.getElementById("calendars");
