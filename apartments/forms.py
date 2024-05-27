@@ -8,7 +8,6 @@ from django.forms import (
     DateInput
     )
 
-
 def get_nearest_sunday():
     today =  datetime.date.today()
     idx = (today.weekday() + 1) % 7
@@ -75,3 +74,4 @@ class OnlineBookingForm(Form):
                         planowanym pobytem, minimalna długość rezerwacji wynosi 3 doby.")
             if (departure - arrival).days < 3:
                 raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
+

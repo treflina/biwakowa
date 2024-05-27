@@ -4,6 +4,19 @@ from django.db import models
 from .managers import BookingManager
 
 
+class SearchedBooking(models.Model):
+
+    apartment = models.ForeignKey("apartments.Apartment", on_delete=models.PROTECT)
+    date_from = models.DateField()
+    date_to = models.DateField()
+
+    def __str__(self):
+        return f"{self.apartment.name}: {self.date_from} - {self.date_to}"
+
+    @property
+    def nights_num(self):
+        return (self.date_to - self.date_from).days
+
 
 class Booking(models.Model):
 
@@ -16,6 +29,7 @@ class Booking(models.Model):
     total_price = models.DecimalField(_("total price"), decimal_places=2, max_digits=7, null=True, blank=True)
     paid = models.BooleanField(_("paid"), default=False)
     notes = models.TextField(_("additional information"), null=True, blank=True)
+    stripe_checkout_id = models.CharField(max_length=500, null=True, blank=True)
 
     objects = BookingManager()
 

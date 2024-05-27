@@ -83,3 +83,4 @@ ENV/
 env.bak/
 venv.bak/
 
+users/migrations/0001_initial.py

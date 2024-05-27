@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags bookings_tags %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/admin-nav.html' %}
+<main>
+{{arrival}}
+{{departure}}
+
+<form action="{% url 'bookings_app:checkout' %}" method="post">
+    {% csrf_token %}
+    <label for="apartment">Apartament {{booking.apartment.type}} nr</label>
+    <input type="text" id="apartment" name="apartment" value="{{booking.apartment.name}}" readonly><br><br>
+    <label for="arrival">Data zameldowania:</label>
+    <input type="text" id="arrival" name="arrival" value="{{booking.date_from}}" readonly><br><br>
+    <label for="departure">Data wymeldowania:</label>
+    <input type="text" id="departure" name="departure" value="{{booking.date_to}}" readonly><br><br>
+    <label for="nights">Ilość nocy:</label>
+    <input type="text" id="nights" name="nights" value="{{booking.nights_num}}" readonly><br><br>
+    <label for="name">Imię i nazwisko:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="phone">Telefon:</label>
+    <input type="text" id="phone" name="phone" required>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+    <input type="hidden" name="booking" value="{{booking.id}}">
+
+    <p><button type="submit">Przejdź do płatności</button></p>
+
+  </form>
+</main>
+
+{% endblock %}

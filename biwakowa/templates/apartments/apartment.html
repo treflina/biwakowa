@@ -30,7 +30,7 @@
         {% endif %}
 </main>
 
-<form method="POST">{% csrf_token %}
+<form method="POST" class="w-full flex flex-col justify-center items-center">{%csrf_token%}
     <!-- <ul>
         {% for field in form %}
         {% if field.errors %}
@@ -43,10 +43,17 @@
     <!-- {% if form.non_field_errors %}
     {{ form.non_field_errors }}
     {% endif %} -->
-
-    {{form.as_p}}
-    <button type="submit">Wyślij</button>
-
+    <div class="flex gap-2 flex-wrap mb-4">
+        {{form.as_p}}
+        <button type="submit" class="btn-admin">Zarezerwuj</button>
+    </div>
+    {% if messages %}
+    <ul class="messages mb-4">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
 </form>
 
 <script src="https://unpkg.com/htmx.org@1.9.12"

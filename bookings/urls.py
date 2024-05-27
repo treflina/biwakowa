@@ -6,7 +6,11 @@ from .views import (
     BookingsListView,
     BookingUpdateView,
     UpcomingBookingsListView,
-    delete_booking
+    delete_booking,
+    # onlinebooking,
+    success,
+    cancel,
+    create_checkout_session
 )
 
 app_name = "bookings_app"
@@ -34,4 +38,8 @@ urlpatterns = [
         name="update-booking",
     ),
     path("rezerwacje/<pk>/", BookingDetailView.as_view(), name="booking"),
+    # path("rezerwacja/", onlinebooking, name="onlinebooking"),
+    path("rezerwacja/sukces/", success, name="success"),
+    path("rezerwacja/anulowane/", cancel, name="cancel"),
+    path("rezerwacja/platnosci/", create_checkout_session, name="checkout"),
 ]

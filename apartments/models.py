@@ -2,15 +2,17 @@ import calendar
 from collections import Counter
 from datetime import date, timedelta
 
+from django.contrib import messages
 from django.db import models
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_path
 
-from bookings.models import Booking
+from bookings.models import Booking, SearchedBooking
 from .forms import OnlineBookingForm
 from .utils import booking_dates_assignment
 
@@ -86,17 +88,6 @@ class ApartmentPage(RoutablePageMixin, Page):
     @path('calendar/<int:year>/<int:month>/')
     def calendar(self, request, year=None, month=None):
 
-        if request.method == "POST":
-            print(request)
-            form = OnlineBookingForm(request.POST)
-            if form.is_valid():
-                print("yes")
-            else:
-                print(form.errors)
-
-        else:
-            form = OnlineBookingForm()
-
         if month is None:
             month = date.today().month
         if year is None:
@@ -117,12 +108,12 @@ class ApartmentPage(RoutablePageMixin, Page):
 #TODO: filter by name defined in choicefield, add name to context
         ap1_bookings_list = (
             Booking.objects.bookings_per_month(
-                self.apartment1, year, month, next_month
+                self.apartment1.name, year, month, next_month
                 ))
 
         ap2_bookings_list = (
            Booking.objects.bookings_per_month(
-                self.apartment2, year, month, next_month
+                self.apartment2.name, year, month, next_month
                 ))
 
         ap1_dates, ap1_arr_dates, ap1_dep_dates = booking_dates_assignment(ap1_bookings_list, year, month)
@@ -134,7 +125,29 @@ class ApartmentPage(RoutablePageMixin, Page):
         else:
             templ= "apartments/apartment.html"
 
-        return self.render(request, template=templ, context_overrides={
+
+        form = OnlineBookingForm()
+        # if request.GET.get("arrival") and request.GET.get("departure"):
+        #     form = OnlineBookingForm(request.GET)
+        #     if form.is_valid():
+        #         data = form.cleaned_data
+
+        #         if Booking.objects.filter(
+        #             Q(apartment__name=self.apartment1.name)
+        #             &Q(date_from__lte=data["arrival"])
+        #             &Q(date_to__lt=data["departure"])
+        #             ).exists() or Booking.objects.filter(
+        #             Q(apartment__name=self.apartment2.name)
+        #             &Q(date_from__lte=["arrival"])
+        #             &Q(date_to__lt=data["departure"])
+        #             ).exists():
+        #                 messages.error(request, "Przykro nam, ale nie mamy wolnych apartamentów w podanym terminie.")
+        #         else:
+        #             messages.success("Dostępne")
+
+
+
+        context_overrides = {
             'year': year,
             'month': month,
             'displayed_month': date(year,month,1),
@@ -153,7 +166,47 @@ class ApartmentPage(RoutablePageMixin, Page):
             'b1_name': self.apartment1.name,
             'b2_name': self.apartment2.name,
             'form': form
-        })
+        }
+
+        # ar = request.GET.get("arrival", None)
+        # print(ar)
+
+        if request.method == "POST":
+            form = OnlineBookingForm(request.POST)
+            if form.is_valid():
+                arrival = form.cleaned_data["arrival"]
+                departure = form.cleaned_data["departure"]
+                num_nights = (departure - arrival).days
+                if not Booking.objects.filter(
+                    Q(apartment__id=self.apartment1.id)
+                    &Q(date_from__lte=arrival)
+                    &Q(date_to__lt=departure)
+                    ).exists():
+                        new_booking = SearchedBooking(apartment=self.apartment1, date_from=arrival, date_to=departure)
+                        new_booking.save()
+                        return render(request, 'bookings/onlinebooking.html', kwargs={"booking": new_booking})
+                elif not Booking.objects.filter(
+                    Q(apartment__id=self.apartment2.id)
+                    &Q(date_from__lte=departure)
+                    &Q(date_to__gt=arrival)
+                    ).exists():
+                        new_booking = SearchedBooking(apartment=self.apartment2, date_from=arrival, date_to=departure)
+                        new_booking.save()
+                        return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
+
+                else:
+                    print("booked", Booking.objects.filter(
+                            Q(apartment__id=self.apartment1.id)
+                            &Q(date_from__lte=departure)
+                            &Q(date_to__gt=arrival))
+                            )
+                    print(Booking.objects.filter(
+                             Q(apartment__id=self.apartment2.id)
+                            &Q(date_from__lte=departure)
+                            &Q(date_to__gt=arrival)))
+                    messages.error(request, "Przykro nam, ale nie mamy wolnych apartamentów w podanym terminie.")
+
+        return self.render(request, template=templ, context_overrides=context_overrides)
 
 
 

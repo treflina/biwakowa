@@ -133,6 +133,8 @@ USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
+BASE_URL = env("BASE_URL")
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -207,6 +209,10 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY_TEST")
+
 
 LOGGING = {
     "version": 1,
