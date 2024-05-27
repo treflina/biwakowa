@@ -39,7 +39,7 @@ urlpatterns = [
     ),
     path("rezerwacje/<pk>/", BookingDetailView.as_view(), name="booking"),
     # path("rezerwacja/", onlinebooking, name="onlinebooking"),
-    path("rezerwacja/sukces/", success, name="success"),
+    path("success/", success, name="success"),
     path("rezerwacja/anulowane/", cancel, name="cancel"),
     path("rezerwacja/platnosci/", create_checkout_session, name="checkout"),
 ]

@@ -179,12 +179,12 @@ class ApartmentPage(RoutablePageMixin, Page):
                 num_nights = (departure - arrival).days
                 if not Booking.objects.filter(
                     Q(apartment__id=self.apartment1.id)
-                    &Q(date_from__lte=arrival)
-                    &Q(date_to__lt=departure)
+                    &Q(date_from__lte=departure)
+                    &Q(date_to__gt=arrival)
                     ).exists():
                         new_booking = SearchedBooking(apartment=self.apartment1, date_from=arrival, date_to=departure)
                         new_booking.save()
-                        return render(request, 'bookings/onlinebooking.html', kwargs={"booking": new_booking})
+                        return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
                 elif not Booking.objects.filter(
                     Q(apartment__id=self.apartment2.id)
                     &Q(date_from__lte=departure)

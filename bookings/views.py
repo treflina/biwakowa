@@ -1,3 +1,4 @@
+import logging
 import time
 import stripe
 import django_filters
@@ -21,7 +22,7 @@ from apartments.models import Apartment
 from .forms import BookingForm, BookingUpdateForm
 from .models import Booking, SearchedBooking
 
-
+logger = logging.getLogger("django")
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class BookingsFilter(django_filters.FilterSet):
@@ -229,7 +230,6 @@ def success(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     checkout_session_id = request.GET.get('session_id', None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
-    customer = stripe.Customer.retrieve(session.customer)
 
     return render(request, "bookings/success.html")
 
@@ -240,6 +240,7 @@ def cancel(request):
 
 @csrf_exempt
 def stripe_webhook(request):
+    logger.error("Webhook called")
     stripe.api_key = settings.STRIPE_SECRET_KEY
     time.sleep(10)
     payload = request.body
@@ -257,8 +258,10 @@ def stripe_webhook(request):
         session = event['data']['object']
         session_id = session.get('id', None)
         time.sleep(15)
+        logger.error("constructed")
 
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         booking.paid = True
         booking.save()
+
         return HttpResponse(status=200)
