@@ -213,6 +213,7 @@ def create_checkout_session(request):
                 ],
                 customer_email=email,
                 mode='payment',
+                expires_at=int(time.time() + 1800),
                 success_url=settings.BASE_URL + "/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=request.build_absolute_uri(reverse("bookings_app:cancel")),
             )
@@ -244,64 +245,46 @@ def cancel(request):
     return render(request, "bookings/cancel.html")
 
 
+
+
 @csrf_exempt
-def stripe_webhook(request):
+def my_webhook_view(request):
     payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
 
     try:
-        event = stripe.Event.construct_from(
-        json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
     except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
         return HttpResponse(status=400)
 
-
     if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        session_id = session.get('id', None)
-        time.sleep(15)
-
-        booking = Booking.objects.get(stripe_checkout_id=session_id)
-        booking.paid = True
-        booking.save()
-
-
-
-    if event['type'] == 'checkout.session.completed':
+        # Retrieve the session.
         session = event['data']['object']
         session_id = session.get('id', None)
         time.sleep(15)
         booking = Booking.objects.get(stripe_checkout_id=session_id)
-
         if session.payment_status == "paid":
-            booking.stripe_transaction_status = "paid"
+            booking.stripe_transaction_status = "success"
             booking.paid = True
             booking.save()
-
-        else:
-            booking.stripe_transaction_status = "pending"
-            booking.save()
-
-    elif event['type'] == 'checkout.session.async_payment_succeeded':
+    elif event['type'] == 'checkout.session.expired':
         session = event['data']['object']
         session_id = session.get('id', None)
-        booking = Booking.objects.get(stripe_checkout_id=session_id)
-        booking.stripe_transaction_status = "paid"
-        booking.paid = True
-        booking.save()
-
-    elif event['type'] == 'checkout.session.async_payment_failed':
-        session = event['data']['object']
-        session_id = session.get('id', None)
+        time.sleep(15)
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         booking.delete()
 
-        #TODO SEND EMAIL
-
-    else:
-        logger.warning('Unhandled event type {}'.format(event.type))
+    # Passed signature verification
     return HttpResponse(status=200)
+
+
 
 
 

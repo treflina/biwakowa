@@ -28,7 +28,7 @@
                     Cena: </span>{% if booking.total_price %} {{booking.total_price}} zł{% endif%}
         </p>
         <p><span class="font-semibold">Zapłacone: </span> {% if booking.paid %}TAK{% else %} NIE {% endif %}</p>
-        <p><span class="font-semibold">Nr płatności online: </span> {% if booking.stripe_session_id %}{{ booking.stripe_session_id}}{% else %} - {% endif %}</p>
+        <p><span class="font-semibold">Nr płatności online: </span> {% if booking.stripe_checkout_id %}{{ booking.stripe_checkout_id}}{% else %} - {% endif %}</p>
         {% if booking.stripe_session_id %}
         <p><span class="font-semibold":>Status transakcji: </span> {{ booking.stripe_transaction_status}}</p>
         {% endif %}
