@@ -163,11 +163,7 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
             apartment__id=self.get_object().apartment.id
         ).filter(Q(date_to__gt=start)&Q(date_from__lt=end)
                  ).exclude(
-                    Q(id=self.get_object().id)).exclude(
-                    Q(stripe_checkout_id__isnull=False)
-                    &(Q(stripe_transaction_status="unpaid")
-                    |Q(stripe_transaction_status="failed"))
-        ).exists()
+                    Q(id=self.get_object().id)).exists()
         if qs:
             form.add_error(None, _("There is already a booking in the given date range."))
             return self.form_invalid(form)
@@ -248,7 +244,7 @@ def cancel(request):
 
 
 @csrf_exempt
-def my_webhook_view(request):
+def stripe_webhook(request):
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None

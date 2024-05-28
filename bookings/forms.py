@@ -94,12 +94,9 @@ class BookingForm(BookingBaseForm):
         if date_from >= date_to:
             raise ValidationError(_("Start date cannot be later or the same as end date"))
         qs = Booking.objects.filter(
-            apartment__id=apartment.id
-        ).filter(Q(date_to__gt=date_from)& Q(date_from__lt=date_to)
-                 ).exclude(
-            Q(stripe_checkout_id__isnull=False)
-                  &(Q(stripe_transaction_status="unpaid")
-                    |Q(stripe_transaction_status="failed"))
+            Q(apartment__id=apartment.id)
+            &Q(date_to__gt=date_from)
+            &Q(date_from__lt=date_to)
         ).exists()
         if qs:
             raise ValidationError(_("There is already a booking in the given date range."))
