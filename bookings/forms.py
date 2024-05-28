@@ -14,6 +14,7 @@ from django.forms import (
     Select,
     Textarea
 )
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import datetime
 
@@ -94,10 +95,13 @@ class BookingForm(BookingBaseForm):
             raise ValidationError(_("Start date cannot be later or the same as end date"))
         qs = Booking.objects.filter(
             apartment__id=apartment.id
-        ).filter(date_to__gte=date_from, date_from__lte=date_to
-                 ).exists()
+        ).filter(Q(date_to__gt=date_from)& Q(date_from__lt=date_to)
+                 ).exclude(
+            Q(stripe_checkout_id__isnull=False)
+                  &(Q(stripe_transaction_status="unpaid")
+                    |Q(stripe_transaction_status="failed"))
+        ).exists()
         if qs:
-        # if any(set(x.booking_dates_list)&set(self.booking_dates_list) for x in qs):
             raise ValidationError(_("There is already a booking in the given date range."))
 
 

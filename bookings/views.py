@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 import stripe
@@ -8,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.db.models import Q
 from django.forms.widgets import DateInput, Select
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -159,9 +161,13 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         end = form.cleaned_data["date_to"]
         qs = Booking.objects.filter(
             apartment__id=self.get_object().apartment.id
-        ).filter(
-            date_to__gte=start, date_from__lte=end
-                 ).exclude(id=self.get_object().id).exists()
+        ).filter(Q(date_to__gt=start)&Q(date_from__lt=end)
+                 ).exclude(
+                    Q(id=self.get_object().id)).exclude(
+                    Q(stripe_checkout_id__isnull=False)
+                    &(Q(stripe_transaction_status="unpaid")
+                    |Q(stripe_transaction_status="failed"))
+        ).exists()
         if qs:
             form.add_error(None, _("There is already a booking in the given date range."))
             return self.form_invalid(form)
@@ -240,28 +246,62 @@ def cancel(request):
 
 @csrf_exempt
 def stripe_webhook(request):
-    logger.error("Webhook called")
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    time.sleep(10)
     payload = request.body
-    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
+
     try:
-        event = stripe.Webhook.construct_event(
-			payload, signature_header, settings.STRIPE_WEBHOOK_SECRET_TEST
-		)
+        event = stripe.Event.construct_from(
+        json.loads(payload), stripe.api_key
+        )
     except ValueError as e:
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        return HttpResponse(status=400)
+
+
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         session_id = session.get('id', None)
         time.sleep(15)
-        logger.error("constructed")
 
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         booking.paid = True
         booking.save()
 
-        return HttpResponse(status=200)
+
+
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        time.sleep(15)
+        booking = Booking.objects.get(stripe_checkout_id=session_id)
+
+        if session.payment_status == "paid":
+            booking.stripe_transaction_status = "paid"
+            booking.paid = True
+            booking.save()
+
+        else:
+            booking.stripe_transaction_status = "pending"
+            booking.save()
+
+    elif event['type'] == 'checkout.session.async_payment_succeeded':
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        booking = Booking.objects.get(stripe_checkout_id=session_id)
+        booking.stripe_transaction_status = "paid"
+        booking.paid = True
+        booking.save()
+
+    elif event['type'] == 'checkout.session.async_payment_failed':
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        booking = Booking.objects.get(stripe_checkout_id=session_id)
+        booking.delete()
+
+        #TODO SEND EMAIL
+
+    else:
+        logger.warning('Unhandled event type {}'.format(event.type))
+    return HttpResponse(status=200)
+
+
+
