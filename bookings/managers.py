@@ -9,8 +9,11 @@ class BookingManager(models.Manager):
     def bookings_per_month(self, apartment, year, month, next_month):
         result = self.filter(
             Q(apartment__name=apartment)
-            & Q(date_to__gt=date(year,month,1))
-            & Q(date_to__lt=date(year,next_month,1))
+            & ((Q(date_to__gte=date(year,month,1))
+            & Q(date_to__lt=date(year,next_month,1)))
+            | (Q(date_from__gte=date(year,month,1))
+            & Q(date_from__lt=date(year,next_month,1)))
+            )
         )
         # .exclude(
         #     Q(stripe_checkout_id__isnull=False)

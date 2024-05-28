@@ -141,13 +141,13 @@ class ApartmentPage(RoutablePageMixin, Page):
                 departure = form.cleaned_data["departure"]
 
                 if not Booking.objects.bookings_periods(self.apartment1, arrival, departure).exists():
-                        new_booking = SearchedBooking(apartment=self.apartment1, date_from=arrival, date_to=departure)
-                        new_booking.save()
-                        return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
+                    new_booking = SearchedBooking(apartment=self.apartment1, date_from=arrival, date_to=departure)
+                    new_booking.save()
+                    return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
                 elif not Booking.objects.bookings_periods(self.apartment2, arrival, departure).exists():
-                        new_booking = SearchedBooking(apartment=self.apartment2, date_from=arrival, date_to=departure)
-                        new_booking.save()
-                        return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
+                    new_booking = SearchedBooking(apartment=self.apartment2, date_from=arrival, date_to=departure)
+                    new_booking.save()
+                    return render(request, 'bookings/onlinebooking.html', {"booking": new_booking})
 
                 else:
                     print("booked", Booking.objects.bookings_periods(self.apartment1, arrival, departure))
