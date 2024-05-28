@@ -19,22 +19,10 @@ from .utils import booking_dates_assignment
 
 
 APARTMENT_TYPES = [
-    ("midi", "midi"),
-    ("maxi", "maxi"),
+    ("midi", "2-osobowy"),
+    ("maxi", "4-osobowy"),
 ]
 
-
-# class Price(models.Model):
-
-#     start = models.DateField(_("start date"))
-#     end = models.DateField(_("end date"))
-#     price = models.DecimalField(_("price"),max_digits=7, decimal_places=2)
-#     apartment = models.ForeignKey("apartments.Apartment", on_delete=models.CASCADE)
-
-#     def __str__(self):
-#          return f"{self.price} ({self.start} - {self.end})"
-
-#
 class Apartment(models.Model):
 
     name = models.CharField(_("apartment's name"), max_length=50)
@@ -85,6 +73,8 @@ class ApartmentPage(RoutablePageMixin, Page):
     @path('calendar/<int:year>/<int:month>/')
     def calendar(self, request, year=None, month=None):
 
+        form = OnlineBookingForm()
+
         if month is None:
             month = date.today().month
         if year is None:
@@ -122,9 +112,6 @@ class ApartmentPage(RoutablePageMixin, Page):
         else:
             templ= "apartments/apartment.html"
 
-
-        form = OnlineBookingForm()
-
         context_overrides = {
             'year': year,
             'month': month,
@@ -149,9 +136,10 @@ class ApartmentPage(RoutablePageMixin, Page):
         if request.method == "POST":
             form = OnlineBookingForm(request.POST)
             if form.is_valid():
+
                 arrival = form.cleaned_data["arrival"]
                 departure = form.cleaned_data["departure"]
-                num_nights = (departure - arrival).days
+
                 if not Booking.objects.bookings_periods(self.apartment1, arrival, departure).exists():
                         new_booking = SearchedBooking(apartment=self.apartment1, date_from=arrival, date_to=departure)
                         new_booking.save()
@@ -165,5 +153,7 @@ class ApartmentPage(RoutablePageMixin, Page):
                     print("booked", Booking.objects.bookings_periods(self.apartment1, arrival, departure))
                     print(Booking.objects.bookings_periods(self.apartment1, arrival, departure))
                     messages.error(request, "Przykro nam, ale nie mamy wolnych apartamentów w podanym terminie.")
+            else:
+                self.render(request, template=templ, context_overrides=context_overrides.update({"form": form}))
 
         return self.render(request, template=templ, context_overrides=context_overrides)

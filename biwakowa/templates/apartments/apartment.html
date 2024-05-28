@@ -30,7 +30,7 @@
         {% endif %}
 </main>
 
-<form method="POST" class="w-full flex flex-col justify-center items-center">{%csrf_token%}
+<form action="" method="POST" class="w-full flex flex-col justify-center items-center">{%csrf_token%}
     <!-- <ul>
         {% for field in form %}
         {% if field.errors %}
@@ -39,13 +39,19 @@
         {% endfor %}
         {% endif %}
         {% endfor %}
-    </ul> -->
-    <!-- {% if form.non_field_errors %}
+    </ul>
+    {% if form.non_field_errors %}
     {{ form.non_field_errors }}
     {% endif %} -->
-    <div class="flex gap-2 flex-wrap mb-4">
-        {{form.as_p}}
-        <button type="submit" class="btn-admin">Zarezerwuj</button>
+    <div class="flex flex-col gap-2 flex-wrap mb-4 mt-2 items-center">
+        <div class="flex flex-wrap items-center gap-2 my-3">
+            <label for="{{ form.arrival.id_for_label }}">Data zameldowania:</label>
+            {{ form.arrival}}
+            <label for="{{ form.departure.id_for_label }}">Data wymeldowania:</label>
+            {{ form.departure}}
+            <button type="submit" class="btn-admin">Zarezerwuj</button>
+        </div>
+        {{ form.non_field_errors }}
     </div>
     {% if messages %}
     <ul class="messages mb-4">

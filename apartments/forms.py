@@ -33,23 +33,21 @@ class OnlineBookingForm(Form):
         'type': "date",
         "class": "rounded-md",
     }))
-    num_guests = IntegerField(min_value=1, max_value=5, initial=2)
 
-    def clean_arrival(self):
-        data = self.cleaned_data["arrival"]
-        today = get_today()
-
-        if data < today:
-            raise ValidationError("Podana data zameldowania już minęła.")
-        return data
+    # def clean_arrival(self):
+    #     data = self.cleaned_data["arrival"]
+    #     today = get_today()
+    #     if data < today:
+    #         raise ValidationError("Podana data zameldowania już minęła.")
+    #     return data
 
 
-    def clean_departure(self):
-        data = self.cleaned_data["departure"]
-        today = get_today()
-        if data < today:
-            raise ValidationError("Podana data wymeldowania już minęła.")
-        return data
+    # def clean_departure(self):
+    #     data = self.cleaned_data["departure"]
+    #     today = get_today()
+    #     if data < today:
+    #         raise ValidationError("Podana data wymeldowania już minęła.")
+    #     return data
 
 
     def clean(self):
@@ -61,6 +59,8 @@ class OnlineBookingForm(Form):
         add_days = 7 -  today.weekday()
 
         if arrival and departure:
+            if arrival < today or departure < today or departure < arrival:
+                raise  ValidationError("Podano nieprawidłowe daty.")
             if arrival.month in [7,8] and departure.month in [7,8]:
                 if (departure - arrival).days < 7 and (arrival - today).days > 7 + add_days:
                     raise ValidationError("Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy. \
