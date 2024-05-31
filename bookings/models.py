@@ -9,6 +9,7 @@ class SearchedBooking(models.Model):
     apartment = models.ForeignKey("apartments.Apartment", on_delete=models.PROTECT)
     date_from = models.DateField()
     date_to = models.DateField()
+    checkout_url = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.apartment.name}: {self.date_from} - {self.date_to}"
@@ -42,10 +43,6 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.apartment.name}: {self.date_from} - {self.date_to}"
-
-    @property
-    def booking_dates_list(self):
-        return pd.date_range(self.date_from, self.date_to, freq='d')
 
 
     @property

@@ -1,0 +1,18 @@
+{% load wagtailcore_tags bookings_tags %}
+{% load static %}
+<li>
+    <a href="{% url 'bookings_app:add-booking' %}" class="menu-close flex items-center gap-1 border-b-4 border-b-transparent transition-all duration-500
+                hover:border-amber-50 ">Apartamenty</a>
+</li>
+<li>
+    <a href="{% slugurl 'midi' %}" class="menu-close flex items-center gap-1 border-b-4 border-b-transparent transition-all duration-500
+                hover:border-amber-50"> Okolica</a>
+</li>
+<li>
+    <a href="{% url 'users_app:logout' %}" class="menu-close flex items-center gap-1 border-b-4 border-b-transparent transition-all duration-500
+                hover:border-amber-50">Kontakt</a>
+</li>
+<li>
+    <a href="{% url 'bookings_app:booking-search' %}" class="menu-close flex items-center gap-1 border-4 bg-amber-300 border-amber-300 rounded-md py-1 px-3">Zarezerwuj</a>
+</li>
+

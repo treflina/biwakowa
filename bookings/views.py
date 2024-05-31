@@ -1,3 +1,5 @@
+import calendar
+from datetime import date
 import json
 import logging
 import time
@@ -21,6 +23,8 @@ from django.views.decorators.csrf import csrf_exempt
 import django_filters.views
 
 from apartments.models import Apartment
+from apartments.forms import OnlineBookingForm
+from apartments.utils import get_next_prev_month, booking_dates_assignment
 from .forms import BookingForm, BookingUpdateForm
 from .models import Booking, SearchedBooking
 
@@ -93,6 +97,72 @@ class BookingsListView(LoginRequiredMixin, FilterView):
         return "bookings/bookings.html"
 
 
+def booking_search(request, year=None, month=None):
+
+    if request.htmx and not request.htmx.history_restore_request:
+        templ = "apartments/fragments/booking-calendar.html"
+    else:
+        templ= "bookings/bookings-search.html"
+
+    if month is None:
+        month = date.today().month
+    if year is None:
+        year = date.today().year
+
+    year=int(year)
+    month=int(month)
+
+    first_day = calendar.monthrange(year, month)[0]
+    num_days = calendar.monthrange(year, month)[1]
+
+    cal_months = get_next_prev_month(year, month)
+
+    ap1 = Apartment.objects.get(name="1")
+    ap2 = Apartment.objects.get(name="2")
+    ap3 = Apartment.objects.get(name="3")
+    ap4 = Apartment.objects.get(name="4")
+
+    ap1_bookings_dict = booking_dates_assignment(ap1, year, month)
+    ap2_bookings_dict = booking_dates_assignment(ap2, year, month)
+    ap3_bookings_dict = booking_dates_assignment(ap3, year, month)
+    ap4_bookings_dict = booking_dates_assignment(ap4, year, month)
+
+    context = {
+        'year': year,
+        'month': month,
+        'displayed_month': date(year,month,1),
+        'previous_year': cal_months["previous_year"],
+        'previous_month': cal_months["previous_month"],
+        'next_month': cal_months["next_month"],
+        'next_year': cal_months["next_year"],
+        'num_days': range(1,num_days+1),
+        'first_day': first_day,
+        'ap1_dates': ap1_bookings_dict,
+        'ap2_dates': ap2_bookings_dict,
+        'ap3_dates': ap3_bookings_dict,
+        'ap4_dates': ap4_bookings_dict,
+        'form': OnlineBookingForm()
+    }
+
+    if 'submit' in request.GET:
+        form = OnlineBookingForm(request.GET)
+        if form.is_valid():
+            arrival = request.GET.get("arrival")
+            departure = request.GET.get("departure")
+
+            available_apartments = []
+            apartments = Apartment.objects.all()
+            for apartment in apartments:
+                if not Booking.objects.bookings_periods(apartment, arrival, departure).exists():
+                    available_apartments.append(apartment)
+
+            context['available_apartments'] = available_apartments
+        else:
+            context['form'] = form
+
+    return render(request, template_name=templ, context=context)
+
+
 class UpcomingBookingsListView(LoginRequiredMixin, FilterView):
     """Upcoming bookings listing page."""
     today = datetime.today()
@@ -128,6 +198,9 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
     form_class = BookingForm
     success_url = reverse_lazy("bookings_app:bookings")
     login_url = reverse_lazy("users_app:user-login")
+
+
+
 
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
@@ -197,6 +270,8 @@ def create_checkout_session(request):
         elif booking.apartment.name == "3" or booking.apartment.name == "4":
             price_id = "price_1PKyeXP9glrwQNJy0bl7v5ZU"
 
+        if booking.checkout_url:
+            return redirect(booking.checkout_url, code=303)
 
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -213,6 +288,9 @@ def create_checkout_session(request):
                 success_url=settings.BASE_URL + "/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=request.build_absolute_uri(reverse("bookings_app:cancel")),
             )
+            booking.checkout_url = checkout_session.url
+            booking.save()
+
             new_booking = Booking(
                 apartment=booking.apartment,
                 date_from=booking.date_from,

@@ -1,12 +1,34 @@
 {% load wagtailcore_tags bookings_tags %}
 {% load static %}
 
+<div class="flex flex-wrap gap-3  justify-evenly ">
+    {% if ap1_dates %}
+    <div class="mb-3 ">
+        <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament {% if b1_name %}nr {{b1_name}}
+            {% else %} nr 1 <span class="font-normal text-base">(2-osobowy)</span>{% endif %}</h2>
+        {% include 'includes/calendar.html' with dates=ap1_dates.dates arrival_dates=ap1_dates.arr_dates departure_dates=ap1_dates.dep_dates %}
+    </div>
+    {% endif %}
+    {% if ap2_dates %}
+    <div class="mb-3">
+        <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament {% if b2_name %}nr {{b2_name}}
+             {% else %}nr 2 <span class="font-normal text-base">(2-osobowy)</span>{% endif %}</h2>
+        {% include 'includes/calendar.html' with dates=ap2_dates.dates arrival_dates=ap2_dates.arr_dates departure_dates=ap2_dates.dep_dates %}
+    </div>
+    {% endif %}
+</div>
+<div class="flex flex-wrap gap-3 justify-evenly">
+    {% if ap3_dates %}
+    <div class="mb-3">
+        <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament nr 3 <span class="font-normal text-base">(4-osobowy)</span></h2>
+        {% include 'includes/calendar.html' with dates=ap3_dates.dates arrival_dates=ap3_dates.arr_dates departure_dates=ap3_dates.dep_dates %}
+    </div>
+    {% endif %}
+    {% if ap4_dates %}
+    <div class="mb-3">
+        <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament nr 4 <span class="font-normal text-base">(4-osobowy)</span></h2>
+        {% include 'includes/calendar.html' with dates=ap4_dates.dates arrival_dates=ap4_dates.arr_dates departure_dates=ap4_dates.dep_dates %}
+    </div>
+    {% endif %}
+</div>
 
-<div class="mb-3">
-    <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament nr {{b1_name}}</h2>
-    {% include 'includes/calendar.html' with dates=b1_dates arrival_dates=b1_arrival_dates departure_dates=b1_departure_dates %}
-</div>
-<div class="mb-3">
-    <h2 class="text-center mb-5 mt-2 text-lg font-semibold">Apartament nr {{b2_name}}</h2>
-    {% include 'includes/calendar.html' with dates=b2_dates arrival_dates=b2_arrival_dates departure_dates=b2_departure_dates %}
-</div>

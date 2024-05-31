@@ -15,7 +15,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, path, re_pat
 from bookings.models import Booking, SearchedBooking
 
 from .forms import OnlineBookingForm
-from .utils import booking_dates_assignment
+from .utils import booking_dates_assignment, get_next_prev_month
 
 
 APARTMENT_TYPES = [
@@ -79,33 +79,14 @@ class ApartmentPage(RoutablePageMixin, Page):
             month = date.today().month
         if year is None:
             year = date.today().year
-        cal = calendar.monthrange(year, month)
 
-        previous_year = year
-        previous_month = month - 1
-        if previous_month == 0:
-            previous_year = year - 1
-            previous_month = 12
-        next_year = year
-        next_month = month + 1
-        if next_month == 13:
-            next_year = year + 1
-            next_month = 1
+        first_day = calendar.monthrange(year, month)[0]
+        num_days = calendar.monthrange(year, month)[1]
 
-#TODO: filter by name defined in choicefield, add name to context
-        ap1_bookings_list = (
-            Booking.objects.bookings_per_month(
-                self.apartment1.name, year, month, next_month
-                ))
+        cal_months = get_next_prev_month(year, month)
 
-        ap2_bookings_list = (
-           Booking.objects.bookings_per_month(
-                self.apartment2.name, year, month, next_month
-                ))
-
-        ap1_dates, ap1_arr_dates, ap1_dep_dates = booking_dates_assignment(ap1_bookings_list, year, month)
-        ap2_dates, ap2_arr_dates, ap2_dep_dates = booking_dates_assignment(ap2_bookings_list, year, month)
-
+        ap1_bookings_dict = booking_dates_assignment(self.apartment1, year, month)
+        ap2_bookings_dict = booking_dates_assignment(self.apartment2, year, month)
 
         if request.htmx and not request.htmx.history_restore_request:
             templ = "apartments/fragments/booking-calendar.html"
@@ -116,18 +97,14 @@ class ApartmentPage(RoutablePageMixin, Page):
             'year': year,
             'month': month,
             'displayed_month': date(year,month,1),
-            'previous_year': previous_year,
-            'previous_month': previous_month,
-            'next_month': next_month,
-            'next_year': next_year,
-            'num_days': range(1,cal[1]+1),
-            'first_day': cal[0],
-            'b1_dates': ap1_dates,
-            'b1_arrival_dates': ap1_arr_dates,
-            'b1_departure_dates': ap1_dep_dates,
-            'b2_dates': ap2_dates,
-            'b2_arrival_dates': ap2_arr_dates,
-            'b2_departure_dates': ap2_dep_dates,
+            'previous_year': cal_months["previous_year"],
+            'previous_month': cal_months["previous_month"],
+            'next_month': cal_months["next_month"],
+            'next_year': cal_months["next_year"],
+            'num_days': range(1,num_days+1),
+            'first_day': first_day,
+            'ap1_dates': ap1_bookings_dict,
+            'ap2_dates': ap2_bookings_dict,
             'b1_name': self.apartment1.name,
             'b2_name': self.apartment2.name,
             'form': form

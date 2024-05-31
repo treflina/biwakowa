@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags bookings_tags querystring_tag filter_tags %}
+{% load static %}
+{% block content %}
+{% include 'includes/admin-nav.html' %}
+
+<form
+    method="GET"
+    action="{% url 'bookings_app:booking-search' %}"
+    class="w-full flex flex-col justify-center items-center"
+    id="bookings-search-results">
+    <div class="flex flex-col gap-2 flex-wrap mb-4 mt-2 items-center">
+        <div class="flex flex-wrap items-center gap-2 my-3">
+            <label for="{{ form.arrival.id_for_label }}">Data zameldowania:</label>
+            {{ form.arrival}}
+            <label for="{{ form.departure.id_for_label }}">Data wymeldowania:</label>
+            {{ form.departure}}
+            <input type="submit" name="submit" class="btn-admin cursor-pointer" value="Wyszukaj">
+        </div>
+        {{ form.non_field_errors }}
+    </div>
+    {% if messages %}
+    <ul class="messages mb-4">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+
+</form>
+
+{% if available_apartments %}
+{% for apartment in available_apartments %}
+    {{apartment}}
+{% endfor %}
+{% endif %}
+
+<section id="booking-calendar">
+    {% include 'apartments/fragments/booking-calendar.html' %}
+</section>
+
+
+
+<script src="https://unpkg.com/htmx.org@1.9.12"
+    integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+    crossorigin="anonymous"></script>
+    {% endblock %}

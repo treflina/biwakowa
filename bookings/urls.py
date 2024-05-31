@@ -11,7 +11,9 @@ from .views import (
     success,
     cancel,
     stripe_webhook,
-    create_checkout_session
+    create_checkout_session,
+    booking_search,
+
 )
 
 app_name = "bookings_app"
@@ -44,4 +46,8 @@ urlpatterns = [
     path("cancel/", cancel, name="cancel"),
     path("stripe-webhook/", stripe_webhook, name="webhook"),
     path("rezerwacja/platnosci/", create_checkout_session, name="checkout"),
+    path("wyszukaj/<year>/<month>/", booking_search, name="booking-search"),
+    path("wyszukaj/", booking_search, name="booking-search"),
+
+
 ]
