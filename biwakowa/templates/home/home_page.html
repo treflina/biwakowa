@@ -12,8 +12,8 @@
         <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
     </video>
     <div class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60"></div>
-    <div class="flex-col lg:flex-row flex justify-between gap-10 ">
-        <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-6 px-2 ">
+    <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
+        <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
             <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="border-4 border-amber-50
                 rounded-md col-start-6 col-end-12 row-start-1 row-end-4 inline-block w-full h-full object-cover" />
             <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="border-4 border-amber-50 rounded-md col-start-1
@@ -23,15 +23,15 @@
         </div>
         <div class="flex flex-col justify-center lg:items-start gap-5 basis-1/2 z-30 px-2 mt-6 sm:mt-8 order-first lg:order-last py-10 lg:py-2 max-w-[95%] sm:max-w-[80%] mx-auto">
             <h1 class="font-bold text-5xl sm:text-6xl font-['Rozha_One']  md:text-left ">Apartamenty Biwakowa&nbsp;4B</h1>
-            <h2 class="font-semibold text-2xl sm:text-4xl text-amber-50 md:text-left">Komfort nad Jeziorem Dużym w&nbsp;Turawie</h2>
+            <h2 class="font-semibold text-3xl sm:text-4xl text-amber-50 md:text-left">Komfort nad Jeziorem Dużym w&nbsp;Turawie</h2>
         </div>
     </div>
-    <a href="#" class="animate__animated animate__bounce  animate__delay-3s flex flex-col justify-center items-center rounded-full  w-max mx-auto uppercase border-4 border-amber-300 z-30 cursor-pointer
-    font-semibold text-lg px-3 py-3 mt-2 mb-1 bg-opacity-20 bg-amber-300">
+    <a href="#" class="animate__animated animate__bounce  animate__delay-3s flex justify-center items-center  rounded-full uppercase border-4 border-amber-300 z-30 cursor-pointer
+    font-semibold text-lg px-3 py-3 ml-auto mr-4 lg:mx-auto mt-3 mb-1 bg-opacity-20 bg-amber-300">
     <svg class="w-6 h-6 inline-block ">
         <use xlink:href="{% static 'img/sprite.svg#chevrondown' %}" />
     </svg>
-</a>
+    </a>
 </main>
 {% endblock %}
 
