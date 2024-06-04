@@ -1,5 +1,5 @@
-body = document.querySelector("body");
-// const modal = document.getElementsByClassName("modal");
+const body = document.querySelector("body");
+
 let modal;
 const openModal = document.querySelectorAll(".openModal");
 const closeModal = document.querySelectorAll(".close");

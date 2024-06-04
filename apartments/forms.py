@@ -23,32 +23,16 @@ class OnlineBookingForm(Form):
 
         widget=DateInput(attrs={
         'type': "date",
-        "class": "rounded-md",
-        "initial":get_nearest_sunday(),
+        "class": "rounded-md p-3 border-2 border-blue-300 min-w-40 w-40",
+        "initial": get_nearest_sunday(),
     })
     )
     departure = DateField(
         initial=get_nearest_sunday() + datetime.timedelta(days=7),
         widget=DateInput(attrs={
         'type': "date",
-        "class": "rounded-md",
+        "class": "rounded-md p-3 border-2 border-blue-300 min-w-40 w-40",
     }))
-
-    # def clean_arrival(self):
-    #     data = self.cleaned_data["arrival"]
-    #     today = get_today()
-    #     if data < today:
-    #         raise ValidationError("Podana data zameldowania już minęła.")
-    #     return data
-
-
-    # def clean_departure(self):
-    #     data = self.cleaned_data["departure"]
-    #     today = get_today()
-    #     if data < today:
-    #         raise ValidationError("Podana data wymeldowania już minęła.")
-    #     return data
-
 
     def clean(self):
         cleaned_data = super().clean()
@@ -60,18 +44,28 @@ class OnlineBookingForm(Form):
 
         if arrival and departure:
             if arrival < today or departure < today or departure < arrival:
-                raise  ValidationError("Podano nieprawidłowe daty.")
+                raise  ValidationError(
+                    "Prosimy sprawdzić poprawność podanych dat.\n\r \
+                    W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                    )
             if arrival.month in [7,8] and departure.month in [7,8]:
                 if (departure - arrival).days < 7 and (arrival - today).days > 7 + add_days:
-                    raise ValidationError("Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy. \
-                        Jeśli nadal dysponujemy wolnymi apartamentami na tydzień przed \
-                        planowanym pobytem, minimalna długość rezerwacji wynosi 3 doby.")
+                    raise ValidationError(
+                        "Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
+                        przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        )
                 if (arrival - today).days > 7 + add_days and arrival.weekday() != 6:
                     print(arrival.weekday())
-                    raise ValidationError("Rezerwacja pobytu w okresie wakacyjnym \
-                        jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli. \
-                        Jeśli nadal dysponujemy wolnymi apartamentami na tydzień przed \
-                        planowanym pobytem, minimalna długość rezerwacji wynosi 3 doby.")
-            if (departure - arrival).days < 3:
-                raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
+                    raise ValidationError(
+                        "Rezerwacja pobytu w okresie wakacyjnym \
+                        jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
+                        (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        )
+                if (departure - arrival).days < 3:
+                    raise ValidationError(
+                        "Minimalna długość pobytu wynosi 3 doby. \n \
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        )
 

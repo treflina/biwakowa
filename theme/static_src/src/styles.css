@@ -2,14 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+select,
+option {
+    font-family: inherit;
+}
+
 .cal-item {
     @apply flex h-10 w-10 justify-center items-center rounded-md pb-1;
 }
 
 .btn-admin {
-    @apply rounded-md border-2 px-4 py-2 bg-gray-300 shadow-md
+    @apply rounded-md border-4 px-2 py-1 bg-gray-300 shadow-md
                      border-gray-300 font-semibold transition-all duration-300 hover:bg-amber-300
                      active:bg-amber-300 focus:bg-amber-300;
+}
+
+.btn-cta {
+    @apply rounded-md border-4 px-2 py-1 md:px-4 md:py-2  bg-amber-300 shadow-md
+                     border-amber-300 font-semibold transition-all duration-300 hover:bg-amber-200
+                     active:bg-amber-200 focus:bg-amber-200;
 }
 
 .bookings-table {
@@ -28,6 +39,16 @@
     padding: 0;
     position: absolute;
     width: 1px;
+}
+
+.bg-lake {
+    background:
+        linear-gradient(
+            to top right,
+            rgb(147 197 253) 0%,
+            rgb(59 130 246) 100%
+        ),
+        url("static/img/lake.jpg") no-repeat;
 }
 
 /* HTML: <div class="loader"></div> */

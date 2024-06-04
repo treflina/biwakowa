@@ -1,18 +1,18 @@
 {% load wagtailcore_tags wagtailroutablepage_tags bookings_tags %}
 {% load static %}
 
-<section {% if not page %}class="bg-blue-200 py-4" {% endif %}>
+<div {% if not page %}class="py-4 bg-gradient-to-tl to-gray-300 from-blue-300" {% endif %}>
     <div class="flex flex-col sm:flex-row w-full justify-center items-center gap-4 my-10">
         <h2 class="font-semibold text-2xl text-center ">Kalendarz rezerwacji: </h2>
         <div
-            class="flex flex-row gap-3 items-center justify-between w-[275px] border-2 border-gray-300 rounded-md bg-gray-50">
+            class="flex flex-row gap-3 items-center justify-between min-w-[275px] border-2 border-gray-300 rounded-md bg-gray-50">
             <div {% if page %} hx-get="{% pageurl page %}calendar/{{previous_year}}/{{previous_month}}/" {% else %}
                 hx-get="/wyszukaj/{{previous_year}}/{{previous_month}}/" {% endif %} hx-target="#booking-calendar"
                 hx-replace-url="true" hx-swap="innerHTML" class="cal-link inline-block text-3xl pb-1 border-r-2 px-2  bg-gray-300 cursor-pointer
                 hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
                 <p>&laquo;</p>
             </div>
-            <p class="font-bold text-xl text-center text-gray-800 uppercase"> {{ displayed_month|date:"F Y"}}
+            <p class="font-semibold text-xl text-center text-gray-800 uppercase"> {{ displayed_month|date:"F Y"}}
             </p>
             <div {% if page %} hx-get="{% pageurl page %}calendar/{{next_year}}/{{next_month}}/" {% else %}
                 hx-get="/wyszukaj/{{next_year}}/{{next_month}}/" {% endif %} hx-target="#booking-calendar"
@@ -45,4 +45,4 @@
             <p class="w-max">tylko wyjazd</p>
         </div>
     </div>
-</section>
+</div>

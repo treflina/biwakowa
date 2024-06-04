@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags bookings_tags %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/admin-nav.html' %}
+<main>
+
+{% comment %} {{arrival}} {{departure}} {{pk}} {% endcomment %}
+ <h1 class="font-semibold text-2xl my-5">Formularz testowy</h1>
+<form method="POST" class="flex flex-col items-center">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" class="btn-admin" value="Przejdź do płatności">
+</form>
+</main>
+
+{% endblock %}

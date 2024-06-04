@@ -16,11 +16,6 @@ class BookingManager(models.Manager):
             | (Q(date_from__gte=date(year,month,1)) & Q(date_from__lte=date(year,month, num_days)))
             )
         )
-        # .exclude(
-        #     Q(stripe_checkout_id__isnull=False)
-        #           &(Q(stripe_transaction_status="unpaid")
-        #             |Q(stripe_transaction_status="failed"))
-        # )
         return result
 
     def bookings_periods(self, apartment, arrival, departure):
@@ -29,10 +24,5 @@ class BookingManager(models.Manager):
             &Q(date_from__lt=departure)
             &Q(date_to__gt=arrival)
             )
-        # .exclude(
-        #     Q(stripe_checkout_id__isnull=False)
-        #           &(Q(stripe_transaction_status="unpaid")
-        #             |Q(stripe_transaction_status="failed"))
-        # )
         return result
 

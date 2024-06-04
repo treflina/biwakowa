@@ -1,6 +1,7 @@
 {% load wagtailcore_tags bookings_tags %}
 {% load static %}
-<nav class="relative bg-gradient-to-r to-amber-300  from-blue-300  ">
+
+<nav class="relative bg-gradient-to-bl to-gray-300  from-blue-300">
     <div class="wrapper  max-w-7xl flex justify-between w-full mx-auto py-2">
         <div class="p-2 w-32 h-auto bg-gray-100 rounded-md z-40 ml-2">
             <a href="/">
@@ -27,10 +28,10 @@
             {% include 'includes/admin-nav-content.html' %}
         </ul>
         {% else %}
-                <ul
+            <ul
             class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-dvh transition-all duration-300
             origin-top-right sm:hidden flex flex-col justify-center
-            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gray-100">
+            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gradient-to-bl to-gray-300  from-blue-300">
             {% include 'includes/nav-content.html' %}
         </ul>
         <ul

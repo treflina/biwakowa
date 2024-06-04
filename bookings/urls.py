@@ -7,11 +7,10 @@ from .views import (
     BookingUpdateView,
     UpcomingBookingsListView,
     delete_booking,
-    # onlinebooking,
+    onlinebooking,
     success,
     cancel,
     stripe_webhook,
-    create_checkout_session,
     booking_search,
 
 )
@@ -41,11 +40,10 @@ urlpatterns = [
         name="update-booking",
     ),
     path("rezerwacje/<pk>/", BookingDetailView.as_view(), name="booking"),
-    # path("rezerwacja/", onlinebooking, name="onlinebooking"),
+    path("rezerwacja/<arrival>/<departure>/<pk>/", onlinebooking, name="onlinebooking"),
     path("success/", success, name="success"),
     path("cancel/", cancel, name="cancel"),
     path("stripe-webhook/", stripe_webhook, name="webhook"),
-    path("rezerwacja/platnosci/", create_checkout_session, name="checkout"),
     path("wyszukaj/<year>/<month>/", booking_search, name="booking-search"),
     path("wyszukaj/", booking_search, name="booking-search"),
 
