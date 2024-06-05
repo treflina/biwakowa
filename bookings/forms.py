@@ -18,9 +18,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import datetime
 
-from .models import Booking
 from apartments.models import Apartment
-
+from .models import Booking
 
 
 class BookingBaseForm(forms.ModelForm):
@@ -127,6 +126,13 @@ class OnlineBookingDetailsForm(forms.Form):
     rules_consent = forms.BooleanField(error_messages={'required': _('You must accept terms & conditions')},
             label=_("Terms&Conditions"))
 
+
+    def __init__(self, *args, request=None, **kwargs):
+        super(OnlineBookingDetailsForm, self).__init__(*args, **kwargs)
+        self.request = request
+        if request is not None:
+            self.session=request.session
+
     def clean_pk(self):
         pk = self.cleaned_data.get("pk")
         try:
@@ -159,15 +165,29 @@ class OnlineBookingDetailsForm(forms.Form):
         super().clean()
         date_from = self.cleaned_data.get("arrival")
         date_to = self.cleaned_data.get("departure")
+        email = self.cleaned_data.get("email")
         id = self.cleaned_data.get("pk")
+
         if date_from >= date_to:
             raise ValidationError(_("Start date cannot be later or the same as end date"))
+
+
+        if self.session:
+            session_email = self.session.get("email", None)
+
         qs = Booking.objects.filter(
-            Q(apartment__id=id)
-            &Q(date_to__gt=date_from)
-            &Q(date_from__lt=date_to)
-        ).exists()
-        if qs:
+                Q(apartment__id=id)
+                &Q(date_to__gt=date_from)
+                &Q(date_from__lt=date_to)
+            )
+        if session_email is not None:
+            qs_check = qs.exclude(
+                Q(email=email)|Q(email=session_email)).exists()
+        else:
+            qs_check = qs.exclude(
+                Q(email=email)).exists()
+
+        if qs_check:
             raise ValidationError(_("There is already a booking in the given date range."))
 
 

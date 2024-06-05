@@ -102,8 +102,16 @@ def booking_search(request, year=None, month=None):
 
             available_apartments = []
             apartments = Apartment.objects.all()
+
+            session_email = request.session.get("email", None)
+            print(session_email)
+
             for apartment in apartments:
-                if not Booking.objects.bookings_periods(apartment, arrival, departure).exists():
+                if session_email:
+                    qs = Booking.objects.bookings_periods(apartment, arrival, departure).exclude(email=session_email)
+                else:
+                    qs = Booking.objects.bookings_periods(apartment, arrival, departure)
+                if not qs.exists():
                     price = calculated_price(apartment, arrival, departure)
                     apartment.price = price
                     available_apartments.append(apartment)
@@ -205,7 +213,7 @@ def delete_booking(request, pk):
 
 def onlinebooking(request, arrival=None, departure=None, pk=None):
 
-    form = OnlineBookingDetailsForm()
+    form = OnlineBookingDetailsForm(request=request)
     context = {}
     context["arrival"] = arrival
     context["departure"] = departure
@@ -215,7 +223,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
     context['form'].fields['pk'].initial = pk
 
     if request.method == "POST":
-        form = OnlineBookingDetailsForm(request.POST)
+        form = OnlineBookingDetailsForm(request.POST, request=request)
 
         if form.is_valid():
             guest = form.cleaned_data["name"]
@@ -247,7 +255,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     line_items=[
                         {
                             "price_data": {
-                                "unit_amount_decimal": total_price,
+                                "unit_amount_decimal": total_price*100,
                                 "currency": "pln",
                                 "product": product_id,
                                 },
@@ -269,10 +277,10 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     guest=guest,
                     phone=phone,
                     email=email,
-                    # checkout_url = checkout_session.url
-                    stripe_checkout_id=checkout_session.id
+                    stripe_checkout_id=checkout_session.id,
                 )
                 new_booking.save()
+                request.session["email"] = email
                 return redirect(checkout_session.url, code=303)
 
             except Exception as e:
@@ -298,18 +306,22 @@ def cancel(request):
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+
+    try:
+        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    except:
+        return HttpResponse(status=403)
     event = None
 
     try:
         event = stripe.Webhook.construct_event(
         payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except ValueError as e:
-        # Invalid payload
-        return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
+        logger.error(f"Stripe-webhook error: {e}")
+        return HttpResponse(status=400)
+    except Exception as e:
+        logger.error(f"Stripe-webhook error: {e}")
         return HttpResponse(status=400)
 
     if event['type'] == 'checkout.session.completed':

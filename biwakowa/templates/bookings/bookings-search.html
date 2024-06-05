@@ -26,6 +26,9 @@
                     {{ form.non_field_errors|linebreaks }}
                 </div>
             </div>
+        </form>
+        {% if not results %}
+        <div class="max-w-5xl mx-auto">
             {% if messages %}
             <ul class="messages mb-2">
                 {% for message in messages %}
@@ -33,9 +36,6 @@
                 {% endfor %}
             </ul>
             {% endif %}
-        </form>
-        {% if not results %}
-        <div class="max-w-5xl mx-auto">
             <p class="text-center">Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
                 okresie
                 <span class="font-semibold">lipiec-sierpień 7 noclegów od niedzieli do niedzieli</span>
