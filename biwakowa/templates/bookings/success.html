@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags bookings_tags querystring_tag filter_tags %}
+{% load static %}
+{% block content %}
+{% include 'includes/admin-nav.html' %}
+<main
+    class="max-w-4xl mx-auto relative flex flex-col w-full min-h-[calc(100dvh-60px)] justify-center items-center gap-4">
+
+    <h1 class="font-semibold text-2xl">Transakcja przebiegła pomyślnie.</h1>
+    <h2 class="font-semibold text-2xl">Dziękujemy za zarezerwowanie pobytu w naszym apartamencie.</h2>
+    <a href="/" class="btn-cta mt-3">Wróć na stronę główną</a>
+</main>
+
+{% endblock %}

@@ -45,8 +45,7 @@ class OnlineBookingForm(Form):
         if arrival and departure:
             if arrival < today or departure < today or departure < arrival:
                 raise  ValidationError(
-                    "Prosimy sprawdzić poprawność podanych dat.\n\r \
-                    W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                    "Prosimy sprawdzić poprawność podanych dat."
                     )
             if arrival.month in [7,8] and departure.month in [7,8]:
                 if (departure - arrival).days < 7 and (arrival - today).days > 7 + add_days:
@@ -63,9 +62,6 @@ class OnlineBookingForm(Form):
                         (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
                         W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
                         )
-                if (departure - arrival).days < 3:
-                    raise ValidationError(
-                        "Minimalna długość pobytu wynosi 3 doby. \n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
-                        )
+            if (departure - arrival).days < 3:
+                raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
 

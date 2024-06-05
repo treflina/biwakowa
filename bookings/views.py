@@ -104,7 +104,6 @@ def booking_search(request, year=None, month=None):
             apartments = Apartment.objects.all()
 
             session_email = request.session.get("email", None)
-            print(session_email)
 
             for apartment in apartments:
                 if session_email:
@@ -195,11 +194,14 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         end = form.cleaned_data["date_to"]
         qs = Booking.objects.filter(
             apartment__id=self.get_object().apartment.id
-        ).filter(Q(date_to__gt=start)&Q(date_from__lt=end)
+        ).filter(
+            Q(date_to__gt=start)&Q(date_from__lt=end)
                  ).exclude(
                     Q(id=self.get_object().id)).exists()
         if qs:
-            form.add_error(None, _("There is already a booking in the given date range."))
+            form.add_error(
+                None, _("There is already a booking in the given date range.")
+                )
             return self.form_invalid(form)
         return super().form_valid(form)
 
@@ -267,7 +269,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     mode='payment',
                     expires_at=int(time.time() + 1800),
                     success_url=settings.BASE_URL + "/success?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url=request.build_absolute_uri(reverse("bookings_app:cancel")),
+                    cancel_url=settings.BASE_URL + "/cancel?session_id={CHECKOUT_SESSION_ID}",
                 )
                 new_booking = Booking(
                     date_from=arrival,
@@ -296,6 +298,8 @@ def success(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     checkout_session_id = request.GET.get('session_id', None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
+    for k,v in session.items():
+        print(k, v )
     return render(request, "bookings/success.html")
 
 

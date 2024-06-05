@@ -4,14 +4,14 @@
 
 {% block content %}
 {% include 'includes/admin-nav.html' %}
-<main>
+<main class="flex flex-col items-center max-w-5xl mx-auto w-full min-h-[calc(100dvh-75px)] px-2 gap-4">
 
 {% comment %} {{arrival}} {{departure}} {{pk}} {% endcomment %}
- <h1 class="font-semibold text-2xl my-5">Formularz testowy</h1>
-<form method="POST" class="flex flex-col items-center">
+ <h1 class="font-semibold text-2xl mt-10 mb-5 text-center">Formularz rezerwacyjny</h1>
+<form method="POST" class="flex flex-col items-center gap-3">
     {% csrf_token %}
-    {{form}}
-    <input type="submit" class="btn-admin" value="Przejdź do płatności">
+    {{form.as_p}}
+    <input type="submit" class="btn-admin cursor-pointer" value="Przejdź do płatności&nbsp;&raquo;">
 </form>
 </main>
 

@@ -15,7 +15,7 @@
             <span class="hamburger-box" role="presentation"
                 ><span class="hamburger-inner" role="presentation"></span></span>
         </button>
-        {% if not page %}
+        {% if not page and request.user.is_authenticated %}
         <ul
             class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-dvh transition-all duration-300
             origin-top-right sm:hidden flex flex-col justify-center
