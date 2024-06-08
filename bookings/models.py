@@ -14,9 +14,12 @@ class Booking(models.Model):
     TRANSACTION_STATUS = [
         ("unpaid", _("unpaid")),
         ("success", _("success"),),
-        ("failed", _("failed"))
+        ("failed", _("failed")),
+        ("pending",_("pending"))
     ]
 
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    # TODO remove null True
     apartment = models.ForeignKey("apartments.Apartment", on_delete=models.PROTECT)
     date_from = models.DateField(_("date from"))
     date_to = models.DateField(_("date to"))

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.timezone import datetime
@@ -19,10 +19,14 @@ from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
 from apartments.models import Apartment
-from apartments.forms import OnlineBookingForm
 from bookings.utils import get_next_prev_month, booking_dates_assignment
 from .filters import BookingsFilter
-from .forms import BookingForm, BookingUpdateForm, OnlineBookingDetailsForm
+from .forms import (
+    BookingForm,
+    BookingUpdateForm,
+    OnlineBookingForm,
+    OnlineBookingDetailsForm,
+    )
 from .models import Booking
 from .utils import calculated_price
 
@@ -97,8 +101,8 @@ def booking_search(request, year=None, month=None):
     if 'submit' in request.GET:
         form = OnlineBookingForm(request.GET)
         if form.is_valid():
-            arrival = datetime.strptime(request.GET.get("arrival"), '%Y-%m-%d').date()
-            departure = datetime.strptime(request.GET.get("departure"), '%Y-%m-%d').date()
+            arrival = datetime.strptime(request.GET.get("arrival"), '%d.%m.%Y').date()
+            departure = datetime.strptime(request.GET.get("departure"), '%d.%m.%Y').date()
 
             available_apartments = []
             apartments = Apartment.objects.all()
@@ -217,12 +221,26 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
     form = OnlineBookingDetailsForm(request=request)
     context = {}
-    context["arrival"] = arrival
-    context["departure"] = departure
+
+    date_from = datetime.strptime(arrival, '%Y-%m-%d').date()
+    date_to = datetime.strptime(departure, '%Y-%m-%d').date()
+
+    context['arrival'] = date_from
+    context['departure'] = date_to
     context["form"] = form
     context['form'].fields['arrival'].initial = arrival
     context['form'].fields['departure'].initial = departure
     context['form'].fields['pk'].initial = pk
+
+    try:
+        ap_to_book = Apartment.objects.get(id=pk)
+        context["apartment"] = ap_to_book
+    except Apartment.DoesNotExist:
+        messages.error(request, _(f"Apartment with id {pk} was not found"))
+        return render(request, "bookings/onlinebookingdetails.html", context=context)
+
+    total_price = calculated_price(ap_to_book, date_from, date_to)
+    context["price"] = total_price
 
     if request.method == "POST":
         form = OnlineBookingDetailsForm(request.POST, request=request)
@@ -233,14 +251,8 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             phone = form.cleaned_data["phone"]
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
-            ap_id = int(form.cleaned_data["pk"])
-
-            # check if the apartment exists
-            try:
-                ap_to_book = Apartment.objects.get(id=ap_id)
-            except Apartment.DoesNotExist:
-                messages.error(request, _(f"Apartment with id {pk} was not found"))
-                return render(request, "bookings/onlinebookingdetails.html", context=context)
+            guest_notes = form.cleaned_data["guest_notes"]
+            guest_notes = f"Uwagi gościa: {guest_notes}" if guest_notes != "" else None
 
             # check if stripe product id is specified for apartment instance
             product_id = ap_to_book.stripe_product_id
@@ -248,8 +260,6 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(request, _("Booking this apartment is not possible now."))
                 #TODO SEND error email
                 return redirect('bookings_app:booking-search')
-
-            total_price = calculated_price(ap_to_book, arrival, departure)
 
             try:
                 checkout_session = stripe.checkout.Session.create(
@@ -279,15 +289,32 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     guest=guest,
                     phone=phone,
                     email=email,
+                    notes=guest_notes,
                     stripe_checkout_id=checkout_session.id,
+                    stripe_transaction_status="pending",
                 )
                 new_booking.save()
                 request.session["email"] = email
                 return redirect(checkout_session.url, code=303)
 
-            except Exception as e:
-                #TODO email about error
-                return HttpResponse(f"<p>{str(e)}</p>")
+            except stripe._error.APIConnectionError as e:
+                logger.error(f"Błąd podczas próby płatności: {e}.")
+
+                messages.error(request, _("Bardzo nam przykro, ale wystąpił problem \
+                                        z połączeniem internetowym podczas \
+                                        próby utworzenia płatności. \n \
+                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."))
+                #TODO SEND error email
+                return redirect('bookings_app:booking-search')
+
+            except Exception as ex:
+
+                logger.error(f"Błąd podczas próby płatności: {e}.")
+                messages.error(request, _("Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
+                                        płatności. \n \
+                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."))
+                #TODO SEND error email
+                return redirect('bookings_app:booking-search')
 
         else:
             context["form"] = form
@@ -304,7 +331,10 @@ def success(request):
 
 
 def cancel(request):
-    return render(request, "bookings/cancel.html")
+    checkout_session_id = request.GET.get('session_id', None)
+    session = stripe.checkout.Session.retrieve(checkout_session_id)
+    context = {"session_url": session.url}
+    return render(request, "bookings/cancel.html", context=context)
 
 
 @csrf_exempt

@@ -12,7 +12,7 @@ option {
 }
 
 .btn-admin {
-    @apply rounded-md border-4 px-2 py-1 bg-gray-300 shadow-md
+    @apply rounded-md border-4 px-2 py-1  bg-gray-300 shadow-md
                      border-gray-300 font-semibold transition-all duration-300 hover:bg-amber-300
                      active:bg-amber-300 focus:bg-amber-300;
 }
@@ -49,6 +49,12 @@ option {
             rgb(59 130 246) 100%
         ),
         url("static/img/lake.jpg") no-repeat;
+}
+
+.datepicker-grid {
+    .disabled {
+        @apply text-gray-400;
+    }
 }
 
 /* HTML: <div class="loader"></div> */

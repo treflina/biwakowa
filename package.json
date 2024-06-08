@@ -1,0 +1,19 @@
+{
+    "name": "b4b",
+    "version": "1.0.0",
+    "description": "",
+    "main": "tailwind.config.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "webpack --mode development --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "flowbite-datepicker": "^1.2.6"
+    },
+    "devDependencies": {
+        "webpack": "^5.91.0",
+        "webpack-cli": "^5.1.4"
+    }
+}

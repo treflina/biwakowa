@@ -8,29 +8,71 @@
         <h1 class="font-semibold text-4xl text-center mb-4">Rezerwuj apartament</h1>
         <img src="{% static 'img/przelewy.png' %}" alt="przelewy24 karty" class="mx-auto w-40" />
         <form method="GET" action="{% url 'bookings_app:booking-search' %}"
-            class="flex justify-center items-center pt-6 px-1" id="bookings-search-results">
-            <div class="flex flex-col gap-2 flex-wrap mb-4 mt-2 items-center justify-center">
-                <div class="flex flex-wrap items-center justify-center gap-2 my-3 p-2 md:p-4 border-2 rounded-md">
-                    <div class="my-2 text-center">
+            class="flex flex-col justify-center items-center pt-6 px-1 w-full mb-4" id="bookings-search-results">
+            <!-- <div class="flex flex-col gap-2 flex-wrap mb-4 mt-2 items-center justify-center"> -->
+            <div class="flex flex-wrap items-center justify-center gap-2 my-3 p-2 md:p-4 border-2 rounded-md mx-auto">
+
+                <div class="flex flex-wrap justify-center items-center my-2">
+                    <label for="id_arrival" class="mx-2">Data zameldowania:</label>
+                    <div class="relative max-w-72">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2
+                                     2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                            </svg>
+                        </div>
+                        <input type="text" id="id_arrival" name="arrival"
+                            class="datepicker min-w-40 w-44 text-center bg-gray-50 border-2 border-blue-300 text-gray-900 rounded-md
+                             focus:ring-amber-300 focus:border-amber-300 block  ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600
+                              dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="dd.mm.rrrr">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="flex flex-wrap justify-center items-center my-2">
+                        <label for="id_departure" class="mx-2 ">Data wymeldowania:</label>
+                        <div class="relative max-w-sm">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2
+                                        2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="departure" id="id_departure" class="datepicker min-w-40 w-44 text-center bg-gray-50 border-2
+                            border-blue-300 text-gray-900 rounded-md focus:ring-amber-300
+                                focus:border-amber-300 block ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                                dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="dd.mm.rrrr">
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" name="submit" class="btn-cta cursor-pointer my-2 mx-4" value="Sprawdź dostępność">
+                <!-- <div class="my-2 text-center">
                         <label for="{{ form.arrival.id_for_label }}">Data zameldowania:</label>
                         {{ form.arrival}}
                     </div>
                     <div class="my-2 text-center">
                         <label for="{{ form.departure.id_for_label }}">Data wymeldowania:</label>
-                        {{ form.departure}}
-                    </div>
-                    <input type="submit" name="submit" class="btn-admin cursor-pointer my-2 mx-4"
-                        value="Sprawdź dostępność">
-                </div>
-                <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold text-lg text-center ">
-                    {{ form.non_field_errors|linebreaks }}
-                </div>
+                        {{ form.departure}} -->
+            </div>
+
+            <!-- </div> -->
+            {% if form.non_field_errors %}
+            <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold text-lg text-center ">
+                {{ form.non_field_errors|linebreaks }}
+            </div>
+            {% endif%}
+
             </div>
         </form>
+
         {% if not results %}
         <div class="max-w-5xl mx-auto">
             {% if messages %}
-            <ul class="messages mb-2">
+            <ul class="messages mb-4">
                 {% for message in messages %}
                 <li class="text-amber-600 font-semibold text-lg text-center my-4">{{ message|linebreaks}}</li>
                 {% endfor %}
@@ -120,4 +162,5 @@
 
 </main>
 <script src="{% static 'js/htmx.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

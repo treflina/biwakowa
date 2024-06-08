@@ -3,6 +3,7 @@ bookings/migrations/*
 apartments/migrations/*
 home/migrations/*
 
+node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
