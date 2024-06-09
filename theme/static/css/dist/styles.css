@@ -2274,6 +2274,11 @@ input[type="range"]::-ms-fill-lower {
   color: rgb(26 86 219 / var(--tw-text-opacity));
 }
 
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
@@ -2453,6 +2458,13 @@ option {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+}
+
+.selected {
+  --tw-bg-opacity: 1;
+  background-color: rgb(164 202 254 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .bookings-table td,

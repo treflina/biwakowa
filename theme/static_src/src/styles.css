@@ -23,6 +23,11 @@ option {
                      active:bg-amber-200 focus:bg-amber-200;
 }
 
+.selected,
+.range-start {
+    @apply text-black bg-blue-300;
+}
+
 .bookings-table {
     td,
     th {

@@ -31,6 +31,7 @@
         {% if booking.stripe_session_id %}
         {% endif %}
         <p><span class="font-semibold">Uwagi: </span> {% if booking.notes %}{{booking.notes}}{% endif %}</p>
+        <hr class="text-gray-300 bg-gray-300 border-gray-300">
         <p><span class="font-semibold":>Data utworzenia:
         </span>{{ booking.created_at|date:"d.m.Y" }} {{ booking.created_at|time:"H:i" }}</p>
         <p><span class="font-semibold":>Status transakcji: </span> {{ booking.stripe_transaction_status}}</p>
