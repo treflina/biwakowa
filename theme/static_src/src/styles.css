@@ -13,8 +13,8 @@ option {
 
 .btn-admin {
     @apply rounded-md border-4 px-2 py-1  bg-gray-300 shadow-md
-                     border-gray-300 font-semibold transition-all duration-300 hover:bg-amber-300
-                     active:bg-amber-300 focus:bg-amber-300;
+                     border-gray-300 font-semibold transition-all duration-300 hover:bg-gray-200
+                     active:bg-gray-200 focus:bg-gray-200;
 }
 
 .btn-cta {

@@ -18,6 +18,7 @@ urlpatterns = [
     path("", include("users.urls")),
     path("", include("bookings.urls")),
     path("", include("apartments.urls")),
+    # path('i18n/',include('django.conf.urls.i18n')),
 ]
 
 
