@@ -30,10 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const datepickerStart = document.querySelector(".datepicker1");
 
     const setEndValue = () => {
+        let endValue;
         const startValue = datepickerStart.value;
         const [day, month, year] = [...startValue?.split(".")];
-        const startValueDate = new Date(year, month - 1, day);
-        const endValue = startValueDate.addDays(3);
+        const monthNum = parseInt(month);
+        const startValueDate = new Date(year, monthNum - 1, day);
+        if (monthNum === 7 || monthNum === 8) {
+            endValue = startValueDate.addDays(7);
+        } else {
+            endValue = startValueDate.addDays(3);
+        }
         rangePicker.setDates(startValue, endValue);
     };
 
