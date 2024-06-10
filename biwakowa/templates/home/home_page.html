@@ -11,7 +11,7 @@
     {% include 'includes/admin-nav.html' %}
     <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
         class="object-cover w-full h-full absolute left-0 top-0 ">
-        <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
+        <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4" media="screen and (min-width:640px)">
     </video>
     <div class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60">
     </div>
