@@ -21,22 +21,22 @@
         <li class="cal-item shadow-sm bg-slate-100 text-slate-600">{{ num }}</li>
         {% elif num  in departure_dates and num == 1 %}
         <li class="cal-item shadow-sm" style='grid-column-start: {{first_day|add:1}};
-            background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(217 249 157) 20%);'>
+            background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%);'>
             {{ num }}</li>
         {% elif num  in departure_dates %}
-        <li class="cal-item shadow-sm" style='background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(217 249 157) 20%);'>
+        <li class="cal-item shadow-sm" style='background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%);'>
             {{ num }}</li>
         {% elif num in arrival_dates and num == 1 %}
         <li class="cal-item shadow-sm text-slate-600"
-            style='grid-column-start: {{first_day|add:1}}; background: linear-gradient(135deg, rgb(217 249 157) 40%, rgb(241 245 249) 40%);'>
+            style='grid-column-start: {{first_day|add:1}}; background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%);'>
             {{ num }}</li>
         {% elif num in arrival_dates %}
-        <li class="cal-item shadow-sm text-slate-600" style='background: linear-gradient(135deg, rgb(217 249 157) 40%, rgb(241 245 249) 40%);'>
+        <li class="cal-item shadow-sm text-slate-600" style='background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%);'>
             {{ num }}</li>
         {% elif num == 1 %}
-        <li class="cal-item shadow-sm bg-lime-200"  style="grid-column-start: {{first_day|add:1}};">{{ num }}</li>
+        <li class="cal-item shadow-sm bg-[#83d183]"  style="grid-column-start: {{first_day|add:1}};">{{ num }}</li>
         {% else %}
-        <li class="cal-item shadow-sm bg-lime-200">{{ num }}</li>
+        <li class="cal-item shadow-sm bg-[#83d183]">{{ num }}</li>
         {% endif %}
         {% endfor %}
     </ol>

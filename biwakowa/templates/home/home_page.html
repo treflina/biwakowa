@@ -18,17 +18,17 @@
     <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
         <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
             <div class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4">
-                <a class="image-link" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block w-full h-full object-cover" />
                 </a>
             </div>
             <div class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6">
-                <a class="image-link" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
+                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class=" inline-block  w-full h-full object-cover" />
                 </a>
             </div>
             <div class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7  ">
-                <a class="image-link" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
+                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block  w-full h-full object-cover" />
                 </a>
             </div>
@@ -50,7 +50,7 @@
 </header>
 <main class="bg-gray-50">
     <section id="aboutus"
-        class="flex flex-col sm:flex-row flex-wrap max-w-7xl mx-auto py-10 px-4 lg:px-1 sm:py-14 gap-5 sm:gap-4">
+        class="flex flex-col md:flex-row flex-wrap max-w-7xl mx-auto py-10 px-4 lg:px-1 sm:py-14 gap-8 md:gap-4 mb-5">
         <div class="flex flex-col basis-1/2 shrink text-lg gap-2 justify-between">
             <h3 class="font-['Rozha_One'] font-bold text-4xl mb-2">O nas</h3>
             <p>Mamy przyjemność zaprosić Państwa do świeżo wybudowanego (w 2024 r.) domu mieszczącego cztery apartamenty
@@ -67,8 +67,24 @@
                 <p>Urszula i Jarosław Duda</p>
             </div>
         </div>
-        <div class="basis-2/5 shrink flex justify-center items-center overflow-hidden mx-auto rounded-md shadow-xl">
-            <img src="{% static 'img/sypialnia.jpg' %}" alt="" class="w-full h-full object-cover object-center">
+        <div class="relative basis-2/5 shrink flex justify-center items-center mx-auto rounded-md shadow-xl mb-10">
+            <img src="{% static 'img/sypialnia.jpg' %}" alt=""
+                class="w-full h-full object-cover object-center rounded-md z-10">
+            <!-- <div
+                class="absolute flex justify-end gap-4 items-end -left-5 -bottom-10 h-40 w-full shadow-md rounded-md bg-gray-200">
+                <svg class="w-6 h-6 inline-block align-middle mr-1 ml-1 mb-2 fill-gray-800">
+                    <use xlink:href="{% static 'img/sprite.svg#wifi' %}" />
+                </svg>
+                <svg class="w-6 h-6 inline-block align-middle mr-1 ml-1 mb-2 fill-gray-800">
+                    <use xlink:href="{% static 'img/sprite.svg#parking2' %}" />
+                </svg>
+                <svg class="w-6 h-6 inline-block align-middle mr-1 ml-1 mb-2 fill-gray-800">
+                    <use xlink:href="{% static 'img/sprite.svg#umbrella' %}" />
+                </svg>
+                <svg class="w-6 h-6 inline-block align-middle mr-6 ml-1 mb-2 fill-gray-800">
+                    <use xlink:href="{% static 'img/sprite.svg#eye' %}" />
+                </svg>
+            </div> -->
         </div>
     </section>
     <section id="apartments" class="w-full bg-gradient-to-tl to-gray-300 from-blue-300">
@@ -109,8 +125,14 @@
             </div>
 
         </div>
-
     </section>
+    <!-- <section id="neighborhood">
+        <div class="flex flex-col gap-5 max-w-7xl mx-auto py-10 sm:py-14 px-4 lg:px-1 ">
+            <h3 class="font-['Rozha_One'] font-bold text-4xl mb-6">Turawa i okolice</h3>
+
+        </div>
+
+    </section> -->
 </main>
 {% endblock %}
 {% block extra_js %}
