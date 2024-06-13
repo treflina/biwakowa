@@ -3,12 +3,11 @@
 {% load static %}
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/animate.min.css' %}" /> -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/magnific_popup.min.css' %}" />
 {% endblock %}
 {% block content %}
 <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
-    {% include 'includes/admin-nav.html' %}
+    {% include 'includes/nav.html' %}
     <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
         class="object-cover w-full h-full absolute left-0 top-0 ">
         <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4" media="screen and (min-width:640px)">
@@ -137,9 +136,9 @@
 {% endblock %}
 {% block extra_js %}
 <script src="{% static 'js/aos.js' %}"></script>
-
+<!--
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> -->
 <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
 <script>
     $(document).ready(function () {
