@@ -27,31 +27,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="{% static 'css/hamburger.css' %}"
-        />
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="{% static 'css/biwakowa.css' %}"
-        />
+
         {% tailwind_css %}
         {% block extra_css %}
-
-        {# Override this in templates to add extra stylesheets #}
-
         {% endblock %}
-
     </head>
-
     <body class="{% block body_class %}bg-grey-50{% endblock %}" style="font-family: 'Red Hat Text', sans-serif;">
         {% wagtailuserbar %} {% block content %}{% endblock %}
         {# Global javascript #}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-
         <script
             type="text/javascript"
             src="{% static 'js/biwakowa.js' %}"

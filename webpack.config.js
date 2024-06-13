@@ -1,9 +1,14 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./assets/index.js", // path to our input file
+    mode: "production",
+    entry: {
+        datepicker: "./assets/datepicker.js",
+        biwakowa: "./assets/biwakowa.js",
+        modal: "./assets/biwakowa.js",
+    },
     output: {
-        filename: "main.js", // output bundle file name
-        path: path.resolve(__dirname, "./biwakowa/static/js"), // path to our Django static directory
+        filename: "[name].js",
+        path: path.resolve(__dirname, "./biwakowa/static/js"),
     },
 };

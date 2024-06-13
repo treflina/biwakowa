@@ -1,6 +1,6 @@
-import Datepicker from "../node_modules/flowbite-datepicker/js/Datepicker";
-import DateRangePicker from "../node_modules/flowbite-datepicker/js/DateRangePicker";
-import pl from "../node_modules/flowbite-datepicker/js/i18n/locales/pl";
+import Datepicker from "flowbite-datepicker/Datepicker";
+import DateRangePicker from "flowbite-datepicker/DateRangePicker";
+import pl from "flowbite-datepicker/locales/pl";
 
 document.addEventListener("DOMContentLoaded", function () {
     Datepicker.locales.pl = pl.pl;

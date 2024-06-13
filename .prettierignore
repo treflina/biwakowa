@@ -1,1 +1,4 @@
 *.html
+biwakowa/static/js/htmx.min.js
+biwakowa/static/js/aos.js
+biwakowa/static/css/hamburger.css
