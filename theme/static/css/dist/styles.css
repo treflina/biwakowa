@@ -1750,10 +1750,6 @@ input[type="range"]::-ms-fill-lower {
   max-width: 24rem;
 }
 
-.max-w-wrapper {
-  max-width: 1300px;
-}
-
 .max-w-xl {
   max-width: 36rem;
 }
@@ -2570,16 +2566,6 @@ option {
   padding: 0;
   position: absolute;
   width: 1px;
-}
-
-.bg-lake {
-  background:
-        linear-gradient(
-            to top right,
-            rgb(147 197 253) 0%,
-            rgb(59 130 246) 100%
-        ),
-        url("static/img/lake.jpg") no-repeat;
 }
 
 .datepicker-grid .disabled {
