@@ -57,8 +57,8 @@
 @font-face {
     font-family: "Red Hat Text";
     src:
-        url("/static/fonts/redhattext.woff2") format("woff2"),
-        url("/static/fonts/redhattext.woff") format("woff");
+        url("/static/fonts/RedHatText-Regular.woff2") format("woff2"),
+        url("/static/fonts/RedHatText-Regular.woff") format("woff");
 
     font-weight: 400;
     font-style: normal;
@@ -71,5 +71,5 @@
             rgb(147 197 253) 0%,
             rgb(59 130 246) 100%
         ),
-        url("img/lake.jpg") no-repeat;
+        url("/static/img/lake.jpg") no-repeat;
 }
