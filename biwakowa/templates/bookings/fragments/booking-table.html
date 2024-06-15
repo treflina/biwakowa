@@ -24,7 +24,7 @@
             <td data-title="Gość:">{% if booking.guest %}{{ booking.guest }}{% endif %}</td>
             <td data-title="Uwagi:">{% if booking.paid %}
                 <svg class="w-6 h-6 inline-block fill-lime-600">
-                    <use xlink:href="{% static 'img/sprite.svg#credit' %}" />
+                    <use xlink:href="{% static 'img/sprite.svg#credit' %}" href="{% static 'img/sprite.svg#credit' %}" />
                 </svg>{% endif %}
                 {% if booking.notes %}
                 (...) {% endif %}
@@ -33,18 +33,18 @@
                 <div class="btn-group btn-group-sm">
                     <a href="{% url 'bookings_app:booking' booking.id %}" class="">
                         <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
-                            <use xlink:href="{% static 'img/sprite.svg#search' %}" />
+                            <use xlink:href="{% static 'img/sprite.svg#search' %}" href="{% static 'img/sprite.svg#search' %}" />
                         </svg>
                     </A>
                     <a href="{%url 'bookings_app:update-booking' booking.id%}" role="button" class="mx-1 fill-gray-700">
                         <svg class="w-6 h-6 inline-block">
-                            <use xlink:href="{% static 'img/sprite.svg#pencil' %}" />
+                            <use xlink:href="{% static 'img/sprite.svg#pencil' %}" href="{% static 'img/sprite.svg#pencil' %}" />
                         </svg>
                     </a>
                     <button type="button" class="openModal" data-toggle="modal"
                         data-target="#deleteModal-{{booking.id}}">
                         <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
-                            <use xlink:href="{% static 'img/sprite.svg#trash' %}" />
+                            <use xlink:href="{% static 'img/sprite.svg#trash' %}" href="{% static 'img/sprite.svg#trash' %}" />
                         </svg>
                     </button>
 
