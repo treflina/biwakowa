@@ -8,7 +8,6 @@
                 <img src="{% static 'img/logonobg.png' %}" alt="logo" class="inline-block w-full h-full" width="150" height="62" />
             </a>
         </div>
-
         <button
             class="absolute right-0 hamburger hamburger--spring z-90 flex-shrink mdl:hidden sm:hidden w-14 h-10"
             type="button" aria-controls="nav-list" aria-haspopup="true" aria-expanded="false" aria-label="Menu" style="z-index:100;">
@@ -28,7 +27,7 @@
             {% include 'includes/admin-nav-content.html' %}
         </ul>
         {% else %}
-            <ul
+        <ul
             class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-dvh transition-all duration-300
             origin-top-right sm:hidden flex flex-col justify-center
             gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gradient-to-bl to-gray-300  from-blue-300">

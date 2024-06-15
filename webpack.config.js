@@ -1,11 +1,10 @@
 const path = require("path");
 
 module.exports = {
-    mode: "production",
     entry: {
         datepicker: "./assets/datepicker.js",
         biwakowa: "./assets/biwakowa.js",
-        modal: "./assets/biwakowa.js",
+        modal: "./assets/modal.js",
     },
     output: {
         filename: "[name].js",
