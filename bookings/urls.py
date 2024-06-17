@@ -6,6 +6,7 @@ from .views import (
     BookingsListView,
     BookingUpdateView,
     UpcomingBookingsListView,
+    calendars,
     delete_booking,
     onlinebooking,
     success,
@@ -44,8 +45,7 @@ urlpatterns = [
     path("success/", success, name="success"),
     path("cancel/", cancel, name="cancel"),
     path("stripe-webhook/", stripe_webhook, name="webhook"),
-    path("wyszukaj/<year>/<month>/", booking_search, name="booking-search"),
+    path("calendars/<year>/<month>/", calendars, name="calendars"),
+    path("calendars/", calendars, name="calendars"),
     path("wyszukaj/", booking_search, name="booking-search"),
-
-
 ]

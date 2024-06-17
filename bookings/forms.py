@@ -141,7 +141,6 @@ class OnlineBookingForm(forms.Form):
                         W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
                         )
                 if (arrival - today).days > 7 + add_days and arrival.weekday() != 6:
-                    print(arrival.weekday())
                     raise ValidationError(
                         "Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
@@ -257,7 +256,6 @@ class OnlineBookingDetailsForm(forms.Form):
                         W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
                         )
                 if (arrival - today).days > 7 + add_days and arrival.weekday() != 6:
-                    print(arrival.weekday())
                     raise ValidationError(
                         "Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \

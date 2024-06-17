@@ -6,23 +6,7 @@
 {% include 'includes/nav.html' %}
 {% comment %} <div style="height:100vh;"></div> {% endcomment %}
 <main class="w-full mx-auto max-w-[1350px]">
-    <section id="booking-calendar">
-        {% include 'apartments/fragments/booking-calendar.html' %}
-    </section>
-    {% if b1_name == "1" %}
-    <div class="text-right mt-10 px-3">
-        <a href="{% slugurl 'maxi' %}"
-            class="btn-admin cursor-pointer inline-block font-semibold">
-            <p>Apartamenty nr 3 i 4 &raquo;</p>
-        </a>
-    </div>
-    {% else %}
-    <div class="text-right mt-10 px-3">
-        <a href="{% slugurl 'midi' %}"
-            class="btn-admin cursor-pointer inline-block font-semibold">
-            <p>Apartamenty nr 1 i 2 &raquo;</p>
-        </a>
-        {% endif %}
+
 </main>
-<script src="{% static 'js/htmx.min.js' %}"></script>
+
 {% endblock%}

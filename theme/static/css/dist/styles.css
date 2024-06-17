@@ -1427,10 +1427,6 @@ input[type="range"]::-ms-fill-lower {
   margin-top: -0.5rem;
 }
 
-.-mt-5 {
-  margin-top: -1.25rem;
-}
-
 .-mt-8 {
   margin-top: -2rem;
 }
@@ -2203,6 +2199,11 @@ input[type="range"]::-ms-fill-lower {
   padding-bottom: 1rem;
 }
 
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
 .pb-1 {
   padding-bottom: 0.25rem;
 }
@@ -2233,6 +2234,10 @@ input[type="range"]::-ms-fill-lower {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 .text-center {
@@ -3121,10 +3126,6 @@ option {
     margin-bottom: 2.5rem;
   }
 
-  .md\:-mt-14 {
-    margin-top: -3.5rem;
-  }
-
   .md\:mr-4 {
     margin-right: 1rem;
   }
@@ -3205,10 +3206,6 @@ option {
   .lg\:mx-auto {
     margin-left: auto;
     margin-right: auto;
-  }
-
-  .lg\:-mt-24 {
-    margin-top: -6rem;
   }
 
   .lg\:mt-6 {

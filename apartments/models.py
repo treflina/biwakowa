@@ -1,19 +1,11 @@
-import calendar
-from collections import Counter
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
-from django.contrib import messages
 from django.db import models
-from django.db.models import Q
-from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.models import Page
-from wagtail.contrib.routable_page.models import RoutablePageMixin, path
 from wagtail.snippets.models import register_snippet
-
-from bookings.utils import booking_dates_assignment, get_next_prev_month
 
 
 class ApartmentType(models.Model):
@@ -74,11 +66,10 @@ class Apartment(models.Model):
         return self.name
 
 
-class ApartmentPage(RoutablePageMixin, Page):
+class ApartmentPage(Page):
 
     template = "apartments/apartment.html"
     content_panels = Page.content_panels + []
-    ajax_template = "apartments/fragments/booking-calendar.html"
 
     apartment1 = models.ForeignKey(
         Apartment,
@@ -105,45 +96,6 @@ class ApartmentPage(RoutablePageMixin, Page):
         ),
     ]
 
-    @path('')
-    @path('calendar/')
-    @path('calendar/<int:year>/<int:month>/')
-    def calendar(self, request, year=None, month=None):
-
-        if month is None:
-            month = date.today().month
-        if year is None:
-            year = date.today().year
-
-        first_day = calendar.monthrange(year, month)[0]
-        num_days = calendar.monthrange(year, month)[1]
-
-        cal_months = get_next_prev_month(year, month)
-
-        ap1_bookings_dict = booking_dates_assignment(self.apartment1, year, month)
-        ap2_bookings_dict = booking_dates_assignment(self.apartment2, year, month)
-
-        if request.htmx and not request.htmx.history_restore_request:
-            templ = "apartments/fragments/booking-calendar.html"
-        else:
-            templ= "apartments/apartment.html"
-
-        context_overrides = {
-            'year': year,
-            'month': month,
-            'displayed_month': date(year,month,1),
-            'previous_year': cal_months["previous_year"],
-            'previous_month': cal_months["previous_month"],
-            'next_month': cal_months["next_month"],
-            'next_year': cal_months["next_year"],
-            'num_days': range(1,num_days+1),
-            'first_day': first_day,
-            'ap1_dates': ap1_bookings_dict,
-            'ap2_dates': ap2_bookings_dict,
-            'b1_name': self.apartment1.name,
-            'b2_name': self.apartment2.name,
-        }
 
 
 
-        return self.render(request, template=templ, context_overrides=context_overrides)

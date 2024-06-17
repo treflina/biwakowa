@@ -52,11 +52,45 @@ class BookingsListView(LoginRequiredMixin, views.FilterView):
 
 
 def booking_search(request, year=None, month=None):
+    """Search and display available apartments."""
 
-    if request.htmx and not request.htmx.history_restore_request:
-        templ = "apartments/fragments/booking-calendar.html"
-    else:
-        templ= "bookings/bookings-search.html"
+    context = {
+        'form': OnlineBookingForm()
+    }
+
+    if 'submit' in request.GET:
+        form = OnlineBookingForm(request.GET)
+        if form.is_valid():
+            arrival = datetime.strptime(request.GET.get("arrival"), '%d.%m.%Y').date()
+            departure = datetime.strptime(request.GET.get("departure"), '%d.%m.%Y').date()
+
+            available_apartments = []
+            apartments = Apartment.objects.all()
+
+            session_email = request.session.get("email", None)
+
+            for apartment in apartments:
+                if session_email:
+                    qs = Booking.objects.bookings_periods(apartment, arrival, departure).exclude(email=session_email)
+                else:
+                    qs = Booking.objects.bookings_periods(apartment, arrival, departure)
+                if not qs.exists():
+                    price = calculated_price(apartment, arrival, departure)
+                    apartment.price = price
+                    available_apartments.append(apartment)
+
+            context['available_apartments'] = available_apartments
+            context["arrival"] = arrival
+            context["departure"] = departure
+            context["results"] = True
+            context["num_nights"] = (departure - arrival).days
+        return render(request, template_name="bookings/fragments/search-results.html", context=context)
+
+    return render(request, template_name="bookings/bookings-search.html", context=context)
+
+
+def calendars(request, year=None, month=None):
+    """Display apartment's availability calendars"""
 
     if month is None:
         month = date.today().month
@@ -95,40 +129,9 @@ def booking_search(request, year=None, month=None):
         'ap2_dates': ap2_bookings_dict,
         'ap3_dates': ap3_bookings_dict,
         'ap4_dates': ap4_bookings_dict,
-        'form': OnlineBookingForm()
     }
 
-    if 'submit' in request.GET:
-        form = OnlineBookingForm(request.GET)
-        if form.is_valid():
-            arrival = datetime.strptime(request.GET.get("arrival"), '%d.%m.%Y').date()
-            departure = datetime.strptime(request.GET.get("departure"), '%d.%m.%Y').date()
-
-            available_apartments = []
-            apartments = Apartment.objects.all()
-
-            session_email = request.session.get("email", None)
-
-            for apartment in apartments:
-                if session_email:
-                    qs = Booking.objects.bookings_periods(apartment, arrival, departure).exclude(email=session_email)
-                else:
-                    qs = Booking.objects.bookings_periods(apartment, arrival, departure)
-                if not qs.exists():
-                    price = calculated_price(apartment, arrival, departure)
-                    apartment.price = price
-                    available_apartments.append(apartment)
-
-            context['available_apartments'] = available_apartments
-            context["arrival"] = arrival
-            context["departure"] = departure
-            context["results"] = True
-            context["num_nights"] = (departure - arrival).days
-
-        else:
-            context['form'] = form
-
-    return render(request, template_name=templ, context=context)
+    return render(request, "bookings/fragments/booking-calendar.html", context=context)
 
 
 class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
@@ -325,8 +328,6 @@ def success(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     checkout_session_id = request.GET.get('session_id', None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
-    for k,v in session.items():
-        print(k, v )
     return render(request, "bookings/success.html")
 
 

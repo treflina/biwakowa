@@ -7,12 +7,11 @@
     <section id="booking-form" class="mt-12 mb-6 px-2">
         <h1 class="font-semibold text-4xl text-center mb-4">Rezerwuj apartament</h1>
         <img src="{% static 'img/przelewy.png' %}" alt="przelewy24 karty" class="mx-auto w-40" />
-        <form method="GET" action="{% url 'bookings_app:booking-search' %}"
-            class="flex flex-col justify-center items-center pt-6 px-1 w-full mb-4" id="bookings-search-results">
-            <!-- <div class="flex flex-col gap-2 flex-wrap mb-4 mt-2 items-center justify-center"> -->
+        <form method="GET" hx-get="{% url 'bookings_app:booking-search' %}" hx-target="#results" hx-swap="outerHTML"
+            hx-trigger="submit" class="flex flex-col justify-center items-center pt-6 px-1 w-full mb-4"
+            id="bookings-search-results">
             <div
                 class="daterangepicker flex flex-wrap items-center justify-center gap-2 my-3 p-2 md:p-4 border-2 rounded-md mx-auto">
-
                 <div class="flex flex-wrap justify-center items-center my-2">
                     <label for="id_arrival" class="mx-2">Data zameldowania:</label>
                     <div class="relative max-w-72">
@@ -21,13 +20,15 @@
                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path
                                     d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2
-                                     2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                        2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                             </svg>
                         </div>
-                        <input type="text" id="id_arrival" name="arrival" value="{{arrival}}" autocomplete="off"
+                        <input type="text" id="id_arrival" name="arrival" value="{{arrival|date:'d.m.Y'}}"
+                            autocomplete="off"
                             class="datepicker datepicker1 min-w-40 w-44 text-center bg-gray-50 border-2 border-blue-300 text-gray-900 rounded-md
-                             focus:ring-amber-300 focus:border-amber-300 block  ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600
-                              dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="dd.mm.rrrr">
+                                focus:ring-amber-300 focus:border-amber-300 block  ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600
+                                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="dd.mm.rrrr">
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -42,7 +43,7 @@
                                         2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input type="text" name="departure" id="id_departure" value="{{departure}}"
+                            <input type="text" name="departure" id="id_departure" value="{{departure|date:'d.m.Y'}}"
                                 autocomplete="off" class="datepicker datepicker2 min-w-40 w-44 text-center bg-gray-50 border-2
                             border-blue-300 text-gray-900 rounded-md focus:ring-amber-300
                                 focus:border-amber-300 block ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
@@ -52,119 +53,17 @@
                     </div>
                 </div>
                 <input type="submit" name="submit" class="btn-cta cursor-pointer my-2 mx-4" value="Sprawdź dostępność">
-                <!-- <div class="my-2 text-center">
-                        <label for="{{ form.arrival.id_for_label }}">Data zameldowania:</label>
-                        {{ form.arrival}}
-                    </div>
-                    <div class="my-2 text-center">
-                        <label for="{{ form.departure.id_for_label }}">Data wymeldowania:</label>
-                        {{ form.departure}} -->
-            </div>
-
-            <!-- </div> -->
-            {% if form.non_field_errors %}
-            <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold text-lg text-center ">
-                {{ form.non_field_errors|linebreaks }}
-            </div>
-            {% endif%}
-
             </div>
         </form>
-
-        {% if not results %}
-        <div class="max-w-5xl mx-auto">
-            {% if messages %}
-            <ul class="messages mb-4">
-                {% for message in messages %}
-                <li class="text-amber-600 font-semibold text-lg text-center my-4">{{ message|linebreaks}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <p class="text-center">Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
-                okresie
-                <span class="font-semibold">lipiec-sierpień 7 noclegów od niedzieli do niedzieli</span>
-                (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).
-            </p>
-        </div>
-        {% endif %}
     </section>
-    <section id="results" class="flex flex-col gap-4 max-w-5xl mx-auto mb-10">
-        {% if available_apartments %}
-        <h2 class="font-semibold text-2xl text-center mb-4">Dostępne apartamenty w terminie
-            <span class="text-amber-600">{{arrival|date:'d.m.Y'}}</span> do
-            <span class="text-amber-600">{{departure|date:'d.m.Y'}} </span>
-            ({{num_nights}}{% if num_nights == 3 or num_nights == 4 %}&nbsp;noclegi
-            {% else %}&nbsp;noclegów {% endif %}):
-        </h2>
-        {% for apartment in available_apartments %}
-        <div class="flex flex-wrap sm:flex-nowrap mx-2 p-2 gap-4 border-2 border-gray-300 rounded-md">
-            <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-                class="inline-block w-full sm:w-72 object-cover object-center rounded-sm">
-            <div class="flex flex-col gap-3">
-                <h3 class="text-lg font-semibold mb-2">
-                    Apartament {{ apartment.apartment_type }} nr {{ apartment.name }}
-                </h3>
-                <p>Salon z aneksem kuchennym,
-                    {% if apartment.name == "2" or apartment.name == "4" %}dwie sypialnie,{% endif %} łazienka z
-                    prysznicem, {% if apartment.name == "1" or apartment.name == "2" %}taras {% else %}
-                    balkon{% endif %}.
-                    Położony na <span class="font-semibold">
-                    {% if apartment.name == "1" or apartment.name == "2" %}parterze{% else %} I&nbsp;piętrze{% endif %}</span>.
-                    <br>Możliwość zakwaterowania {% if apartment.name == "1" or apartment.name == "3" %} dodatkowej
-                    osoby {% else %}
-                    2 dodatkowych osób {% endif %} (kanapa w salonie) za dopłatą 50zł&nbsp;os./doba.
-                </p>
-                <p class="flex-wrap">
-                    <span class="inline-block">
-                    <svg class="w-4 h-4 inline-block align-middle mx-1 mb-1 fill-blue-600">
-                        <use xlink:href="{% static 'img/sprite.svg#surface' %}" href="{% static 'img/sprite.svg#surface' %}" />
-                    </svg>{% if  apartment.name == "1" or apartment.name == "3" %}31m2 {% else %}49m2{% endif %}</span>
-                    <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                        <use xlink:href="{% static 'img/sprite.svg#parking' %}"
-                            href="{% static 'img/sprite.svg#parking' %}" />
-                    </svg>parking
-                    <span class="inline-block">
-                            <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                                <use xlink:href="{% static 'img/sprite.svg#wifi' %}" href="{% static 'img/sprite.svg#wifi' %}" />
-                            </svg>WiFi</span>
-                    <span class="inline-block">
-                            <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                                <use xlink:href="{% static 'img/sprite.svg#tv' %}" href="{% static 'img/sprite.svg#tv' %}" />
-                            </svg>TV</span>
-                    <span class="inline-block">
-                            <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                                <use xlink:href="{% static 'img/sprite.svg#kitchen' %}" href="{% static 'img/sprite.svg#kitchen' %}" />
-                            </svg>przybory kuchenne, czajnik, lodówka, płyta kuchenna</span>
-                    <span class="inline-block">
-                            <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                                <use xlink:href="{% static 'img/sprite.svg#shower' %}" href="{% static 'img/sprite.svg#shower' %}" />
-                            </svg> ręczniki, kosmetyki łazienkowe</span>
-                </p>
-                <div class="flex justify-between sm:justify-end items-center my-3 w-full gap-2 sm:gap-4">
-                    <p>Cena: <span class="font-semibold text-xl md:text-2xl">{{ apartment.price }}&nbsp;zł</span></p>
-                    <form action="{% url 'bookings_app:onlinebooking' arrival departure apartment.id %}" method="GET">
+    {% include 'bookings/fragments/search-results.html' %}
 
-                        <button type="submit" class="btn-cta mr-1 md:mr-4 text-center">Rezerwuję i płacę</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-
-        {% if results and not available_apartments %}
-        <p class="text-amber-600 font-semibold text-lg text-center my-4">Przykro nam, ale nie mamy wolnych apartamentów
-            w okresie od {{arrival}} do {{departure}}</p>
-        {% endif %}
+    <section id="booking-calendar" hx-get="{% url 'bookings_app:calendars' %}" hx-target="#booking-calendar"
+        hx-swap="innerHTML" hx-trigger="load" class="bg-gradient-to-tl to-gray-300 from-blue-300 py-6">
+        {% include 'bookings/fragments/booking-calendar.html' %}
     </section>
-    <section id="booking-calendar">
-        {% include 'apartments/fragments/booking-calendar.html' %}
-    </section>
-    <!-- -mt-5 md:-mt-14 lg:-mt-24 -->
     <img src="{% static 'img/jezioro2.png' %}" class="-mt-8 relative inline-block">
 
 </main>
-<script src="{% static 'js/htmx.min.js' %}"></script>
 <script src="{% static 'js/datepicker.js' %}"></script>
 {% endblock %}
