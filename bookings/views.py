@@ -84,6 +84,8 @@ def booking_search(request, year=None, month=None):
             context["departure"] = departure
             context["results"] = True
             context["num_nights"] = (departure - arrival).days
+        else:
+            context["form"] = form
         return render(request, template_name="bookings/fragments/search-results.html", context=context)
 
     return render(request, template_name="bookings/bookings-search.html", context=context)
