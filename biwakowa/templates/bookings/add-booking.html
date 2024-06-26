@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags bookings_tags %}
+{% load wagtailcore_tags %}
 {% load static %}
 
 {% block content %}
 {% include 'includes/nav.html' %}
 <main
-    class="relative flex flex-col justify-center items-center min-h-[calc(100dvh-55px)] w-full bg-gradient-to-tl to-gray-300 from-blue-300">
-    <div class="p-2 bg-gray-50 rounded-md m-2 my-6 pb-8 sm:m-6 sm:px-6 md:px-8 max-w-lg lg:max-w-5xl">
+    class="relative flex flex-col items-center min-h-[calc(100dvh-55px)] w-full bg-gradient-to-tl to-gray-300 from-blue-300">
+    <div class="p-2 bg-gray-50 rounded-md m-2 my-6 pb-8 sm:m-6 sm:px-6 md:px-10 max-w-xl lg:max-w-5xl md:w-3/4">
         <h1 class="text-2xl text-center font-semibold my-6">
             {% if updating %} Edytuj rezerwację {% else %} Nowa rezerwacja {% endif %}</h1>
         {% for error in form.non_field_errors %}
@@ -49,28 +49,25 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="flex flex-col gap-5 ">
-                <div class="flex flex-row gap-3">
-                    <div class="flex flex-col w-full justify-between">
-                        <label for="id_total_price">Cena za pobyt</label>
-                        {{ form.total_price }}
+                <div class="flex flex-col gap-5 ">
+                    <div class="flex flex-row gap-3">
+                        <div class="flex flex-col w-full justify-between">
+                            <label for="id_total_price">Cena za pobyt</label>
+                            {{ form.total_price }}
+                        </div>
+                        <div class="flex w-full items-center gap-2 justify-center">
+                            {{ form.paid }}
+                            <label for="id_paid">Zapłacone</label>
+                        </div>
                     </div>
-                    <div class="flex w-full items-center gap-2 justify-center">
-                        {{ form.paid }}
-                        <label for="id_paid">Zapłacone</label>
+                    <div class="flex flex-col w-full">
+                        <label for="id_notes">Dodatkowe informacje</label>
+                        {{ form.notes }}
                     </div>
+                    <button class="btn-admin uppercase" type="submit" value="Dodaj">Gotowe</button>
                 </div>
-                <div class="flex flex-col w-full">
-                    <label for="id_notes">Dodatkowe informacje</label>
-                    {{ form.notes }}
-                </div>
-                <button class="btn-admin uppercase" type="submit" value="Dodaj">Gotowe</button>
             </div>
-    </div>
-
-
-    </form>
+        </form>
     </div>
 </main>
 

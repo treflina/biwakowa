@@ -65,7 +65,7 @@ def booking_search(request, year=None, month=None):
             departure = datetime.strptime(request.GET.get("departure"), '%d.%m.%Y').date()
 
             available_apartments = []
-            apartments = Apartment.objects.all()
+            apartments = Apartment.objects.all().order_by("name")
 
             session_email = request.session.get("email", None)
 
@@ -217,8 +217,9 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required(login_url="users_app:user-login")
 def delete_booking(request, pk):
-    """Deletes booking."""
-    Booking.objects.get(id=pk).delete()
+    """Delete booking."""
+    booking_to_delete = get_object_or_404(Booking, id=pk)
+    booking_to_delete.delete()
     return HttpResponseRedirect(reverse("bookings_app:bookings"))
 
 
@@ -314,7 +315,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
             except Exception as ex:
 
-                logger.error(f"Błąd podczas próby płatności: {e}.")
+                logger.error(f"Błąd podczas próby płatności: {ex}.")
                 messages.error(request, _("Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
                                         płatności. \n \
                                         Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."))
@@ -328,8 +329,8 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
 def success(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    checkout_session_id = request.GET.get('session_id', None)
-    session = stripe.checkout.Session.retrieve(checkout_session_id)
+    # checkout_session_id = request.GET.get('session_id', None)
+    # session = stripe.checkout.Session.retrieve(checkout_session_id)
     return render(request, "bookings/success.html")
 
 
@@ -346,7 +347,7 @@ def stripe_webhook(request):
 
     try:
         sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    except:
+    except KeyError:
         return HttpResponse(status=403)
     event = None
 
@@ -365,7 +366,6 @@ def stripe_webhook(request):
         # Retrieve the session.
         session = event['data']['object']
         session_id = session.get('id', None)
-        time.sleep(15)
         #TODO make try except
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         if session.payment_status == "paid":
@@ -375,7 +375,6 @@ def stripe_webhook(request):
     elif event['type'] == 'checkout.session.expired':
         session = event['data']['object']
         session_id = session.get('id', None)
-        time.sleep(15)
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         booking.delete()
 

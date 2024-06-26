@@ -3,7 +3,7 @@
 
 # from modelcluster.fields import ParentalKey
 
-from wagtail.models import Page, Orderable
+from wagtail.models import Page
 # from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 
 

@@ -53,10 +53,20 @@ class Apartment(models.Model):
         )
     stripe_product_id = models.CharField(_("stripe product id"), max_length=255, null=True, blank=True)
     base_price = models.DecimalField(_("base price"), max_digits=7, decimal_places=2, default=0)
+    floor = models.CharField(
+        _("floor"),
+        choices=(
+            ("0", _("ground floor")),
+            ("1", _("first floor"))
+            ),
+        default="0",
+        max_length=10
+        )
 
     panels = [
         FieldPanel("name",  read_only=True),
-        FieldPanel("apartment_type", read_only=True),
+        FieldPanel("apartment_type"),
+        FieldPanel("floor"),
         FieldPanel("stripe_product_id"),
         FieldPanel("base_price"),
     ]

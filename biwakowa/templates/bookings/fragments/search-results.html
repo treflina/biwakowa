@@ -2,7 +2,7 @@
 
 <section id="results" class="flex flex-col gap-4 max-w-5xl mx-auto mb-10">
     {% if form.non_field_errors %}
-    <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold text-lg text-center ">
+    <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold sm:text-lg text-center px-3">
         {{ form.non_field_errors|linebreaks }}
     </div>
     {% endif%}
@@ -11,7 +11,7 @@
         {% if messages %}
         <ul class="messages mb-4">
             {% for message in messages %}
-            <li class="text-amber-600 font-semibold text-lg text-center my-4">{{ message|linebreaks}}</li>
+            <li class="text-amber-600 font-semibold sm:text-lg text-center my-4 px-3">{{ message|linebreaks}}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -26,8 +26,7 @@
     <h2 class="font-semibold text-2xl text-center mb-4">Dostępne apartamenty w terminie
         <span class="text-amber-600">{{arrival|date:'d.m.Y'}}</span> do
         <span class="text-amber-600">{{departure|date:'d.m.Y'}} </span>
-        ({{num_nights}}{% if num_nights == 3 or num_nights == 4 %}&nbsp;noclegi
-        {% else %}&nbsp;noclegów {% endif %}):
+        ({{num_nights}}{% if num_nights == 3 or num_nights == 4 %}&nbsp;noclegi{% else %}&nbsp;noclegów{% endif %}):
     </h2>
     {% for apartment in available_apartments %}
     <div class="flex flex-wrap sm:flex-nowrap mx-2 p-2 gap-4 border-2 border-gray-300 rounded-md">
@@ -35,15 +34,15 @@
             class="inline-block w-full sm:w-72 object-cover object-center rounded-sm">
         <div class="flex flex-col gap-3">
             <h3 class="text-lg font-semibold mb-2">
-                Apartament {{ apartment.apartment_type }} nr {{ apartment.name }}
+                Apartament {{ apartment.apartment_type.type_name }} nr {{ apartment.name }}
             </h3>
             <p>Salon z aneksem kuchennym,
-                {% if apartment.name == "2" or apartment.name == "4" %}dwie sypialnie,{% endif %} łazienka z
-                prysznicem, {% if apartment.name == "1" or apartment.name == "2" %}taras {% else %}
+                {% if apartment.apartment_type.type_name == "4-osobowy" %}dwie sypialnie,{% endif %} łazienka z
+                prysznicem, {% if apartment.floor == "0" %}taras {% else %}
                 balkon{% endif %}.
                 Położony na <span class="font-semibold">
-                {% if apartment.name == "1" or apartment.name == "2" %}parterze{% else %} I&nbsp;piętrze{% endif %}</span>.
-                <br>Możliwość zakwaterowania {% if apartment.name == "1" or apartment.name == "3" %} dodatkowej
+                {% if apartment.floor == "0" %}parterze{% else %} I&nbsp;piętrze{% endif %}</span>.
+                <br>Możliwość zakwaterowania {% if apartment.apartment_type.type_name == "2-osobowy" %} dodatkowej
                 osoby {% else %}
                 2 dodatkowych osób {% endif %} (kanapa w salonie) za dopłatą 50zł&nbsp;os./doba.
             </p>
@@ -51,7 +50,7 @@
                 <span class="inline-block">
                 <svg class="w-4 h-4 inline-block align-middle mx-1 mb-1 fill-blue-600">
                     <use xlink:href="{% static 'img/sprite.svg#surface' %}" href="{% static 'img/sprite.svg#surface' %}" />
-                </svg>{% if  apartment.name == "1" or apartment.name == "3" %}31m2 {% else %}49m2{% endif %}</span>
+                </svg>{% if  apartment.apartment_type.type_name == "2-osobowy" %}31m2 {% else %}49m2{% endif %}</span>
                 <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
                     <use xlink:href="{% static 'img/sprite.svg#parking' %}"
                         href="{% static 'img/sprite.svg#parking' %}" />

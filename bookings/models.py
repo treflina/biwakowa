@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-from django.db.models import Q
 
 from .managers import BookingManager
 from bookings.utils import get_base_price

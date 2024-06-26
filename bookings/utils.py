@@ -6,12 +6,13 @@ from django.db.models import Q
 
 
 def daterange(start_date, end_date):
+    """Iterate over dates in a given period."""
     for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
 
 def get_base_price(apartment, date):
-
+    """Get apartment price for a given date"""
     Apartment = apps.get_model('apartments', 'Apartment')
     Price = apps.get_model('apartments', 'Price')
 
@@ -28,14 +29,16 @@ def get_base_price(apartment, date):
 
 
 def calculated_price(apartment, arrival, departure):
+    """Calculate apartment total price for a given booking period."""
     price_list = [ get_base_price(apartment, date) for date in  daterange(arrival, departure) ]
     return sum(price_list)
 
 
 def booking_dates_assignment(apartment, year, month):
+    """Assign booking dates as a first, in the middle or last day of stay.
+    Necessary for display purposes in calendars."""
 
     Booking = apps.get_model('bookings', 'Booking')
-
     bookings_list = Booking.objects.bookings_per_month(
                 apartment.name, year, month
                 )
@@ -60,11 +63,13 @@ def booking_dates_assignment(apartment, year, month):
         dates.extend(dep_arr_dates)
 
     bookings_dates_dict = {
+        "apartment": apartment,
         "dates": dates,
         "arr_dates": arrival_dates,
         "dep_dates": departure_dates
     }
     return bookings_dates_dict
+
 
 def get_next_prev_month(year, month):
     previous_year = year

@@ -122,8 +122,7 @@ class OnlineBookingForm(forms.Form):
         departure = cleaned_data.get("departure")
 
         today = get_today()
-        add_days = 7 -  today.weekday()
-
+        # add_days = 7 -  today.weekday()
         if not arrival or not departure:
             raise ValidationError(_("Please provide both dates."))
         else:
@@ -134,13 +133,13 @@ class OnlineBookingForm(forms.Form):
                     "Wybrana data nie może być wcześniejsza od dzisiaj."
                     )
             if arrival.month in [7,8] and departure.month in [7,8]:
-                if (departure - arrival).days < 7 and (arrival - today).days > 7 + add_days:
+                if (departure - arrival).days < 7 and (arrival - today).days > 7:
                     raise ValidationError(
                         "Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
                         przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
                         W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
                         )
-                if (arrival - today).days > 7 + add_days and arrival.weekday() != 6:
+                if (arrival - today).days > 7 and arrival.weekday() != 6:
                     raise ValidationError(
                         "Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
@@ -149,7 +148,6 @@ class OnlineBookingForm(forms.Form):
                         )
             if (departure - arrival).days < 3:
                 raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
-
 
 
 class OnlineBookingDetailsForm(forms.Form):
@@ -238,6 +236,7 @@ class OnlineBookingDetailsForm(forms.Form):
 
         today = dt.date.today()
         add_days = 7 -  today.weekday()
+        print(add_days)
 
         if not arrival or not departure:
             raise ValidationError(_("Please provide both dates."))
@@ -249,13 +248,13 @@ class OnlineBookingDetailsForm(forms.Form):
                     "Wybrana data nie może być wcześniejsza od dzisiaj."
                     )
             if arrival.month in [7,8] and departure.month in [7,8]:
-                if (departure - arrival).days < 7 and (arrival - today).days > 7 + add_days:
+                if (departure - arrival).days < 7 and (arrival - today).days > 7:
                     raise ValidationError(
                         "Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
                         przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
                         W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
                         )
-                if (arrival - today).days > 7 + add_days and arrival.weekday() != 6:
+                if (arrival - today).days > 7 and arrival.weekday() != 6:
                     raise ValidationError(
                         "Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
