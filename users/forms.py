@@ -30,8 +30,6 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get("password")
 
         if not authenticate(username=username, password=password):
-            raise forms.ValidationError(
-                _("Provided credentials are invalid.")
-                )
+            raise forms.ValidationError(_("Provided credentials are invalid."))
 
         return cleaned_data

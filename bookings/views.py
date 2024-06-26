@@ -26,7 +26,7 @@ from .forms import (
     BookingUpdateForm,
     OnlineBookingForm,
     OnlineBookingDetailsForm,
-    )
+)
 from .models import Booking
 from .utils import calculated_price
 
@@ -43,7 +43,7 @@ class BookingsListView(LoginRequiredMixin, views.FilterView):
     login_url = reverse_lazy("users_app:user-login")
     filterset_class = BookingsFilter
     paginate_by = 20
-    ordering = ['-date_from']
+    ordering = ["-date_from"]
 
     def get_template_names(self):
         if self.request.htmx and not self.request.htmx.history_restore_request:
@@ -54,15 +54,15 @@ class BookingsListView(LoginRequiredMixin, views.FilterView):
 def booking_search(request, year=None, month=None):
     """Search and display available apartments."""
 
-    context = {
-        'form': OnlineBookingForm()
-    }
+    context = {"form": OnlineBookingForm()}
 
-    if 'submit' in request.GET:
+    if "submit" in request.GET:
         form = OnlineBookingForm(request.GET)
         if form.is_valid():
-            arrival = datetime.strptime(request.GET.get("arrival"), '%d.%m.%Y').date()
-            departure = datetime.strptime(request.GET.get("departure"), '%d.%m.%Y').date()
+            arrival = datetime.strptime(request.GET.get("arrival"), "%d.%m.%Y").date()
+            departure = datetime.strptime(
+                request.GET.get("departure"), "%d.%m.%Y"
+            ).date()
 
             available_apartments = []
             apartments = Apartment.objects.all().order_by("name")
@@ -71,7 +71,9 @@ def booking_search(request, year=None, month=None):
 
             for apartment in apartments:
                 if session_email:
-                    qs = Booking.objects.bookings_periods(apartment, arrival, departure).exclude(email=session_email)
+                    qs = Booking.objects.bookings_periods(
+                        apartment, arrival, departure
+                    ).exclude(email=session_email)
                 else:
                     qs = Booking.objects.bookings_periods(apartment, arrival, departure)
                 if not qs.exists():
@@ -79,16 +81,22 @@ def booking_search(request, year=None, month=None):
                     apartment.price = price
                     available_apartments.append(apartment)
 
-            context['available_apartments'] = available_apartments
+            context["available_apartments"] = available_apartments
             context["arrival"] = arrival
             context["departure"] = departure
             context["results"] = True
             context["num_nights"] = (departure - arrival).days
         else:
             context["form"] = form
-        return render(request, template_name="bookings/fragments/search-results.html", context=context)
+        return render(
+            request,
+            template_name="bookings/fragments/search-results.html",
+            context=context,
+        )
 
-    return render(request, template_name="bookings/bookings-search.html", context=context)
+    return render(
+        request, template_name="bookings/bookings-search.html", context=context
+    )
 
 
 def calendars(request, year=None, month=None):
@@ -99,8 +107,8 @@ def calendars(request, year=None, month=None):
     if year is None:
         year = date.today().year
 
-    year=int(year)
-    month=int(month)
+    year = int(year)
+    month = int(month)
 
     first_day = calendar.monthrange(year, month)[0]
     num_days = calendar.monthrange(year, month)[1]
@@ -118,19 +126,19 @@ def calendars(request, year=None, month=None):
     ap4_bookings_dict = booking_dates_assignment(ap4, year, month)
 
     context = {
-        'year': year,
-        'month': month,
-        'displayed_month': date(year,month,1),
-        'previous_year': cal_months["previous_year"],
-        'previous_month': cal_months["previous_month"],
-        'next_month': cal_months["next_month"],
-        'next_year': cal_months["next_year"],
-        'num_days': range(1,num_days+1),
-        'first_day': first_day,
-        'ap1_dates': ap1_bookings_dict,
-        'ap2_dates': ap2_bookings_dict,
-        'ap3_dates': ap3_bookings_dict,
-        'ap4_dates': ap4_bookings_dict,
+        "year": year,
+        "month": month,
+        "displayed_month": date(year, month, 1),
+        "previous_year": cal_months["previous_year"],
+        "previous_month": cal_months["previous_month"],
+        "next_month": cal_months["next_month"],
+        "next_year": cal_months["next_year"],
+        "num_days": range(1, num_days + 1),
+        "first_day": first_day,
+        "ap1_dates": ap1_bookings_dict,
+        "ap2_dates": ap2_bookings_dict,
+        "ap3_dates": ap3_bookings_dict,
+        "ap4_dates": ap4_bookings_dict,
     }
 
     return render(request, "bookings/fragments/booking-calendar.html", context=context)
@@ -138,6 +146,7 @@ def calendars(request, year=None, month=None):
 
 class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
     """Upcoming bookings listing page."""
+
     today = datetime.today()
     queryset = Booking.objects.filter(date_from__gte=today)
     context_object_name = "bookings"
@@ -145,7 +154,7 @@ class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
     login_url = reverse_lazy("users_app:user-login")
     filterset_class = BookingsFilter
     paginate_by = 20
-    ordering = ['date_from']
+    ordering = ["date_from"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -185,12 +194,12 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
     def get_initial(self):
         initials = super(BookingUpdateView, self).get_initial()
         booking_obj = self.get_object()
-        initials["date_from"] = booking_obj.date_from.strftime('%Y-%m-%d')
-        initials["date_to"] = booking_obj.date_to.strftime('%Y-%m-%d')
+        initials["date_from"] = booking_obj.date_from.strftime("%Y-%m-%d")
+        initials["date_to"] = booking_obj.date_to.strftime("%Y-%m-%d")
         return initials
 
     def get_object(self, *args, **kwargs):
-        booking = get_object_or_404(Booking, pk=self.kwargs['pk'])
+        booking = get_object_or_404(Booking, pk=self.kwargs["pk"])
         return booking
 
     def get_context_data(self, **kwargs):
@@ -201,16 +210,16 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         start = form.cleaned_data["date_from"]
         end = form.cleaned_data["date_to"]
-        qs = Booking.objects.filter(
-            apartment__id=self.get_object().apartment.id
-        ).filter(
-            Q(date_to__gt=start)&Q(date_from__lt=end)
-                 ).exclude(
-                    Q(id=self.get_object().id)).exists()
+        qs = (
+            Booking.objects.filter(apartment__id=self.get_object().apartment.id)
+            .filter(Q(date_to__gt=start) & Q(date_from__lt=end))
+            .exclude(Q(id=self.get_object().id))
+            .exists()
+        )
         if qs:
             form.add_error(
                 None, _("There is already a booking in the given date range.")
-                )
+            )
             return self.form_invalid(form)
         return super().form_valid(form)
 
@@ -224,19 +233,18 @@ def delete_booking(request, pk):
 
 
 def onlinebooking(request, arrival=None, departure=None, pk=None):
-
     form = OnlineBookingDetailsForm(request=request)
     context = {}
 
-    date_from = datetime.strptime(arrival, '%Y-%m-%d').date()
-    date_to = datetime.strptime(departure, '%Y-%m-%d').date()
+    date_from = datetime.strptime(arrival, "%Y-%m-%d").date()
+    date_to = datetime.strptime(departure, "%Y-%m-%d").date()
 
-    context['arrival'] = date_from
-    context['departure'] = date_to
+    context["arrival"] = date_from
+    context["departure"] = date_to
     context["form"] = form
-    context['form'].fields['arrival'].initial = arrival
-    context['form'].fields['departure'].initial = departure
-    context['form'].fields['pk'].initial = pk
+    context["form"].fields["arrival"].initial = arrival
+    context["form"].fields["departure"].initial = departure
+    context["form"].fields["pk"].initial = pk
 
     try:
         ap_to_book = Apartment.objects.get(id=pk)
@@ -263,29 +271,32 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             # check if stripe product id is specified for apartment instance
             product_id = ap_to_book.stripe_product_id
             if not product_id:
-                messages.error(request, _("Booking this apartment is not possible now."))
-                #TODO SEND error email
-                return redirect('bookings_app:booking-search')
+                messages.error(
+                    request, _("Booking this apartment is not possible now.")
+                )
+                # TODO SEND error email
+                return redirect("bookings_app:booking-search")
 
             try:
                 checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=['card', 'p24', 'blik'],
+                    payment_method_types=["card", "p24", "blik"],
                     line_items=[
                         {
                             "price_data": {
-                                "unit_amount_decimal": total_price*100,
+                                "unit_amount_decimal": total_price * 100,
                                 "currency": "pln",
                                 "product": product_id,
-                                },
+                            },
                             "quantity": 1,
-
-                         }
+                        }
                     ],
                     customer_email=email,
-                    mode='payment',
+                    mode="payment",
                     expires_at=int(time.time() + 1800),
-                    success_url=settings.BASE_URL + "/success?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url=settings.BASE_URL + "/cancel?session_id={CHECKOUT_SESSION_ID}",
+                    success_url=settings.BASE_URL
+                    + "/success?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url=settings.BASE_URL
+                    + "/cancel?session_id={CHECKOUT_SESSION_ID}",
                 )
                 new_booking = Booking(
                     date_from=arrival,
@@ -306,21 +317,30 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             except stripe._error.APIConnectionError as e:
                 logger.error(f"Błąd podczas próby płatności: {e}.")
 
-                messages.error(request, _("Bardzo nam przykro, ale wystąpił problem \
+                messages.error(
+                    request,
+                    _(
+                        "Bardzo nam przykro, ale wystąpił problem \
                                         z połączeniem internetowym podczas \
                                         próby utworzenia płatności. \n \
-                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."))
-                #TODO SEND error email
-                return redirect('bookings_app:booking-search')
+                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."
+                    ),
+                )
+                # TODO SEND error email
+                return redirect("bookings_app:booking-search")
 
             except Exception as ex:
-
                 logger.error(f"Błąd podczas próby płatności: {ex}.")
-                messages.error(request, _("Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
+                messages.error(
+                    request,
+                    _(
+                        "Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
                                         płatności. \n \
-                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."))
-                #TODO SEND error email
-                return redirect('bookings_app:booking-search')
+                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."
+                    ),
+                )
+                # TODO SEND error email
+                return redirect("bookings_app:booking-search")
 
         else:
             context["form"] = form
@@ -335,7 +355,7 @@ def success(request):
 
 
 def cancel(request):
-    checkout_session_id = request.GET.get('session_id', None)
+    checkout_session_id = request.GET.get("session_id", None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     context = {"session_url": session.url}
     return render(request, "bookings/cancel.html", context=context)
@@ -346,14 +366,14 @@ def stripe_webhook(request):
     payload = request.body
 
     try:
-        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+        sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
     except KeyError:
         return HttpResponse(status=403)
     event = None
 
     try:
         event = stripe.Webhook.construct_event(
-        payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
     except stripe.error.SignatureVerificationError as e:
         logger.error(f"Stripe-webhook error: {e}")
@@ -362,26 +382,21 @@ def stripe_webhook(request):
         logger.error(f"Stripe-webhook error: {e}")
         return HttpResponse(status=400)
 
-    if event['type'] == 'checkout.session.completed':
+    if event["type"] == "checkout.session.completed":
         # Retrieve the session.
-        session = event['data']['object']
-        session_id = session.get('id', None)
-        #TODO make try except
+        session = event["data"]["object"]
+        session_id = session.get("id", None)
+        # TODO make try except
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         if session.payment_status == "paid":
             booking.stripe_transaction_status = "success"
             booking.paid = True
             booking.save()
-    elif event['type'] == 'checkout.session.expired':
-        session = event['data']['object']
-        session_id = session.get('id', None)
+    elif event["type"] == "checkout.session.expired":
+        session = event["data"]["object"]
+        session_id = session.get("id", None)
         booking = Booking.objects.get(stripe_checkout_id=session_id)
         booking.delete()
 
     # Passed signature verification
     return HttpResponse(status=200)
-
-
-
-
-

@@ -13,13 +13,20 @@ def daterange(start_date, end_date):
 
 def get_base_price(apartment, date):
     """Get apartment price for a given date"""
-    Apartment = apps.get_model('apartments', 'Apartment')
-    Price = apps.get_model('apartments', 'Price')
+    Apartment = apps.get_model("apartments", "Apartment")
+    Price = apps.get_model("apartments", "Price")
 
-    price_obj = Price.objects.order_by("-start_date").filter(
-                Q(apartment_type=apartment.apartment_type)&(
-                    Q(start_date__lte=date)&Q(end_date__gte=date)|Q(
-                    start_date__lte=date)&Q(end_date=None))).first()
+    price_obj = (
+        Price.objects.order_by("-start_date")
+        .filter(
+            Q(apartment_type=apartment.apartment_type)
+            & (
+                Q(start_date__lte=date) & Q(end_date__gte=date)
+                | Q(start_date__lte=date) & Q(end_date=None)
+            )
+        )
+        .first()
+    )
     if price_obj:
         price_per_day = price_obj.amount
     else:
@@ -30,7 +37,9 @@ def get_base_price(apartment, date):
 
 def calculated_price(apartment, arrival, departure):
     """Calculate apartment total price for a given booking period."""
-    price_list = [ get_base_price(apartment, date) for date in  daterange(arrival, departure) ]
+    price_list = [
+        get_base_price(apartment, date) for date in daterange(arrival, departure)
+    ]
     return sum(price_list)
 
 
@@ -38,12 +47,10 @@ def booking_dates_assignment(apartment, year, month):
     """Assign booking dates as a first, in the middle or last day of stay.
     Necessary for display purposes in calendars."""
 
-    Booking = apps.get_model('bookings', 'Booking')
-    bookings_list = Booking.objects.bookings_per_month(
-                apartment.name, year, month
-                )
+    Booking = apps.get_model("bookings", "Booking")
+    bookings_list = Booking.objects.bookings_per_month(apartment.name, year, month)
 
-    c=calendar.Calendar()
+    c = calendar.Calendar()
 
     dates = []
     arrival_dates = []
@@ -51,14 +58,14 @@ def booking_dates_assignment(apartment, year, month):
 
     for d in c.itermonthdates(year, month):
         for booking in bookings_list:
-            if d.month==month and d > booking.date_from and d < booking.date_to:
+            if d.month == month and d > booking.date_from and d < booking.date_to:
                 dates.append(d.day)
-            elif d.month==month and d == booking.date_from:
+            elif d.month == month and d == booking.date_from:
                 arrival_dates.append(d.day)
-            elif d.month==month and d == booking.date_to:
+            elif d.month == month and d == booking.date_to:
                 departure_dates.append(d.day)
 
-    dep_arr_dates = list(set(arrival_dates)&set(departure_dates))
+    dep_arr_dates = list(set(arrival_dates) & set(departure_dates))
     if dep_arr_dates:
         dates.extend(dep_arr_dates)
 
@@ -66,7 +73,7 @@ def booking_dates_assignment(apartment, year, month):
         "apartment": apartment,
         "dates": dates,
         "arr_dates": arrival_dates,
-        "dep_dates": departure_dates
+        "dep_dates": departure_dates,
     }
     return bookings_dates_dict
 
@@ -86,6 +93,6 @@ def get_next_prev_month(year, month):
         "previous_year": previous_year,
         "next_year": next_year,
         "previous_month": previous_month,
-        "next_month": next_month
+        "next_month": next_month,
     }
     return calendar_months

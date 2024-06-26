@@ -13,7 +13,6 @@ from .views import (
     cancel,
     stripe_webhook,
     booking_search,
-
 )
 
 app_name = "bookings_app"
@@ -23,7 +22,7 @@ urlpatterns = [
     path(
         "rezerwacje/nadchodzace/",
         UpcomingBookingsListView.as_view(),
-        name="upcoming-bookings"
+        name="upcoming-bookings",
     ),
     path(
         "rezerwacje/dodaj/",

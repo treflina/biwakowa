@@ -1,1 +1,1 @@
-default_app_config = 'apartments.apps.ApartmentsConfig'
+default_app_config = "apartments.apps.ApartmentsConfig"

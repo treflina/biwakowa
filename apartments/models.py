@@ -12,7 +12,7 @@ class ApartmentType(models.Model):
     type_name = models.CharField(
         _("apartment's type"),
         max_length=50,
-        )
+    )
 
     def __str__(self):
         return self.type_name
@@ -21,9 +21,7 @@ class ApartmentType(models.Model):
 @register_snippet
 class Price(models.Model):
     amount = models.DecimalField(_("price"), max_digits=6, decimal_places=2)
-    apartment_type = models.ForeignKey(
-        ApartmentType, on_delete=models.CASCADE
-        )
+    apartment_type = models.ForeignKey(ApartmentType, on_delete=models.CASCADE)
     start_date = models.DateField(_("start date"))
     end_date = models.DateField(default=None, null=True, blank=True)
 
@@ -34,11 +32,10 @@ class Price(models.Model):
         FieldPanel("end_date"),
     ]
 
-
     def __str__(self):
-        start = datetime.strftime(self.start_date, '%d.%m.%Y')
+        start = datetime.strftime(self.start_date, "%d.%m.%Y")
         if self.end_date:
-            end = datetime.strftime(self.end_date, '%d.%m.%Y')
+            end = datetime.strftime(self.end_date, "%d.%m.%Y")
         else:
             end = "..."
         return f"{self.amount} ({start} - {end}) {self.apartment_type}"
@@ -46,38 +43,34 @@ class Price(models.Model):
 
 @register_snippet
 class Apartment(models.Model):
-
     name = models.CharField(_("apartment's name"), max_length=50, unique=True)
-    apartment_type = models.ForeignKey(
-        ApartmentType, on_delete=models.PROTECT
-        )
-    stripe_product_id = models.CharField(_("stripe product id"), max_length=255, null=True, blank=True)
-    base_price = models.DecimalField(_("base price"), max_digits=7, decimal_places=2, default=0)
+    apartment_type = models.ForeignKey(ApartmentType, on_delete=models.PROTECT)
+    stripe_product_id = models.CharField(
+        _("stripe product id"), max_length=255, null=True, blank=True
+    )
+    base_price = models.DecimalField(
+        _("base price"), max_digits=7, decimal_places=2, default=0
+    )
     floor = models.CharField(
         _("floor"),
-        choices=(
-            ("0", _("ground floor")),
-            ("1", _("first floor"))
-            ),
+        choices=(("0", _("ground floor")), ("1", _("first floor"))),
         default="0",
-        max_length=10
-        )
+        max_length=10,
+    )
 
     panels = [
-        FieldPanel("name",  read_only=True),
+        FieldPanel("name", read_only=True),
         FieldPanel("apartment_type"),
         FieldPanel("floor"),
         FieldPanel("stripe_product_id"),
         FieldPanel("base_price"),
     ]
 
-
     def __str__(self):
         return self.name
 
 
 class ApartmentPage(Page):
-
     template = "apartments/apartment.html"
     content_panels = Page.content_panels + []
 
@@ -86,15 +79,15 @@ class ApartmentPage(Page):
         on_delete=models.PROTECT,
         related_name="apartment1",
         null=True,
-        blank=True
-        )
+        blank=True,
+    )
     apartment2 = models.ForeignKey(
         Apartment,
         on_delete=models.PROTECT,
         related_name="apartment2",
         null=True,
-        blank=True
-        )
+        blank=True,
+    )
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
@@ -105,7 +98,3 @@ class ApartmentPage(Page):
             heading="Apartamenty",
         ),
     ]
-
-
-
-

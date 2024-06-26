@@ -4,6 +4,7 @@ from django.forms.widgets import DateInput, Select
 from apartments.models import Apartment
 from .models import Booking
 
+
 class BookingsFilter(django_filters.FilterSet):
     apartment = django_filters.ChoiceFilter(
         choices=[],
@@ -43,11 +44,10 @@ class BookingsFilter(django_filters.FilterSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filters['apartment'].extra['choices'] = [
-            (name, name)
-            for name in Apartment.objects.values_list('name', flat=True)
+        self.filters["apartment"].extra["choices"] = [
+            (name, name) for name in Apartment.objects.values_list("name", flat=True)
         ]
 
     class Meta:
         model = Booking
-        fields = ['arrival', 'departure']
+        fields = ["arrival", "departure"]

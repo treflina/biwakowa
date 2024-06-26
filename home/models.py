@@ -10,6 +10,7 @@ from wagtail.models import Page
 class HomePage(Page):
     template = "home/home_page.html"
 
+
 #     header_heading = models.CharField(_("heading"), max_length=50)
 #     header_subheading = models.CharField(_("subheading"), max_length=50)
 

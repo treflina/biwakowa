@@ -12,8 +12,14 @@ class BookingManager(models.Manager):
         result = self.filter(
             Q(apartment__name=apartment)
             & (
-            (Q(date_to__gte=date(year,month, 1)) & Q(date_to__lte=date(year,month, num_days)))
-            | (Q(date_from__gte=date(year,month,1)) & Q(date_from__lte=date(year,month, num_days)))
+                (
+                    Q(date_to__gte=date(year, month, 1))
+                    & Q(date_to__lte=date(year, month, num_days))
+                )
+                | (
+                    Q(date_from__gte=date(year, month, 1))
+                    & Q(date_from__lte=date(year, month, num_days))
+                )
             )
         )
         return result
@@ -21,8 +27,7 @@ class BookingManager(models.Manager):
     def bookings_periods(self, apartment, arrival, departure):
         result = self.filter(
             Q(apartment__id=apartment.id)
-            &Q(date_from__lt=departure)
-            &Q(date_to__gt=arrival)
-            )
+            & Q(date_from__lt=departure)
+            & Q(date_to__gt=arrival)
+        )
         return result
-

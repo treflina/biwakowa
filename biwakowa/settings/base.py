@@ -131,7 +131,7 @@ USE_TZ = True
 
 USE_L10N = True
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 BASE_URL = env("BASE_URL")
 
@@ -204,7 +204,7 @@ WAGTAILDOCS_EXTENSIONS = [
     "zip",
 ]
 
-TAILWIND_APP_NAME = 'theme'
+TAILWIND_APP_NAME = "theme"
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -228,11 +228,11 @@ LOGGING = {
         "logfile": {
             "level": "WARNING",
             "class": "logging.handlers.RotatingFileHandler",
-            "maxBytes": 10*1024*1024,
+            "maxBytes": 10 * 1024 * 1024,
             "backupCount": 3,
             "filename": "django.log",
             "formatter": "verbose",
-            "encoding": "utf-8"
+            "encoding": "utf-8",
         },
     },
     "formatters": {
