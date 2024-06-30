@@ -25,10 +25,10 @@
         <p class="basis-3/5 flex-grow max-w-80 py-2 font-semibold text-lg">{{ price }} zł</p>
     </div>
         <div class="flex items-center ml-auto gap-2 my-2">
-        {% if apartment.name == '1' or apartment.name == '3'  %}
+        {% if apartment.apartment_type.type_name == "2-osobowy" %}
         <p>* Cena dotyczy maks. 2 osób.  Możliwość zakwaterowania dodatkowej osoby (rozkładana kanapa w salonie)
             za dopłatą 50&nbsp;zł os./doba, płatne na miejscu. Dzieci do lat 3 bezpłatnie.</p>
-        {% elif apartment.name == '2' or apartment.name == '4'  %}
+        {% elif apartment.apartment_type.type_name == "4-osobowy" %}
             <p>* Cena dotyczy maks. 4 osób.  Możliwość zakwaterowania dodatkowych 2 osób (rozkładana kanapa w salonie)
         za dopłatą 50&nbsp;zł os./doba, płatne na miejscu. Dzieci do lat 3 bezpłatnie.</p>
         {% endif %}
