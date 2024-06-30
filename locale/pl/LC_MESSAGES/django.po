@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-09 07:07+0200\n"
+"POT-Creation-Date: 2024-06-30 12:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,89 +19,124 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-#: .\apartments\models.py:21
+
+#: .\apartments\models.py:13
 msgid "apartment's type"
 msgstr "Typ apartmamentu"
 
-#: .\apartments\models.py:31
+#: .\apartments\models.py:23 .\apartments\models.py:44
 msgid "price"
 msgstr "Cena"
 
-#: .\apartments\models.py:35
+#: .\apartments\models.py:25
 msgid "start date"
 msgstr "Data zameldowania"
 
-#: .\apartments\models.py:58
+#: .\apartments\models.py:45
+#, fuzzy
+#| msgid "price"
+msgid "prices"
+msgstr "Cena"
+
+#: .\apartments\models.py:50
 msgid "apartment's name"
 msgstr "Numer apartamentu"
 
-#: .\apartments\models.py:62
+#: .\apartments\models.py:53
 msgid "stripe product id"
 msgstr "Numer id produktu (stripe)"
 
-#: .\apartments\models.py:63
+#: .\apartments\models.py:56
 msgid "base price"
 msgstr "Cena bazowa"
+
+#: .\apartments\models.py:59
+msgid "floor"
+msgstr "piętro"
+
+#: .\apartments\models.py:60
+msgid "ground floor"
+msgstr "parter"
+
+#: .\apartments\models.py:60
+msgid "first floor"
+msgstr "pierwsze piętro"
+
+#: .\apartments\models.py:79
+#, fuzzy
+#| msgid "Apartment"
+msgid "apartment"
+msgstr "Apartament"
+
+#: .\apartments\models.py:80
+#, fuzzy
+#| msgid "Apartment"
+msgid "apartments"
+msgstr "Apartament"
 
 #: .\bookings\forms.py:44
 msgid "Apartment"
 msgstr "Apartament"
 
-#: .\bookings\forms.py:48
+#: .\bookings\forms.py:49
 msgid "Date from"
 msgstr "Data zameldowania"
 
-#: .\bookings\forms.py:54
+#: .\bookings\forms.py:56
 msgid "Date to"
 msgstr "Data wymeldowania"
 
-#: .\bookings\forms.py:59
+#: .\bookings\forms.py:61
 msgid "Guest's name"
 msgstr "Imię i nazwisko gościa"
 
-#: .\bookings\forms.py:63 .\users\models.py:6
+#: .\bookings\forms.py:64 .\users\models.py:7
 msgid "Phone"
 msgstr "Telefon"
 
-#: .\bookings\forms.py:93 .\bookings\forms.py:111 .\bookings\forms.py:131
-#: .\bookings\forms.py:247
+#: .\bookings\forms.py:93 .\bookings\forms.py:114 .\bookings\forms.py:134
+#: .\bookings\forms.py:248
 msgid "Start date cannot be later or the same as end date"
-msgstr "Data zameldowania nie może być wcześniejsza lub taka sama jak data wymeldowania."
+msgstr ""
+"Data zameldowania nie może być wcześniejsza lub taka sama jak data "
+"wymeldowania."
 
-#: .\bookings\forms.py:100 .\bookings\forms.py:287 .\bookings\views.py:207
+#: .\bookings\forms.py:102 .\bookings\forms.py:286 .\bookings\views.py:224
 msgid "There is already a booking in the given date range."
 msgstr "Niestety jest już rezerwacja na podany okres."
 
-#: .\bookings\forms.py:128 .\bookings\forms.py:244
+#: .\bookings\forms.py:130 .\bookings\forms.py:244
 msgid "Please provide both dates."
 msgstr "Proszę podać obydwie daty (zameldowania i wymeldowania)."
 
-#: .\bookings\forms.py:194
+#: .\bookings\forms.py:192
 msgid "You must confirm rodo"
-msgstr "OŚwiadczenie o zapoznaniu się z regulaminem i polityką prywatności jest obowiązkowe aby kontynuować."
+msgstr ""
+"OŚwiadczenie o zapoznaniu się z regulaminem i polityką prywatności jest "
+"obowiązkowe aby kontynuować."
 
-#: .\bookings\forms.py:210 .\bookings\views.py:239
+#: .\bookings\forms.py:211 .\bookings\views.py:256
 #, python-brace-format
 msgid "Apartment with id {pk} was not found"
 msgstr "Apartament z podanym nr {pk} nie został znaleziony."
 
-#: .\bookings\forms.py:218
+#: .\bookings\forms.py:219
 msgid "Invalid email has been provided."
 msgstr "Podano nieprawidłowy e-mail"
 
-#: .\bookings\forms.py:224
+#: .\bookings\forms.py:225
 msgid "Invalid name has been provided."
 msgstr "Podano nieprawidłowe imię i nazwisko."
 
-#: .\bookings\forms.py:230
+#: .\bookings\forms.py:231
 msgid "Invalid phone number has been provided."
 msgstr "Podano nieprawidłowy adres e-mail."
 
-#: .\bookings\models.py:15
+#: .\bookings\models.py:12
 msgid "unpaid"
 msgstr "nieopłacone"
 
-#: .\bookings\models.py:16
+#: .\bookings\models.py:15
 msgid "success"
 msgstr "opłacone"
 
@@ -115,11 +150,11 @@ msgstr "oczekuje"
 
 #: .\bookings\models.py:24
 msgid "date from"
-msgstr "data zameldowania"
+msgstr "od"
 
 #: .\bookings\models.py:25
 msgid "date to"
-msgstr "data wymeldowania"
+msgstr "do"
 
 #: .\bookings\models.py:26
 msgid "guest's name"
@@ -129,51 +164,69 @@ msgstr "imię i nazwisko gościa"
 msgid "phone number"
 msgstr "telefon"
 
-#: .\bookings\models.py:28
+#: .\bookings\models.py:28 .\home\models.py:31
 msgid "email"
 msgstr "e-mail"
 
-#: .\bookings\models.py:29
+#: .\bookings\models.py:30
 msgid "total price"
 msgstr "cena za pobyt"
 
-#: .\bookings\models.py:30
+#: .\bookings\models.py:32
 msgid "paid"
 msgstr "zapłacone"
 
-#: .\bookings\models.py:31
+#: .\bookings\models.py:33
 msgid "additional information"
 msgstr "uwagi"
 
-#: .\bookings\models.py:32
+#: .\bookings\models.py:35
 msgid "stripe transaction id"
 msgstr "numer id płatności Stripe"
 
-#: .\bookings\models.py:33
+#: .\bookings\models.py:38
 msgid "transaction status"
 msgstr "status transakcji"
 
-#: .\bookings\views.py:260
+#: .\bookings\views.py:278
 msgid "Booking this apartment is not possible now."
 msgstr "zarezerwowanie wybranego apartamentu nie jest obecnie możliwe"
 
-#: .\bookings\views.py:303
-msgid ""
-"Bardzo nam przykro, ale wystąpił "
-"problem                                         z połączeniem internetowym "
-"podczas                                         próby utworzenia "
-"płatności. \n"
-"                                         Spróbuj ponownie lub zarezerwuj "
-"telefonicznie pod nr 609 000 000."
-msgstr ""
+#: .\bookings\views.py:286
+#, fuzzy
+#| msgid "stripe product id"
+msgid "Error. No stripe product_id"
+msgstr "Numer id produktu (stripe)"
 
-#: .\bookings\views.py:313
-msgid ""
-"Bardzo nam przykro, ale wystąpił problem podczas próby "
-"utworzenia                                         płatności. \n"
-"                                         Spróbuj ponownie lub zarezerwuj "
-"telefonicznie pod nr 609 000 000."
-msgstr ""
+#: .\bookings\views.py:362
+msgid "Error while creating checkout session"
+msgstr "Błąd podczas utworzenia sesji stripe"
+
+#: .\bookings\views.py:411
+msgid "Webhook error"
+msgstr "Błąd: stripe webhook."
+
+#: .\bookings\views.py:433
+msgid "Session completed webhook error"
+msgstr "Błąd: webhook session completed"
+
+#: .\home\models.py:13 .\home\models.py:19
+#, fuzzy
+#| msgid "Phone"
+msgid "phone"
+msgstr "Telefon"
+
+#: .\home\models.py:20
+#, fuzzy
+#| msgid "Phone"
+msgid "phones"
+msgstr "Telefon"
+
+#: .\home\models.py:32
+#, fuzzy
+#| msgid "email"
+msgid "emails"
+msgstr "e-mail"
 
 #: .\users\forms.py:8 .\users\forms.py:12
 msgid "Username"
@@ -183,10 +236,10 @@ msgstr "Nazwa użytkownika"
 msgid "Password"
 msgstr "Hasło"
 
-#: .\users\forms.py:34
+#: .\users\forms.py:33
 msgid "Provided credentials are invalid."
 msgstr "Podano nieprawidłowe dane do logowania."
 
-#: .\users\models.py:5
+#: .\users\models.py:6
 msgid "Customer's name"
 msgstr "Imię i nazwisko gościa."

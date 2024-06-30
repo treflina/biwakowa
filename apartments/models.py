@@ -40,6 +40,10 @@ class Price(models.Model):
             end = "..."
         return f"{self.amount} ({start} - {end}) {self.apartment_type}"
 
+    class Meta:
+        verbose_name = _("price")
+        verbose_name_plural = _("prices")
+
 
 @register_snippet
 class Apartment(models.Model):
@@ -68,6 +72,12 @@ class Apartment(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = _("apartment")
+        verbose_name_plural = _("apartments")
 
 
 class ApartmentPage(Page):
