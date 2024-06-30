@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-30 12:41+0200\n"
+"POT-Creation-Date: 2024-06-30 21:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,59 +20,57 @@ msgstr ""
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: .\apartments\models.py:13
+#: .\apartments\models.py:13 .\apartments\models.py:21
 msgid "apartment's type"
-msgstr "Typ apartmamentu"
+msgstr "typ apartmamentu"
 
-#: .\apartments\models.py:23 .\apartments\models.py:44
+#: .\apartments\models.py:22
+msgid "apartments types"
+msgstr "typy apartmamentów"
+
+#: .\apartments\models.py:27 .\apartments\models.py:48
 msgid "price"
 msgstr "Cena"
 
-#: .\apartments\models.py:25
+#: .\apartments\models.py:29
 msgid "start date"
 msgstr "Data zameldowania"
 
-#: .\apartments\models.py:45
-#, fuzzy
-#| msgid "price"
+#: .\apartments\models.py:49
 msgid "prices"
-msgstr "Cena"
+msgstr "Ceny"
 
-#: .\apartments\models.py:50
+#: .\apartments\models.py:54
 msgid "apartment's name"
 msgstr "Numer apartamentu"
 
-#: .\apartments\models.py:53
+#: .\apartments\models.py:57
 msgid "stripe product id"
 msgstr "Numer id produktu (stripe)"
 
-#: .\apartments\models.py:56
+#: .\apartments\models.py:60
 msgid "base price"
 msgstr "Cena bazowa"
 
-#: .\apartments\models.py:59
+#: .\apartments\models.py:63
 msgid "floor"
 msgstr "piętro"
 
-#: .\apartments\models.py:60
+#: .\apartments\models.py:64
 msgid "ground floor"
 msgstr "parter"
 
-#: .\apartments\models.py:60
+#: .\apartments\models.py:64
 msgid "first floor"
 msgstr "pierwsze piętro"
 
-#: .\apartments\models.py:79
-#, fuzzy
-#| msgid "Apartment"
+#: .\apartments\models.py:83
 msgid "apartment"
-msgstr "Apartament"
+msgstr "apartament"
 
-#: .\apartments\models.py:80
-#, fuzzy
-#| msgid "Apartment"
+#: .\apartments\models.py:84
 msgid "apartments"
-msgstr "Apartament"
+msgstr "apartamenty"
 
 #: .\bookings\forms.py:44
 msgid "Apartment"
@@ -97,13 +95,11 @@ msgstr "Telefon"
 #: .\bookings\forms.py:93 .\bookings\forms.py:114 .\bookings\forms.py:134
 #: .\bookings\forms.py:248
 msgid "Start date cannot be later or the same as end date"
-msgstr ""
-"Data zameldowania nie może być wcześniejsza lub taka sama jak data "
-"wymeldowania."
+msgstr "Data zameldowania nie może być wcześniejsza lub taka sama jak data wymeldowania"
 
 #: .\bookings\forms.py:102 .\bookings\forms.py:286 .\bookings\views.py:224
 msgid "There is already a booking in the given date range."
-msgstr "Niestety jest już rezerwacja na podany okres."
+msgstr "Niestety istnieje już rezerwacja na podany okres."
 
 #: .\bookings\forms.py:130 .\bookings\forms.py:244
 msgid "Please provide both dates."
@@ -211,16 +207,12 @@ msgid "Session completed webhook error"
 msgstr "Błąd: webhook session completed"
 
 #: .\home\models.py:13 .\home\models.py:19
-#, fuzzy
-#| msgid "Phone"
 msgid "phone"
-msgstr "Telefon"
+msgstr "telefon"
 
 #: .\home\models.py:20
-#, fuzzy
-#| msgid "Phone"
 msgid "phones"
-msgstr "Telefon"
+msgstr "telefon"
 
 #: .\home\models.py:32
 #, fuzzy

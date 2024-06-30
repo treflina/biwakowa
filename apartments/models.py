@@ -17,6 +17,10 @@ class ApartmentType(models.Model):
     def __str__(self):
         return self.type_name
 
+    class Meta:
+        verbose_name = _("apartment's type")
+        verbose_name_plural = _("apartments types")
+
 
 @register_snippet
 class Price(models.Model):

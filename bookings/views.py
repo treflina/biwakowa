@@ -13,7 +13,9 @@ from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
+from django.utils.html import strip_tags
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
@@ -442,6 +444,17 @@ def stripe_webhook(request):
             booking.stripe_transaction_status = "success"
             booking.paid = True
             booking.save()
+
+            try:
+                subject = 'Potwierdzenie rezerwacji B4B'
+                html_message = render_to_string('bookings/confirmation-email.html', {'booking': booking})
+                plain_message = strip_tags(html_message)
+                from_email = settings.EMAIL_HOST_USER
+                to = booking.email
+                send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+            except Exception as e:
+                logger.error(f"Confirmation email not sent for {booking}. {e}")
+
     elif event["type"] == "checkout.session.expired":
         session = event["data"]["object"]
         session_id = session.get("id", None)
