@@ -126,7 +126,7 @@ msgstr "Podano nieprawidłowe imię i nazwisko."
 
 #: .\bookings\forms.py:231
 msgid "Invalid phone number has been provided."
-msgstr "Podano nieprawidłowy adres e-mail."
+msgstr "Podano nieprawidłowy numer telefonu."
 
 #: .\bookings\models.py:12
 msgid "unpaid"
