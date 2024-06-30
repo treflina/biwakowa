@@ -1677,10 +1677,6 @@ input[type="range"]::-ms-fill-lower {
   width: min-content;
 }
 
-.w-4\/5 {
-  width: 80%;
-}
-
 .min-w-40 {
   min-width: 10rem;
 }
@@ -1739,10 +1735,6 @@ input[type="range"]::-ms-fill-lower {
 
 .max-w-full {
   max-width: 100%;
-}
-
-.max-w-lg {
-  max-width: 32rem;
 }
 
 .max-w-max {
@@ -2098,6 +2090,12 @@ input[type="range"]::-ms-fill-lower {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-blue-400 {
+  --tw-gradient-from: #76A9FA var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(118 169 250 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .to-amber-300 {
   --tw-gradient-to: #fcd34d var(--tw-gradient-to-position);
 }
@@ -2146,6 +2144,10 @@ input[type="range"]::-ms-fill-lower {
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-1 {
@@ -2290,6 +2292,11 @@ input[type="range"]::-ms-fill-lower {
   line-height: 1.75rem;
 }
 
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -2380,6 +2387,16 @@ input[type="range"]::-ms-fill-lower {
 .text-slate-600 {
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
+}
+
+.text-amber-300 {
+  --tw-text-opacity: 1;
+  color: rgb(252 211 77 / var(--tw-text-opacity));
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -3119,10 +3136,6 @@ option {
     width: 18rem;
   }
 
-  .sm\:w-4\/5 {
-    width: 80%;
-  }
-
   .sm\:max-w-\[80\%\] {
     max-width: 80%;
   }
@@ -3181,6 +3194,10 @@ option {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
+
+  .sm\:font-bold {
+    font-weight: 700;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3195,10 +3212,6 @@ option {
 
   .md\:mt-0 {
     margin-top: 0px;
-  }
-
-  .md\:w-4\/5 {
-    width: 80%;
   }
 
   .md\:w-3\/4 {
@@ -3237,34 +3250,19 @@ option {
     padding: 1.5rem;
   }
 
+  .md\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
   .md\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  .md\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
   .md\:py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-  }
-
-  .md\:px-16 {
-    padding-left: 4rem;
-    padding-right: 4rem;
-  }
-
-  .md\:px-20 {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-
-  .md\:px-10 {
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
   }
 
   .md\:text-left {

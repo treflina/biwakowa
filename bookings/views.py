@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -19,6 +20,7 @@ from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
 from apartments.models import Apartment
+from home.models import PhoneSnippet
 from bookings.utils import get_next_prev_month, booking_dates_assignment
 from .filters import BookingsFilter
 from .forms import (
@@ -57,6 +59,7 @@ def booking_search(request, year=None, month=None):
     context = {"form": OnlineBookingForm()}
 
     if "submit" in request.GET:
+        # TODO REMOVE
         form = OnlineBookingForm(request.GET)
         if form.is_valid():
             arrival = datetime.strptime(request.GET.get("arrival"), "%d.%m.%Y").date()
@@ -234,11 +237,11 @@ def delete_booking(request, pk):
 
 def onlinebooking(request, arrival=None, departure=None, pk=None):
     form = OnlineBookingDetailsForm(request=request)
-    context = {}
 
     date_from = datetime.strptime(arrival, "%Y-%m-%d").date()
     date_to = datetime.strptime(departure, "%Y-%m-%d").date()
 
+    context = {}
     context["arrival"] = date_from
     context["departure"] = date_to
     context["form"] = form
@@ -262,7 +265,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
         if form.is_valid():
             guest = form.cleaned_data["name"]
             email = form.cleaned_data["email"]
-            phone = form.cleaned_data["phone"]
+            guest_phone = form.cleaned_data["phone"]
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
             guest_notes = form.cleaned_data["guest_notes"]
@@ -274,7 +277,19 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(
                     request, _("Booking this apartment is not possible now.")
                 )
-                # TODO SEND error email
+                err_msg = f"Error. Brak stripe id dla apartamentu {ap_to_book.name}. \n\r \
+                    {guest} {guest_phone} {email} \n\r \
+                    {arrival} - {departure} \n\r \
+                    {guest_notes}"
+                logger.error(err_msg)
+                send_mail(
+                    subject=_("Error. No stripe product_id"),
+                    message=err_msg,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[settings.ADMIN_EMAIL],
+                    fail_silently=True,
+                )
+
                 return redirect("bookings_app:booking-search")
 
             try:
@@ -304,7 +319,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     apartment=ap_to_book,
                     total_price=total_price,
                     guest=guest,
-                    phone=phone,
+                    phone=guest_phone,
                     email=email,
                     notes=guest_notes,
                     stripe_checkout_id=checkout_session.id,
@@ -316,30 +331,41 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
             except stripe._error.APIConnectionError as e:
                 logger.error(f"Błąd podczas próby płatności: {e}.")
+                phone = PhoneSnippet.objects.last()
 
                 messages.error(
                     request,
-                    _(
-                        "Bardzo nam przykro, ale wystąpił problem \
-                                        z połączeniem internetowym podczas \
-                                        próby utworzenia płatności. \n \
-                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."
-                    ),
+                    f"Bardzo nam przykro, ale wystąpił problem \
+                            z połączeniem internetowym podczas \
+                            próby utworzenia płatności. \n \
+                            Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
                 )
-                # TODO SEND error email
                 return redirect("bookings_app:booking-search")
 
             except Exception as ex:
                 logger.error(f"Błąd podczas próby płatności: {ex}.")
+                phone = PhoneSnippet.objects.last()
+
                 messages.error(
                     request,
-                    _(
-                        "Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
-                                        płatności. \n \
-                                        Spróbuj ponownie lub zarezerwuj telefonicznie pod nr 609 000 000."
-                    ),
+                    f"Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
+                            płatności. \n \
+                            Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
                 )
-                # TODO SEND error email
+                err_msg = f"{ex} \n\r \
+                    apartment: {ap_to_book.name} \n\r \
+                    {guest} {guest_phone} {email} \n\r \
+                    {arrival} - {departure} \n\r \
+                    {guest_notes}"
+                logger.error(err_msg)
+                send_mail(
+                    subject=_("Error while creating checkout session"),
+                    message=err_msg,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[settings.ADMIN_EMAIL],
+                    fail_silently=True,
+                )
+
                 return redirect("bookings_app:booking-search")
 
         else:
@@ -357,7 +383,8 @@ def success(request):
 def cancel(request):
     checkout_session_id = request.GET.get("session_id", None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
-    context = {"session_url": session.url}
+    phone = PhoneSnippet.objects.last()
+    context = {"session_url": session.url, "phone": phone}
     return render(request, "bookings/cancel.html", context=context)
 
 
@@ -380,23 +407,51 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
     except Exception as e:
         logger.error(f"Stripe-webhook error: {e}")
+        send_mail(
+            subject=_("Webhook error"),
+            message=e,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[settings.ADMIN_EMAIL],
+            fail_silently=True,
+        )
         return HttpResponse(status=400)
 
     if event["type"] == "checkout.session.completed":
-        # Retrieve the session.
         session = event["data"]["object"]
         session_id = session.get("id", None)
-        # TODO make try except
-        booking = Booking.objects.get(stripe_checkout_id=session_id)
-        if session.payment_status == "paid":
+        # TODO send email about failure
+        try:
+            booking = Booking.objects.get(stripe_checkout_id=session_id)
+        except Booking.DoesNotExist:
+            booking = None
+            logger.error(
+                f"""Session completed (session id: {session_id}) webhook was sent,
+                but related booking was not found in the database.
+                """
+            )
+            send_mail(
+                subject=_("Session completed webhook error"),
+                message=f"Session id:{session_id}. Session completed webhook was sent, \n \
+                but corresponding booking was not found in the database.",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.ADMIN_EMAIL],
+                fail_silently=True,
+            )
+
+        if booking and session.payment_status == "paid":
             booking.stripe_transaction_status = "success"
             booking.paid = True
             booking.save()
     elif event["type"] == "checkout.session.expired":
         session = event["data"]["object"]
         session_id = session.get("id", None)
-        booking = Booking.objects.get(stripe_checkout_id=session_id)
-        booking.delete()
-
-    # Passed signature verification
+        try:
+            booking = Booking.objects.get(stripe_checkout_id=session_id)
+            booking.delete()
+        except Booking.DoesNotExist:
+            logger.error(
+                f"""Session expired (session id: {session_id}) webhook was sent,
+                but related booking was not found in the database.
+                """
+            )
     return HttpResponse(status=200)

@@ -47,4 +47,23 @@
     allTargetNavItems?.forEach((item) => {
         item.addEventListener("click", closeNav);
     });
+
+    // loading page indicator
+    const wait = (delay = 0) =>
+        new Promise((resolve) => setTimeout(resolve, delay));
+
+    const setVisible = (selector, visible) => {
+        const el = document.querySelector(selector);
+        el !== null && (el.style.display = visible ? "flex" : "none");
+    };
+
+    setVisible(".page", false);
+    setVisible("#loading", true);
+
+    document.addEventListener("DOMContentLoaded", () =>
+        wait().then(() => {
+            setVisible(".page", true);
+            setVisible("#loading", false);
+        })
+    );
 })();

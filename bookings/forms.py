@@ -16,6 +16,7 @@ from django.forms import (
 from django.utils.translation import gettext_lazy as _
 
 from apartments.models import Apartment
+from home.models import PhoneSnippet
 from .models import Booking
 
 
@@ -138,17 +139,19 @@ class OnlineBookingForm(forms.Form):
                 )
             if arrival.month in [7, 8] and departure.month in [7, 8]:
                 if (departure - arrival).days < 7 and (arrival - today).days > 7:
+                    phone = PhoneSnippet.objects.last()
                     raise ValidationError(
-                        "Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
+                        f"Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
                         przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
                     )
                 if (arrival - today).days > 7 and arrival.weekday() != 6:
+                    phone = PhoneSnippet.objects.last()
                     raise ValidationError(
-                        "Rezerwacja pobytu w okresie wakacyjnym \
+                        f"Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
                         (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
                     )
             if (departure - arrival).days < 3:
                 raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
@@ -236,8 +239,6 @@ class OnlineBookingDetailsForm(forms.Form):
         id = self.cleaned_data.get("pk")
 
         today = dt.date.today()
-        add_days = 7 - today.weekday()
-        print(add_days)
 
         if not arrival or not departure:
             raise ValidationError(_("Please provide both dates."))
@@ -252,17 +253,19 @@ class OnlineBookingDetailsForm(forms.Form):
                 )
             if arrival.month in [7, 8] and departure.month in [7, 8]:
                 if (departure - arrival).days < 7 and (arrival - today).days > 7:
+                    phone = PhoneSnippet.objects.last()
                     raise ValidationError(
-                        "Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
+                        f"Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
                         przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
                     )
                 if (arrival - today).days > 7 and arrival.weekday() != 6:
+                    phone = PhoneSnippet.objects.last()
                     raise ValidationError(
-                        "Rezerwacja pobytu w okresie wakacyjnym \
+                        f"Rezerwacja pobytu w okresie wakacyjnym \
                         jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
                         (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. 609-988-190"
+                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
                     )
             if (departure - arrival).days < 3:
                 raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")

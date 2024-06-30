@@ -28,15 +28,19 @@
                     Cena: </span>{% if booking.total_price %} {{booking.total_price}} zł{% endif%}
         </p>
         <p><span class="font-semibold">Zapłacone: </span> {% if booking.paid %}TAK{% else %} NIE {% endif %}</p>
-        {% if booking.stripe_session_id %}
-        {% endif %}
         <p><span class="font-semibold">Uwagi: </span> {% if booking.notes %}{{booking.notes}}{% endif %}</p>
         <hr class="text-gray-300 bg-gray-300 border-gray-300">
         <p><span class="font-semibold":>Data utworzenia:
         </span>{{ booking.created_at|date:"d.m.Y" }} {{ booking.created_at|time:"H:i" }}</p>
-        <p><span class="font-semibold":>Status transakcji: </span> {{ booking.stripe_transaction_status}}</p>
-        <p style="overflow-wrap: anywhere;"><span class="font-semibold">Nr płatności online: </span> {% if booking.stripe_checkout_id %}{{ booking.stripe_checkout_id}}{% else %} - {% endif %}</p>
-
+        {% if booking.stripe_checkout_id %}
+        <p><span class="font-semibold":>Status transakcji: </span>
+            {% if booking.stripe_transaction_status == "pending" %}oczekuje
+            {% elif booking.stripe_transaction_status == "success" %}zapłacone
+            {% else %}niezapłacone {% endif %}
+        </p>
+        <p style="overflow-wrap: anywhere;"><span class="font-semibold">Nr płatności online: </span>
+            {{ booking.stripe_checkout_id}}</p>
+        {% endif %}
     </div>
 
 </main>
