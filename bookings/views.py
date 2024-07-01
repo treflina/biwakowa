@@ -22,7 +22,7 @@ from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
 from apartments.models import Apartment
-from home.models import PhoneSnippet
+from home.models import PhoneSnippet, AdminEmail
 from bookings.utils import get_next_prev_month, booking_dates_assignment
 from .filters import BookingsFilter
 from .forms import (
@@ -421,7 +421,7 @@ def stripe_webhook(request):
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         session_id = session.get("id", None)
-        # TODO send email about failure
+
         try:
             booking = Booking.objects.get(stripe_checkout_id=session_id)
         except Booking.DoesNotExist:
@@ -445,11 +445,31 @@ def stripe_webhook(request):
             booking.paid = True
             booking.save()
 
+            from_email = settings.EMAIL_HOST_USER
+            # send email to hotel
             try:
+                admin_email = AdminEmail.objects.last()
+                subject = f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
+                msg = f"Dokonano nowej rezerwacji: \n\r \
+                    Apartament nr {booking.apartment.apartment_type.type_name} \n\r \
+                    od {booking.date_from} do {booking.date_to} \n\r \
+                    gość: {booking.guest} \n\r \
+                    uwagi: {booking.guest_notes} \n\r \
+                    utworzona: {booking.created_at}"
+                to = admin_email
+                send_mail(subject, msg, from_email, [to])
+            except Exception as e:
+                logger.error(f"Confirmation email not sent for {booking}. {e}")
+
+            # send email to guest
+            try:
+                hotel_phone = PhoneSnippet.objects.last()
                 subject = 'Potwierdzenie rezerwacji B4B'
-                html_message = render_to_string('bookings/confirmation-email.html', {'booking': booking})
+                html_message = render_to_string(
+                    'bookings/confirmation-email.html',
+                    {'booking': booking, 'phone': hotel_phone}
+                    )
                 plain_message = strip_tags(html_message)
-                from_email = settings.EMAIL_HOST_USER
                 to = booking.email
                 send_mail(subject, plain_message, from_email, [to], html_message=html_message)
             except Exception as e:
