@@ -271,7 +271,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
             guest_notes = form.cleaned_data["guest_notes"]
-            guest_notes = f"Uwagi gościa: {guest_notes}" if guest_notes != "" else None
+            guest_notes = f"Gość napisał: {guest_notes}" if guest_notes != "" else None
 
             # check if stripe product id is specified for apartment instance
             product_id = ap_to_book.stripe_product_id
@@ -450,12 +450,12 @@ def stripe_webhook(request):
             try:
                 admin_email = AdminEmail.objects.last()
                 subject = f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
-                msg = f"Dokonano nowej rezerwacji: \n\r \
-                    Apartament nr {booking.apartment.apartment_type.type_name} \n\r \
-                    od {booking.date_from} do {booking.date_to} \n\r \
-                    gość: {booking.guest} \n\r \
-                    uwagi: {booking.guest_notes} \n\r \
-                    utworzona: {booking.created_at}"
+                msg = f"Dokonano nowej rezerwacji: \r\n \
+                    Apartament nr {booking.apartment.apartment_type.type_name} \r\n \
+                    od {booking.date_from} do {booking.date_to} \r\n \
+                    Gość: {booking.guest} \r\n \
+                    {booking.notes} \r\n \
+                    utworzona: {booking.created_at} \r\n "
                 to = admin_email
                 send_mail(subject, msg, from_email, [to])
             except Exception as e:
