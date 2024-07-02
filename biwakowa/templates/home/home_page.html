@@ -4,73 +4,80 @@
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/magnific_popup.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />
 {% endblock %}
 {% block content %}
 <div class="page flex-col">
-<header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
-    {% include 'includes/nav.html' %}
-    <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
-        class="object-cover w-full h-full absolute left-0 top-0 ">
-        <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
-    </video>
-    <div class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60">
-    </div>
-    <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
-        <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
-            <div class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4">
-                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block w-full h-full object-cover" />
-                </a>
-            </div>
-            <div class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6">
-                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class=" inline-block  w-full h-full object-cover" />
-                </a>
-            </div>
-            <div class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7  ">
-                <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block  w-full h-full object-cover" />
-                </a>
-            </div>
-        </div>
+    <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
+        {% include 'includes/nav.html' %}
+        <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
+            class="object-cover w-full h-full absolute left-0 top-0 ">
+            <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
+        </video>
         <div
-            class="flex flex-col justify-center lg:items-start gap-5 basis-1/2 z-30 px-2 mt-6 sm:mt-8 order-first lg:order-last py-10 lg:py-2 max-w-[95%] sm:max-w-[80%] mx-auto">
-            <h1 class="font-semibold sm:font-bold text-5xl sm:text-6xl font-['Rozha_One']  md:text-left ">Apartamenty Biwakowa&nbsp;4B
-            </h1>
-            <h2 class="font-semibold text-3xl sm:text-4xl text-amber-50 md:text-left">Komfort nad Jeziorem Dużym
-                w&nbsp;Turawie</h2>
+            class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60">
         </div>
-    </div>
-    <a href="#aboutus" class="animated bounceInDown flex justify-center items-center  rounded-full uppercase border-4 border-amber-300 z-30 cursor-pointer
-    font-semibold text-lg px-3 py-3 ml-auto mr-4 lg:mx-auto mt-3 mb-1 bg-opacity-20 bg-amber-300"><p class="sr-only">Czytaj dalej</p>
-    <svg class="w-6 h-6 inline-block ">
-        <use xlink:href="{% static 'img/sprite.svg#chevrondown' %}" href="{% static 'img/sprite.svg#chevrondown' %}" />
-    </svg>
-    </a>
-</header>
-<main class="bg-gray-50">
-    <section id="aboutus"
-        class="flex flex-col md:flex-row flex-wrap max-w-7xl mx-auto py-10 px-4 lg:px-1 sm:py-14 gap-8 md:gap-4 mb-5">
-        <div class="flex flex-col basis-1/2 shrink text-lg gap-2 justify-between">
-            <h3 class="font-['Rozha_One'] font-semibold sm:font-bold text-4xl mb-2">O nas</h3>
-            <p>Mamy przyjemność zaprosić Państwa do świeżo wybudowanego (w 2024 r.) domu mieszczącego cztery apartamenty
-                na wynajem.
-                Obiekt dysponuje bezpłatnym parkingiem, WiFi, tarasem widokowym na dachu budynku. Wszystkie apartamenty
-                zapewniają
-                komfortowe wyposażenie. W pobliżu znajduje się piaszczysta plaża, promenada oraz wiele barów i
-                restauracji.</p>
-            <p>Turawa jest w naszym sercu od zawsze. Jej położenie wśród jezior i przepięknych obszarów leśnych sprawia,
-                że jest doskonałym miejscem na wypoczynek.
-            </p>
-            <div class="ml-auto flex flex-col justify-center items-center mt-2">
-                <p class="font-semibold">Serdecznie do nas zapraszamy!</p>
-                <p>Urszula i Jarosław Duda</p>
+        <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
+            <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
+                <div class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4">
+                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block w-full h-full object-cover" /></a>
+                </div>
+                <div class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6">
+                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class=" inline-block  w-full h-full object-cover" /></a>
+                </div>
+                <div class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7  ">
+                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block  w-full h-full object-cover" /></a>
+                </div>
+            </div>
+            <div
+                class="flex flex-col justify-center lg:items-start gap-5 basis-1/2 z-30 px-2 mt-6 sm:mt-8 order-first lg:order-last py-10 lg:py-2 max-w-[95%] sm:max-w-[80%] mx-auto">
+                <h1 class="font-semibold sm:font-bold text-5xl sm:text-6xl font-['Rozha_One']  md:text-left ">
+                    Apartamenty Biwakowa&nbsp;4B
+                </h1>
+                <h2 class="font-semibold text-3xl sm:text-4xl text-amber-50 md:text-left">Komfort nad Jeziorem Dużym
+                    w&nbsp;Turawie</h2>
             </div>
         </div>
-        <div class="relative basis-2/5 shrink flex justify-center items-center mx-auto rounded-md shadow-xl">
-            <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-                class="w-full h-full object-cover object-center rounded-md z-10">
-            <!-- <div
+        <a href="#aboutus" class="animated bounceInDown flex justify-center items-center  rounded-full uppercase border-4 border-amber-300 z-30 cursor-pointer
+        font-semibold text-lg px-3 py-3 ml-auto mr-4 lg:mx-auto mt-3 mb-1 bg-opacity-20 bg-amber-300"><p class="sr-only">Czytaj dalej</p>
+            <svg class="w-6 h-6 inline-block ">
+                <use xlink:href="{% static 'img/sprite.svg#chevrondown' %}" href="{% static 'img/sprite.svg#chevrondown' %}" />
+            </svg>
+        </a>
+    </header>
+    <div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+        <main>
+            <section id="aboutus" class="  py-10 px-4 lg:px-1 sm:py-14  bg-gray-50 w-full">
+                <div class="flex flex-col md:flex-row flex-wrap gap-8 md:gap-4 max-w-7xl mx-auto">
+                    <div class="flex flex-col basis-1/2 shrink text-lg gap-2 justify-between">
+                        <h3 class="font-['Rozha_One'] font-semibold sm:font-bold text-4xl mb-2">O nas</h3>
+                        <p>Mamy przyjemność zaprosić Państwa do świeżo wybudowanego (w 2024 r.) domu mieszczącego cztery
+                            apartamenty
+                            na wynajem.
+                            Obiekt dysponuje bezpłatnym parkingiem, WiFi, tarasem widokowym na dachu budynku. Wszystkie
+                            apartamenty
+                            zapewniają
+                            komfortowe wyposażenie. W pobliżu znajduje się piaszczysta plaża, promenada oraz wiele barów
+                            i
+                            restauracji.</p>
+                        <p>Turawa jest w naszym sercu od zawsze. Jej położenie wśród jezior i przepięknych obszarów
+                            leśnych
+                            sprawia,
+                            że jest doskonałym miejscem na wypoczynek.
+                        </p>
+                        <div class="ml-auto flex flex-col justify-center items-center mt-2">
+                            <p class="font-semibold">Serdecznie do nas zapraszamy!</p>
+                            <p>Urszula i Jarosław Duda</p>
+                        </div>
+                    </div>
+                    <div
+                        class="relative basis-2/5 shrink flex justify-center items-center mx-auto rounded-md shadow-xl">
+                        <img src="{% static 'img/sypialnia.jpg' %}" alt=""
+                            class="w-full h-full object-cover object-center rounded-md z-10">
+                        <!-- <div
                 class="absolute flex justify-end gap-4 items-end -left-5 -bottom-10 h-40 w-full shadow-md rounded-md bg-gray-200">
                 <svg class="w-6 h-6 inline-block align-middle mr-1 ml-1 mb-2 fill-gray-800">
                     <use xlink:href="{% static 'img/sprite.svg#wifi' %}" />
@@ -85,59 +92,86 @@
                     <use xlink:href="{% static 'img/sprite.svg#eye' %}" />
                 </svg>
             </div> -->
-        </div>
-    </section>
-    <section id="apartments" class="w-full bg-gradient-to-tl to-gray-300 from-blue-300">
-        <div class="flex flex-col gap-5 max-w-7xl mx-auto py-10 sm:py-14 px-4 lg:px-1 ">
-            <h3 class="font-['Rozha_One'] font-semibold sm:font-bold text-4xl mb-6">Apartamenty</h3>
-            <div class="flex flex-col md:flex-row gap-8">
-                <div data-aos="flip-up" data-aos-duration="700"
-                    class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-                        class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
-                    <div class="px-4 pt-4 pb-6 flex flex-col">
-                        <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">Dwuosobowe
-                            <br class="block ssm:hidden">(max. 3&nbsp;os.)
-                        </h4>
-                        <p>Składają się z salonu z w pełni wyposażonym aneksem kuchennym, łazienki z&nbsp;prysznicem
-                            i&nbsp;
-                            tarasu. Do wynajęcia dostępne są dwa apartamenty tego typu.
-                        </p>
-                        <button class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</button>
+                    </div>
+                </div>
+            </section>
+            <section id="apartments" class="w-full bg-gray-50">
+                <div class="flex flex-col gap-5 max-w-7xl mx-auto pt-10 pb-10 sm:pb-28 sm:pt-14 px-4 lg:px-1 ">
+                    <h3 class="font-['Rozha_One'] font-semibold sm:font-bold text-4xl mb-6">Apartamenty</h3>
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div data-aos="flip-up" data-aos-duration="700"
+                            class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
+                            <img src="{% static 'img/sypialnia.jpg' %}" alt=""
+                                class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
+                            <div class="px-4 pt-4 pb-6 flex flex-col">
+                                <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">Dwuosobowe
+                                    <br class="block ssm:hidden">(max. 3&nbsp;os.)
+                                </h4>
+                                <p>Składają się z salonu z w pełni wyposażonym aneksem kuchennym, łazienki
+                                    z&nbsp;prysznicem
+                                    i&nbsp;
+                                    tarasu. Do wynajęcia dostępne są dwa apartamenty tego typu.
+                                </p>
+                                <button class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</button>
+                            </div>
+
+                        </div>
+                        <div data-aos="flip-up" data-aos-duration="700"
+                            class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
+                            <img src="{% static 'img/sypialnia.jpg' %}" alt=""
+                                class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
+                            <div class="px-4 pt-4 pb-6 flex flex-col">
+                                <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">Czteroosobowe
+                                    <br class="block ssm:hidden">(max. 6&nbsp;os.)
+                                </h4>
+                                <p>Składają się z salonu z aneksem kuchennym, dwóch sypialni,
+                                    łazienki z prysznicem i tarasu. Są w pełni wyposażone.
+                                    Dysponujemy dwoma apartamentami tego typu.
+                                </p>
+                                <button class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-                <div data-aos="flip-up" data-aos-duration="700"
-                    class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-                        class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
-                    <div class="px-4 pt-4 pb-6 flex flex-col">
-                        <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">Czteroosobowe
-                            <br class="block ssm:hidden">(max. 6&nbsp;os.)
-                        </h4>
-                        <p>Składają się z salonu z aneksem kuchennym, dwóch sypialni,
-                            łazienki z prysznicem i tarasu. Są w pełni wyposażone.
-                            Dysponujemy dwoma apartamentami tego typu.
-                        </p>
-                        <button class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</button>
+            </section>
+            <section class="gallery px-2  pb-10 pt-10">
+                <div class="flex flex-wrap items-center justify-center gap-5 mt-6 mb-12 ">
+                    <h3 class="font-['Rozha_One'] font-semibold sm:font-bold text-4xl text-center">Jezioro
+                        Duże w&nbsp;Turawie</h3>
+                    <button class="btn-admin">Nasza okolica &raquo;</button>
+                </div>
+                <div class="w-full flex flex-col sm:flex-row gap-2 lg:h-[85vh]">
+                    <div class="flex flex-row sm:flex-col sm:basis-1/3  gap-2 h-full">
+                        <a class="image-link cursor-zoom-in block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro9.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <img class="object-fit object-cover w-full h-full rounded-md"
+                            src="{% static 'img/jezioro9.jpg' %}" alt=""></a>
+                        <a class="image-link cursor-zoom-in block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro7.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <img class="object-fit object-cover w-full h-full rounded-md"
+                            src="{% static 'img/jezioro7.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="h-48 sm:hidden md:h-auto md:basis-1/3 md:block">
+                        <a class="image-link cursor-zoom-in block h-full" href="{% static 'img/jezioro6.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <img class="object-fit object-cover object-right w-full h-full rounded-md"
+                            src="{% static 'img/jezioro6.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="h-[300px] sm:h-auto flex sm:basis-2/3 md:basis-1/3 grow-1">
+                        <div id="map" class="grow-1 h-full w-full rounded-md"></div>
                     </div>
                 </div>
-            </div>
-
-        </div>
-    </section>
-    <!-- <section id="neighborhood">
-        <div class="flex flex-col gap-5 max-w-7xl mx-auto py-10 sm:py-14 px-4 lg:px-1 ">
-            <h3 class="font-['Rozha_One'] font-bold text-4xl mb-6">Turawa i okolice</h3>
-
-        </div>
-
-    </section> -->
-</main>
+            </section>
+        </main>
+        {% include 'includes/footer.html' %}
+    </div>
 </div>
 <div id="loading" class="bg-gradient-to-tl to-gray-300 from-blue-400">
     <div class="flex justify-center items-center text-amber-300 p-4 rounded-md bg-gray-100">
-        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
         <h1 class="font-['Rozha_One'] text-5xl text-black">B4B</h1>
     </div>
 </div>
@@ -160,9 +194,23 @@
                     return openerElement.is('img') ? openerElement : openerElement.find('img');
                 }
             }
-
         });
         AOS.init();
     });
+</script>
+<script src="{% static 'vendors/leaflet/leaflet.js' %}"></script>
+<script>
+    const map = L.map('map').setView([50.74062, 18.12041], 12);
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([50.74062, 18.12041])
+        .addTo(map)
+        .bindTooltip("Apartamenty Biwakowa 4B").openTooltip();
 </script>
 {% endblock %}

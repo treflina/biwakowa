@@ -2,3 +2,5 @@
 biwakowa/static/js/htmx.min.js
 biwakowa/static/js/aos.js
 biwakowa/static/css/hamburger.css
+biwakowa/static/vendors/leaflet/leaflet.js
+

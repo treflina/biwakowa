@@ -271,7 +271,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
             guest_notes = form.cleaned_data["guest_notes"]
-            guest_notes = f"Gość napisał: {guest_notes}" if guest_notes != "" else None
+            guest_notes = f"{guest_notes}" if guest_notes != "" else None
 
             # check if stripe product id is specified for apartment instance
             product_id = ap_to_book.stripe_product_id
@@ -354,11 +354,11 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                             płatności. \n \
                             Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
                 )
-                err_msg = f"{ex} \n\r \
-                    apartment: {ap_to_book.name} \n\r \
-                    {guest} {guest_phone} {email} \n\r \
-                    {arrival} - {departure} \n\r \
-                    {guest_notes}"
+                err_msg = f"""{ex} \n
+                apartment: {ap_to_book.name}  \n
+                {guest} {guest_phone} {email} \n
+                {arrival} - {departure} \n
+                {guest_notes}"""
                 logger.error(err_msg)
                 send_mail(
                     subject=_("Error while creating checkout session"),
@@ -446,16 +446,18 @@ def stripe_webhook(request):
             booking.save()
 
             from_email = settings.EMAIL_HOST_USER
+
             # send email to hotel
             try:
                 admin_email = AdminEmail.objects.last()
+                notes = booking.notes if booking.notes else "-"
                 subject = f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
-                msg = f"Dokonano nowej rezerwacji: \r\n \
-                    Apartament nr {booking.apartment.apartment_type.type_name} \r\n \
-                    od {booking.date_from} do {booking.date_to} \r\n \
-                    Gość: {booking.guest} \r\n \
-                    {booking.notes} \r\n \
-                    utworzona: {booking.created_at} \r\n "
+                msg = f"""Nowa rezerwacja: \n
+        Apartament nr {booking.apartment.apartment_type.type_name} \n
+        od {booking.date_from} do {booking.date_to} \n
+        Gość: {booking.guest} \n
+        Uwagi gościa: {notes} \n
+        utworzona: {booking.created_at} """
                 to = admin_email
                 send_mail(subject, msg, from_email, [to])
             except Exception as e:
