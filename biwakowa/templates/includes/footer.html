@@ -5,17 +5,15 @@
             <div class="flex flex-col text-lg gap-2">
                 <p>"Apartamenty Biwakowa 4B"</p>
                 <p>ul. Biwakowa 4B, 46-045 Turawa</p>
-                <a href="tel:+48{{phone}}">tel. {{phone}}</a>
-                <br>
+                <a href="tel:+48{{phone}}" class="sm:mb-2">tel. {{phone}}</a>
                 <hr>
-                <br>
-                <div class="flex gap-3 items-center">
+                <div class="flex flex-wrap gap-3 items-center sm:mt-2 mb-2">
                     <p>GPS: 50.74062, 18.12041</p>
                     <a href="https://www.google.pl/maps/dir//50.740448,18.120431/@50.7404514,18.1178561,17z?entry=ttu"
                     class="btn-admin text-base">
                         Sprawdź dojazd</a>
                 </div>
-                <p>Nr konta bankowego: 01 0101 0101 0101 0101 0101 0101 0101</p>
+                <div class="flex flex-wrap gap-2"><p>Nr konta bankowego:</p> <p>01 0101 0101 0101 0101 0101 0101 0101</p></div>
             </div>
         </div>
         <div class="flex flex-col">
@@ -29,8 +27,7 @@
     </div>
     <div class="w-full px-2 py-4 bg-gray-200">
         <p class="mx-auto block text-center">
-            &copy;2024 Apartamenty Biwakowa 4B | Wykonanie:
-            <a href="mailto:luiza.cwik@gmail.com" class="outlined ml-auto">ISĆ</a>
+            &copy;{% now "Y" %} Apartamenty Biwakowa 4B |&nbsp;Wykonanie:&nbsp;<a href="mailto:luiza.cwik@gmail.com" class="outlined ml-auto">ISĆ</a>
         </p>
     </div>
 </footer>

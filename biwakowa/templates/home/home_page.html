@@ -209,7 +209,18 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([50.74062, 18.12041])
+    const markerIcon = L.icon({
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+        shadowSize: [41, 41],
+        iconUrl: "{% static 'vendors/leaflet/images/marker-icon.png' %}",
+        iconRetinaUrl: "{% static 'vendors/leaflet/images/marker-icon-2x.png' %}",
+        shadowUrl: "{% static 'vendors/leaflet/images/marker-shadow.png' %}"
+    });
+
+    L.marker([50.74062, 18.12041], { icon: markerIcon })
         .addTo(map)
         .bindTooltip("Apartamenty Biwakowa 4B").openTooltip();
 </script>
