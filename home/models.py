@@ -34,27 +34,10 @@ class AdminEmail(models.Model):
 
 class HomePage(Page):
     template = "home/home_page.html"
+    max_count = 1
 
-
-#     header_heading = models.CharField(_("heading"), max_length=50)
-#     header_subheading = models.CharField(_("subheading"), max_length=50)
-
-#     content_panels = Page.content_panels + [
-#         MultiFieldPanel(
-#             [
-#                 FieldPanel("header_heading"),
-#                 FieldPanel("header_subheading"),
-#                 InlinePanel(
-#                     "header_images",
-#                     heading="_(Header images)",
-#                     label="_(Header images)",
-#                     min_num=3,
-#                     max_num=3
-#                     ),
-#             ],
-#             heading="_(Header)",
-#         ),
-#     ]
+    class Meta:
+        verbose_name = _("Home Page")
 
 # class HeaderImage(Orderable):
 #     page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='header_images')

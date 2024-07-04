@@ -52,6 +52,10 @@ option {
     }
 }
 
+.apartment-description p {
+    @apply p-2;
+}
+
 .hx-indicator {
     display: none;
 }

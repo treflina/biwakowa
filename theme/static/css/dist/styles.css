@@ -1398,10 +1398,6 @@ input[type="range"]::-ms-fill-lower {
   margin: 0.5rem;
 }
 
-.m-6 {
-  margin: 1.5rem;
-}
-
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -1802,22 +1798,6 @@ input[type="range"]::-ms-fill-lower {
   max-width: 36rem;
 }
 
-.max-w-\[700px\] {
-  max-width: 700px;
-}
-
-.max-w-\[50\%\] {
-  max-width: 50%;
-}
-
-.max-w-\[45\%\] {
-  max-width: 45%;
-}
-
-.max-w-\[calc\(50\%-50px\)\] {
-  max-width: calc(50% - 50px);
-}
-
 .flex-shrink {
   flex-shrink: 1;
 }
@@ -1882,10 +1862,6 @@ input[type="range"]::-ms-fill-lower {
 
 .list-none {
   list-style-type: none;
-}
-
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 .grid-cols-11 {
@@ -2725,6 +2701,10 @@ option {
     color: rgb(156 163 175 / var(--tw-text-opacity));
   }
 
+.apartment-description p {
+  padding: 0.5rem;
+}
+
 .hx-indicator {
   display: none;
 }
@@ -3259,10 +3239,6 @@ option {
 @media (min-width: 400px) {
   .xsm\:max-w-\[350px\] {
     max-width: 350px;
-  }
-
-  .xsm\:grid-cols-\[repeat\(2\2c _minmax\(230px\2c 400px\)\)\] {
-    grid-template-columns: repeat(2, minmax(230px,400px));
   }
 }
 
