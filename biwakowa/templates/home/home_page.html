@@ -19,16 +19,19 @@
         </div>
         <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
             <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
-                <div class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4">
-                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                <div
+                    class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4 overflow-hidden">
+                    <a class="gallery-imglink w-full h-full" href="{% static 'img/sypialnialg.jpg' %}" data-fslightbox="i1"><span class="sr-only inline-block">Powiększ zdjęcie</span>
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block w-full h-full object-cover" /></a>
                 </div>
-                <div class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6">
-                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
-                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class=" inline-block  w-full h-full object-cover" /></a>
+                <div
+                    class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6 overflow-hidden z-20">
+                    <a class="gallery-imglink w-full h-full" href="{% static 'img/sypialnialg.jpg' %}" data-fslightbox="i2"><span class="sr-only">Powiększ zdjęcie</span>
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block  w-full h-full object-cover" /></a>
                 </div>
-                <div class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7  ">
-                    <a class="image-link cursor-zoom-in" href="{% static 'img/sypialnialg.jpg' %}"><span class="sr-only">Powiększ zdjęcie</span>
+                <div
+                    class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7 overflow-hidden z-30">
+                    <a class="gallery-imglink w-full h-full" href="{% static 'img/sypialnialg.jpg' %}" data-fslightbox="i3"><span class="sr-only">Powiększ zdjęcie</span>
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="front budynku" class="inline-block  w-full h-full object-cover" /></a>
                 </div>
             </div>
@@ -143,15 +146,15 @@
                 </div>
                 <div class="w-full flex flex-col sm:flex-row gap-2 lg:h-[85vh]">
                     <div class="flex flex-row sm:flex-col sm:basis-1/3  gap-2 h-full">
-                        <a class="image-link cursor-zoom-in block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro9.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <a class="gallery-imglink block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro9.jpg' %}" data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
                         <img class="object-fit object-cover w-full h-full rounded-md"
                             src="{% static 'img/jezioro9.jpg' %}" alt=""></a>
-                        <a class="image-link cursor-zoom-in block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro7.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <a class="gallery-imglink block sm:h-[calc(50%-4px)]" href="{% static 'img/jezioro7.jpg' %}" data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
                         <img class="object-fit object-cover w-full h-full rounded-md"
                             src="{% static 'img/jezioro7.jpg' %}" alt=""></a>
                     </div>
                     <div class="h-48 sm:hidden md:h-auto md:basis-1/3 md:block">
-                        <a class="image-link cursor-zoom-in block h-full" href="{% static 'img/jezioro6.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                        <a class="h-full gallery-imglink" data-fslightbox href="{% static 'img/jezioro6.jpg' %}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
                         <img class="object-fit object-cover object-right w-full h-full rounded-md"
                             src="{% static 'img/jezioro6.jpg' %}" alt=""></a>
                     </div>
@@ -178,26 +181,7 @@
 {% endblock %}
 {% block extra_js %}
 <script src="{% static 'js/aos.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
-    integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-<script>
-    $(document).ready(function () {
-        $('.image-link').magnificPopup({
-            type: 'image',
-            mainClass: 'mfp-with-zoom',
-            zoom: {
-                enabled: true,
-                duration: 300,
-                easing: 'ease-in-out',
-                opener: function (openerElement) {
-                    return openerElement.is('img') ? openerElement : openerElement.find('img');
-                }
-            }
-        });
-        AOS.init();
-    });
-</script>
+<script src="{% static 'js/fslightbox.js' %}"></script>
 <script src="{% static 'vendors/leaflet/leaflet.js' %}"></script>
 <script>
     const map = L.map('map').setView([50.74062, 18.12041], 12);
