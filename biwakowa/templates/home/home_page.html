@@ -112,7 +112,7 @@
                                     i&nbsp;
                                     tarasu. Do wynajęcia dostępne są dwa apartamenty tego typu.
                                 </p>
-                                <button class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</button>
+                                <a href="{% slugurl 'apartamenty-2-osobowe' %}" class="btn-admin mt-4 ml-auto">Zobacz szczegóły &raquo;</a>
                             </div>
 
                         </div>
@@ -222,6 +222,6 @@
 
     L.marker([50.74062, 18.12041], { icon: markerIcon })
         .addTo(map)
-        .bindTooltip("Apartamenty Biwakowa 4B").openTooltip();
+        .bindTooltip("Apartamenty Biwakowa 4B");
 </script>
 {% endblock %}

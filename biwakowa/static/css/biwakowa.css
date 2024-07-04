@@ -64,85 +64,44 @@
     font-style: normal;
 }
 
-.bg-lake {
+.bg-header {
     background:
         linear-gradient(
             to top right,
-            rgb(147 197 253) 0%,
-            rgb(59 130 246) 100%
+            rgba(0, 0, 56, 0.4) 0%,
+            rgba(0, 0, 56, 0.4) 100%
         ),
-        url("/static/img/lake.jpg") no-repeat;
+        url("/static/img/budynek.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
-/* .loader {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  border: 10px solid;
-  border-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.5);
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-} */
-
-#loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    width: 100vw;
-    height: 100vh;
-}
-
-.lds-ring,
-.lds-ring div {
-    box-sizing: border-box;
-}
-.lds-ring {
-    display: inline-block;
+.gallery-imglink {
     position: relative;
-    width: 80px;
-    height: 80px;
-}
-.lds-ring div {
-    box-sizing: border-box;
     display: block;
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 8px solid currentColor;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: currentColor transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
-}
-@keyframes lds-ring {
-    0% {
-        transform: rotate(0deg);
+
+    &::before,
+    &::after {
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.3s;
     }
-    100% {
-        transform: rotate(360deg);
+    &::before {
+        content: "";
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    &::after {
+        content: url("/static/img/magnifying.svg");
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &:hover::before,
+    &:hover::after {
+        opacity: 1;
     }
 }

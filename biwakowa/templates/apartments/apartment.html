@@ -1,12 +1,172 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags wagtailimages_tags  %}
+{% load wagtailcore_tags wagtailimages_tags %}
 {% load static %}
-
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/flexbin.css' %}" />
+{% endblock %}
 {% block content %}
 {% include 'includes/nav.html' %}
-{% comment %} <div style="height:100vh;"></div> {% endcomment %}
-<main class="w-full mx-auto max-w-[1350px]">
-
+<header class="flex justify-center items-center bg-header h-64">
+    <h1 class="text-5xl sm:text-5xl md:text-6xl font-semibold font-['Rozha_One'] text-white text-center p-2">
+        <span>Apartamenty</span> <span class="whitespace-nowrap">2-osobowe</span>
+    </h1>
+</header>
+<main class="bg-gray-50">
+    <section id="description">
+        <div class="flex flex-col md:flex-row w-full gap-4">
+            <div class="md:ml-auto md:max-w-[620px] basis-1/2 py-8 md:py-14  pr-3 pl-3 md:pr-0">
+                <h2 class="font-semibold text-2xl mb-6 mt-4 md:mt-0 px-2">Apartament nr&nbsp;1, nr&nbsp;2</h2>
+                <p class="text-lg p-2 leading-relaxed">Dysponujemy dwoma apartamentami 2-osobowymi o&nbsp;powierzchni 31
+                    m2.
+                    Składają się one z&nbsp;salonu z&nbsp;aneksem kuchennym, łazienki z&nbsp;prysznicem
+                    i&nbsp;dużego tarasu (o&nbsp;dodatkowej pow. 10 m2) z&nbsp;wygodnymi meblami ogrodowymi.</p>
+                <p class="text-lg p-2 leading-relaxed">Aneks kuchenny wyposażony jest w&nbsp;lodówkę, płytę kuchenną,
+                    komplet
+                    garnków, talerzy, sztućców,
+                    czajnik elektryczny, a&nbsp;także zestaw do parzenia kawy i herbaty. W&nbsp;każdym apartamencie
+                    znajduje&nbsp;się
+                    telewizor, pościel, ręczniki i zestaw kosmetyków w&nbsp;łazience. W całym obiekcie
+                    dostępne jest WiFi. Do każdego apartamentu przynależy miejsce parkingowe. Na dachu budynku
+                    znajduje&nbsp;się taras widokowy.
+                </p>
+                <p class="text-lg p-2 leading-relaxed">Podwójne łóżka można na życzenie rozdzielić.</p>
+                <p class="text-lg p-2 leading-relaxed">Apartament nr 1 jest położony na parterze, apartament nr&nbsp;2
+                    na I
+                    piętrze.</p>
+            </div>
+            <figure class="relative basis-1/2 grow-0 overflow-hidden">
+                <img class="w-full h-full object-cover object-center" src="{% static 'img/sypialnialg.jpg' %}" alt="">
+                <figcaption
+                    class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%] bg-gray-800 opacity-60 z-20">
+                    <p class="text-white text-lg relative z-30 ml-4">Apartament nr 1</p>
+                </figcaption>
+            </figure>
+        </div>
+        <div class="flex flex-wrap justify-evenly py-8 px-2 gap-2 bg-gradient-to-br to-gray-200  from-blue-200 ">
+            <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
+                    <use xlink:href="{% static 'img/sprite.svg#bed' %}" href="{% static 'img/sprite.svg#bed' %}" />
+                </svg>
+                <p class="text-center ssm:text-lg">2 połączone <br class="block md:hidden">łóżka</p>
+            </div>
+            <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
+                    <use xlink:href="{% static 'img/sprite.svg#sofa' %}" href="{% static 'img/sprite.svg#sofa' %}" />
+                </svg>
+                <p class="text-center ssm:text-lg">rozkładana <br class="block sm:hidden">sofa</p>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                    <use xlink:href="{% static 'img/sprite.svg#people' %}"
+                        href="{% static 'img/sprite.svg#people' %}" />
+                </svg>
+                <p class="ssm:text-lg">max. 3 os.</p>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                    <use xlink:href="{% static 'img/sprite.svg#parking' %}"
+                        href="{% static 'img/sprite.svg#parking' %}" />
+                </svg>
+                <p class="ssm:text-lg">parking</p>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                    <use xlink:href="{% static 'img/sprite.svg#wifi' %}" href="{% static 'img/sprite.svg#wifi' %}" />
+                </svg>
+                <p class="ssm:text-lg">WiFi</p>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row w-full gap-4 lg:gap-8">
+            <figure class="relative basis-1/2 grow-0 order-3 md:order-1">
+                <img class="w-full h-full object-cover object-center" src="{% static 'img/sypialnialg.jpg' %}" alt="">
+                <figcaption
+                    class="flex items-center absolute top-[92%] left-0 w-full h-[8%] bg-gray-800 opacity-60 z-20">
+                    <p class="text-white text-lg relative z-30 ml-4">Apartament nr 2</p>
+                </figcaption>
+            </figure>
+            <div class="md:mr-auto md:max-w-[620px] basis-1/2 py-8 md:py-14 pr-3 pl-3 md:pl-0 order-2">
+                <p class="text-lg p-2 leading-relaxed">Koszt wynajęcia apartamentu 2-osobowego to 400 zł za dobę.
+                    Istnieje możliwość zakwaterowania dodatkowej osoby (rozkładana sofa w salonie), za opłatą 50 zł
+                    os./doba.<br>
+                    Dzieci do lat 3 bezpłatnie.
+                </p>
+                <p class="text-lg p-2 leading-relaxed">Można dokupić śniadania w formie szwedzkiego stołu,
+                    serwowane w pobliskim (50 m) hotelu Zacisze w kwocie XXX za osobę.</p>
+                <p class="text-lg p-2 leading-relaxed">Na terenie całego obiektu obowiązuje całkowity zakaz palenia
+                    oraz organizowania imprez okolicznościowych typu wieczór
+                    panieński, kawalerski itp. Zwierzęta nie są akceptowane.</p>
+                <p class="text-lg p-2 leading-relaxed">
+                    Zameldowanie od godz. 15.00<br>
+                    Wymeldowanie do godz. 11.00
+                </p>
+            </div>
+        </div>
+    </section>
+    <section id="photogallery">
+        <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+            <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr 1
+                - Galeria&nbsp;zdjęć</h3>
+        </div>
+        <div class="flexbin flexbin-margin">
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/400/500" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
+                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+        </div>
+        <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+            <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr 2
+                - Galeria&nbsp;zdjęć</h3>
+        </div>
+        <div class="flexbin flexbin-margin">
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                    <img src="https://picsum.photos/400/500" alt="" loading="lazy" class="rounded-md">
+                                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                                <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
+                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+        </div>
+    </section>
+    <div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+        {% include 'includes/footer.html' %}
+    </div>
 </main>
-
+<script src="{% static 'js/fslightbox.js' %}"></script>
 {% endblock%}
