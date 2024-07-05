@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />
 {% endblock %}
 {% block content %}
+{% include 'includes/cookies.html' %}
 <div class="page flex-col max-w-[100vw]">
     <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
         {% include 'includes/nav.html' %}

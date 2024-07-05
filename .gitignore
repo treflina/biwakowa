@@ -1,9 +1,12 @@
 public/
-bookings/migrations/*
-apartments/migrations/*
-home/migrations/*
+bookings/migrations/
+apartments/migrations/
+home/migrations/
+users/migrations/
 
 node_modules/
+
+data.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

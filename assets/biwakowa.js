@@ -1,4 +1,24 @@
 (() => {
+    // cookies
+    const cookieBox = document.querySelector(".cookie-box");
+    const cookieBtn = document.querySelector(".cookie-btn");
+
+    const showCookie = () => {
+        const cookieSeen = localStorage.getItem("cookie");
+
+        if (!cookieSeen) {
+            cookieBox.classList.remove("hide");
+        }
+    };
+
+    const handleCookieBox = () => {
+        localStorage.setItem("cookie", "true");
+        cookieBox.classList.add("hide");
+    };
+
+    cookieBtn.addEventListener("click", handleCookieBox);
+    showCookie();
+
     // navbar
 
     let hamburgerBtn = document.querySelector(".hamburger");
