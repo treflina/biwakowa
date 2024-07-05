@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />
 {% endblock %}
 {% block content %}
-<div class="page flex-col">
+<div class="page flex-col max-w-[100vw]">
     <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
         {% include 'includes/nav.html' %}
         <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
@@ -66,8 +66,7 @@
                             i
                             restauracji.</p>
                         <p>Turawa jest w naszym sercu od zawsze. Jej położenie wśród jezior i przepięknych obszarów
-                            leśnych
-                            sprawia,
+                            leśnych sprawia,
                             że jest doskonałym miejscem na wypoczynek.
                         </p>
                         <div class="ml-auto flex flex-col justify-center items-center mt-2">
@@ -104,7 +103,7 @@
                         <div data-aos="flip-up" data-aos-duration="700"
                             class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
                             <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-                                class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
+                                class="ssm:w-2/5 shrink-0 inline-block object-cover object-center">
                             <div class="px-4 pt-4 pb-6 flex flex-col">
                                 <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">Dwuosobowe
                                     <br class="block ssm:hidden">(max. 3&nbsp;os.)

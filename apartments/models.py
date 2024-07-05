@@ -70,7 +70,7 @@ class Apartment(models.Model):
     )
 
     panels = [
-        FieldPanel("name", read_only=True),
+        FieldPanel("name"),
         FieldPanel("apartment_type"),
         FieldPanel("floor"),
         FieldPanel("stripe_product_id"),

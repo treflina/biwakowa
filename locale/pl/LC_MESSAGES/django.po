@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-04 20:22+0200\n"
+"POT-Creation-Date: 2024-07-05 13:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgstr "imię i nazwisko gościa"
 msgid "phone number"
 msgstr "telefon"
 
-#: .\bookings\models.py:28 .\home\models.py:31
+#: .\bookings\models.py:28 .\home\models.py:30
 msgid "email"
 msgstr "e-mail"
 
@@ -230,23 +230,63 @@ msgstr "Błąd: stripe webhook."
 msgid "Session completed webhook error"
 msgstr "Błąd: webhook session completed"
 
-#: .\home\models.py:13 .\home\models.py:19
+#: .\home\models.py:12 .\home\models.py:18
 msgid "phone"
 msgstr "telefon"
 
-#: .\home\models.py:20
+#: .\home\models.py:19
 msgid "phones"
 msgstr "telefon"
 
-#: .\home\models.py:32
+#: .\home\models.py:31
 #, fuzzy
 #| msgid "email"
 msgid "emails"
 msgstr "e-mail"
 
+#: .\home\models.py:38
+msgid "subtitle"
+msgstr "podtytuł"
+
+#: .\home\models.py:39
+msgid "paragraph 1"
+msgstr "paragraf 1"
+
 #: .\home\models.py:40
+msgid "paragraph 2"
+msgstr "paragraf 2"
+
+#: .\home\models.py:41
+msgid "signature 1"
+msgstr "podpis 1"
+
+#: .\home\models.py:42
+msgid "signature 2"
+msgstr "podpis 2"
+
+#: .\home\models.py:46
 msgid "Home Page"
 msgstr "Strona główna"
+
+#: .\home\models.py:51 .\home\models.py:63
+msgid "Image"
+msgstr "zdjęcie"
+
+#: .\home\models.py:52
+msgid "Header images"
+msgstr "Zdjęcia na czołówce"
+
+#: .\home\models.py:60
+msgid "About us"
+msgstr "O nas"
+
+#: .\home\models.py:64
+msgid "Lake images"
+msgstr "Zdjęcia jeziora"
+
+#: .\home\models.py:78 .\home\models.py:95
+msgid "alternative text"
+msgstr "opis alternatywny"
 
 #: .\users\forms.py:8 .\users\forms.py:12
 msgid "Username"
@@ -266,12 +306,6 @@ msgstr "Imię i nazwisko gościa."
 
 #~ msgid "description part I"
 #~ msgstr "opis część I"
-
-#~ msgid "paragraph"
-#~ msgstr "paragraf"
-
-#~ msgid "image"
-#~ msgstr "zdjęcie"
 
 #~ msgid "image description"
 #~ msgstr "opis pod zdjęciem"
