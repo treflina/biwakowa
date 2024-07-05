@@ -3,7 +3,6 @@
 {% load static %}
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/magnific_popup.min.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />
 {% endblock %}
 {% block content %}
@@ -181,6 +180,7 @@
 {% endblock %}
 {% block extra_js %}
 <script src="{% static 'js/aos.js' %}"></script>
+<script>AOS.init();</script>
 <script src="{% static 'js/fslightbox.js' %}"></script>
 <script src="{% static 'vendors/leaflet/leaflet.js' %}"></script>
 <script>

@@ -5,154 +5,171 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/flexbin.css' %}" />
 {% endblock %}
 {% block content %}
-{% include 'includes/nav.html' %}
-<header class="flex justify-center items-center bg-header h-64">
-    <h1 class="text-5xl sm:text-5xl md:text-6xl font-semibold font-['Rozha_One'] text-white text-center p-2">
-        Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>
-    </h1>
-</header>
-<main class="bg-gray-50">
-    <section id="description" class="apartment-description">
-        <div class="flex flex-col md:flex-row w-full gap-4">
-            <div class="md:ml-auto md:max-w-[620px] basis-1/2 py-8 md:py-14 pr-3 pl-3 md:pr-0 text-lg leading-relaxed">
-                <h2 class="font-semibold text-2xl mb-6 mt-4 md:mt-0 px-2">
-                    {{page.heading}}</h2>
-                {{ page.text_1|richtext }}
+<div class="page flex-col">
+    {% include 'includes/nav.html' %}
+    <header class="flex justify-center items-center bg-header h-64">
+        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+            Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>
+        </h1>
+    </header>
+    <main class="bg-gray-50">
+        <section id="description" class="apartment-description">
+            <div class="flex flex-col md:flex-row w-full gap-4">
+                <div
+                    class="md:ml-auto md:max-w-[620px] basis-1/2 py-6 md:py-14 pr-3 pl-3 md:pr-0 text-lg leading-relaxed">
+                    <h2 class="font-semibold text-2xl mb-6 mt-4 md:mt-0 px-2">
+                        {{page.heading}}</h2>
+                    {{ page.text_1|richtext }}
+                </div>
+                <figure class="relative basis-1/2 grow-0 overflow-hidden">
+                    {% image page.image_1 width-800 as img %}
+                    <img class="w-full h-full object-cover object-center" src="{{ img.url }}" width="{{ img.width }}"
+                        height="{{ img.height }}" alt="">
+                    <figcaption
+                        class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%] bg-gray-800 opacity-60 z-20">
+                        <p class="text-white text-lg relative z-30 ml-4">{{ page.caption_1 }}</p>
+                    </figcaption>
+                </figure>
             </div>
-            <figure class="relative basis-1/2 grow-0 overflow-hidden">
-                {% image page.image_1 width-800 as img %}
-                <img class="w-full h-full object-cover object-center" src="{{ img.url }}" width="{{ img.width }}"
-                    height="{{ img.height }}" alt="">
-                <figcaption
-                    class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%] bg-gray-800 opacity-60 z-20">
-                    <p class="text-white text-lg relative z-30 ml-4">{{ page.caption_1 }}</p>
-                </figcaption>
-            </figure>
-        </div>
-        <div class="flex flex-wrap justify-evenly py-8 px-2 gap-2 bg-gradient-to-br to-gray-200  from-blue-200 ">
-            <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
-                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
-                    <use xlink:href="{% static 'img/sprite.svg#bed' %}" href="{% static 'img/sprite.svg#bed' %}" />
-                </svg>
-                {% if page.apartment_type.type_name == "2-osobowy" %}
-                <p class="text-center ssm:text-lg">2 połączone <br class="block md:hidden">łóżka</p>
-                {% else %}
-                <p class="text-center ssm:text-lg">2 sypialnie</p>
-                {% endif %}
-            </div>
-            <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
-                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
-                    <use xlink:href="{% static 'img/sprite.svg#sofa' %}" href="{% static 'img/sprite.svg#sofa' %}" />
-                </svg>
-                {% if page.apartment_type.type_name == "2-osobowy" %}
-                <p class="text-center ssm:text-lg">rozkładana <br class="block sm:hidden">sofa</p>
-                {% else %}
-                <p class="text-center ssm:text-lg">salon</p>
-                {% endif %}
-            </div>
-            <div class="flex flex-col items-center justify-center">
-                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
-                    <use xlink:href="{% static 'img/sprite.svg#people' %}"
-                        href="{% static 'img/sprite.svg#people' %}" />
-                </svg>
-                <p class="ssm:text-lg">max. {% if page.apartment_type.type_name == "2-osobowy" %}3{% else %}6{% endif %}
-                    os.</p>
-            </div>
-            <div class="flex flex-col items-center justify-center">
-                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
-                    <use xlink:href="{% static 'img/sprite.svg#parking' %}"
-                        href="{% static 'img/sprite.svg#parking' %}" />
-                </svg>
-                <p class="ssm:text-lg">parking</p>
-            </div>
-            <div class="flex flex-col items-center justify-center">
-                <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
-                    <use xlink:href="{% static 'img/sprite.svg#wifi' %}" href="{% static 'img/sprite.svg#wifi' %}" />
-                </svg>
-                <p class="ssm:text-lg">WiFi</p>
-            </div>
-        </div>
-        <div class="flex flex-col md:flex-row w-full gap-4 lg:gap-8">
-            <figure class="relative basis-1/2 grow-0 overflow-hidden">
-                {% image page.image_2 width-800 as img2 %}
-                <img class="w-full h-full object-cover object-center" src="{{ img2.url }}" width="{{ img2.width }}"
-                    height="{{ img2.height }}" alt="">
-                <figcaption
-                    class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%] bg-gray-800 opacity-60 z-20">
-                    <p class="text-white text-lg relative z-30 ml-4">{{ page.caption_2 }}</p>
-                </figcaption>
-            </figure>
             <div
-                class="md:mr-auto md:max-w-[620px] basis-1/2 py-8 md:py-14 text-lg leading-relaxed pr-3 pl-3 md:pl-0 order-2">
-                {{ page.text_2|richtext }}
+                class="flex flex-wrap justify-evenly pt-6 xssm:pt-8 pb-4 xssm:pb-8 px-2 gap-4 xssm:gap-2 bg-gradient-to-br to-gray-200  from-blue-200 ">
+                <div class="flex flex-col items-center justify-center">
+                    <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                        <use xlink:href="{% static 'img/sprite.svg#people' %}"
+                            href="{% static 'img/sprite.svg#people' %}" />
+                    </svg>
+                    <p class="ssm:text-lg">
+                        max. {% if page.apartment_type.type_name == "2-osobowy" %}3{% else %}6{% endif %} os.</p>
+                </div>
+                <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                    <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
+                        <use xlink:href="{% static 'img/sprite.svg#bed' %}" href="{% static 'img/sprite.svg#bed' %}" />
+                    </svg>
+                    {% if page.apartment_type.type_name == "2-osobowy" %}
+                    <p class="text-center ssm:text-lg">2 połączone <br class="block md:hidden">łóżka</p>
+                    {% else %}
+                    <p class="text-center ssm:text-lg">2 sypialnie</p>
+                    {% endif %}
+                </div>
+                <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                    <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
+                        <use xlink:href="{% static 'img/sprite.svg#sofa' %}"
+                            href="{% static 'img/sprite.svg#sofa' %}" />
+                    </svg>
+                    {% if page.apartment_type.type_name == "2-osobowy" %}
+                    <p class="text-center ssm:text-lg">rozkładana <br class="block sm:hidden">sofa</p>
+                    {% else %}
+                    <p class="text-center ssm:text-lg">salon</p>
+                    {% endif %}
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                        <use xlink:href="{% static 'img/sprite.svg#parking' %}"
+                            href="{% static 'img/sprite.svg#parking' %}" />
+                    </svg>
+                    <p class="ssm:text-lg">parking</p>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
+                        <use xlink:href="{% static 'img/sprite.svg#wifi' %}"
+                            href="{% static 'img/sprite.svg#wifi' %}" />
+                    </svg>
+                    <p class="ssm:text-lg">WiFi</p>
+                </div>
             </div>
-        </div>
-    </section>
-    <section id="photogallery">
-        <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
-            <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment1}}
-                - Galeria&nbsp;zdjęć</h3>
-        </div>
-        <div class="flexbin flexbin-margin">
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+            <div class="flex flex-col md:flex-row w-full gap-4 lg:gap-8">
+                <figure class="relative basis-1/2 grow-0 overflow-hidden order-3 md:order-1">
+                    {% image page.image_2 width-800 as img2 %}
+                    <img class="w-full h-full object-cover object-center" src="{{ img2.url }}" width="{{ img2.width }}"
+                        height="{{ img2.height }}" alt="">
+                    <figcaption
+                        class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%] bg-gray-800 opacity-60 z-20">
+                        <p class="text-white text-lg relative z-30 ml-4">{{ page.caption_2 }}</p>
+                    </figcaption>
+                </figure>
+                <div
+                    class="md:mr-auto md:max-w-[620px] basis-1/2 py-6 md:py-14 text-lg leading-relaxed pr-3 pl-3 md:pl-0 order-2">
+                    {{ page.text_2|richtext }}
+                </div>
+            </div>
+        </section>
+        <section id="photogallery">
+            <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+                <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment1}}
+                    - Galeria&nbsp;zdjęć</h3>
+            </div>
+            <div class="flexbin flexbin-margin">
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
                     <img src="https://picsum.photos/400/500" alt="" loading="lazy" class="rounded-md">
                     <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
-                <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
-                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            </div>
+            <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+                <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment2}}
+                    - Galeria&nbsp;zdjęć</h3>
+            </div>
+            <div class="flexbin flexbin-margin">
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/400/500" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
+                    <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
+                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+            </div>
+        </section>
+        <div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+            {% include 'includes/footer.html' %}
         </div>
-        <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
-            <h3 class="font-semibold text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment2}}
-                - Galeria&nbsp;zdjęć</h3>
+    </main>
+</div>
+<div id="loading" class="bg-gradient-to-tl to-gray-300 from-blue-400">
+    <div class="flex justify-center items-center text-amber-300 p-4 rounded-md bg-gray-100">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
-        <div class="flexbin flexbin-margin">
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="https://picsum.photos/500/600" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="https://picsum.photos/300/300" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="https://picsum.photos/600/400" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                    <img src="https://picsum.photos/400/500" alt="" loading="lazy" class="rounded-md">
-                                    <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="https://picsum.photos/500/300" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-            <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
-                                <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
-                                <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-        </div>
-    </section>
-    <div class="bg-gradient-to-tl to-gray-200 from-blue-200">
-        {% include 'includes/footer.html' %}
+        <h1 class="font-['Rozha_One'] text-5xl text-black">B4B</h1>
     </div>
-</main>
+</div>
 <script src="{% static 'js/fslightbox.js' %}"></script>
 {% endblock%}
