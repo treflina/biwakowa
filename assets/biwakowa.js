@@ -7,16 +7,16 @@
         const cookieSeen = localStorage.getItem("cookie");
 
         if (!cookieSeen) {
-            cookieBox.classList.remove("hide");
+            cookieBox?.classList.remove("hide");
         }
     };
 
     const handleCookieBox = () => {
         localStorage.setItem("cookie", "true");
-        cookieBox.classList.add("hide");
+        cookieBox?.classList.add("hide");
     };
 
-    cookieBtn.addEventListener("click", handleCookieBox);
+    cookieBtn?.addEventListener("click", handleCookieBox);
     showCookie();
 
     // navbar

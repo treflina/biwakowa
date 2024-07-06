@@ -453,7 +453,7 @@ def stripe_webhook(request):
                 notes = booking.notes if booking.notes else "-"
                 subject = f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
                 msg = f"""Nowa rezerwacja: \n
-        Apartament nr {booking.apartment.apartment_type.type_name} \n
+        Apartament nr {booking.apartment.name} \n
         od {booking.date_from} do {booking.date_to} \n
         Gość: {booking.guest} \n
         Uwagi gościa: {notes} \n

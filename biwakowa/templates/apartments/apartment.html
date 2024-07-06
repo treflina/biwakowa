@@ -2,6 +2,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 {% load static %}
 {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/flexbin.css' %}" />
 {% endblock %}
 {% block content %}
@@ -33,7 +34,7 @@
             </div>
             <div
                 class="flex flex-wrap justify-evenly pt-6 xssm:pt-8 pb-4 xssm:pb-8 px-2 gap-4 xssm:gap-2 bg-gradient-to-br to-gray-200  from-blue-200 ">
-                <div class="flex flex-col items-center justify-center">
+                <div data-aos="zoom-in" class="flex flex-col items-center justify-center">
                     <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
                         <use xlink:href="{% static 'img/sprite.svg#people' %}"
                             href="{% static 'img/sprite.svg#people' %}" />
@@ -41,7 +42,8 @@
                     <p class="ssm:text-lg">
                         max. {% if page.apartment_type.type_name == "2-osobowy" %}3{% else %}6{% endif %} os.</p>
                 </div>
-                <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                <div data-aos="zoom-in" data-aos-delay="50"
+                    class="flex flex-col items-center justify-center gap-2 fill-blue-900">
                     <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
                         <use xlink:href="{% static 'img/sprite.svg#bed' %}" href="{% static 'img/sprite.svg#bed' %}" />
                     </svg>
@@ -51,7 +53,8 @@
                     <p class="text-center ssm:text-lg">2 sypialnie</p>
                     {% endif %}
                 </div>
-                <div class="flex flex-col items-center justify-center gap-2 fill-blue-900">
+                <div data-aos="zoom-in" data-aos-delay="100"
+                    class="flex flex-col items-center justify-center gap-2 fill-blue-900">
                     <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle">
                         <use xlink:href="{% static 'img/sprite.svg#sofa' %}"
                             href="{% static 'img/sprite.svg#sofa' %}" />
@@ -62,14 +65,14 @@
                     <p class="text-center ssm:text-lg">salon</p>
                     {% endif %}
                 </div>
-                <div class="flex flex-col items-center justify-center">
+                <div data-aos="zoom-in" data-aos-delay="150" class="flex flex-col items-center justify-center">
                     <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
                         <use xlink:href="{% static 'img/sprite.svg#parking' %}"
                             href="{% static 'img/sprite.svg#parking' %}" />
                     </svg>
                     <p class="ssm:text-lg">parking</p>
                 </div>
-                <div class="flex flex-col items-center justify-center">
+                <div data-aos="zoom-in" data-aos-delay="200" class="flex flex-col items-center justify-center">
                     <svg class="w-8 h-8 ssm:w-12 ssm:h-12 inline-block align-middle gap-2 fill-blue-900">
                         <use xlink:href="{% static 'img/sprite.svg#wifi' %}"
                             href="{% static 'img/sprite.svg#wifi' %}" />
@@ -94,11 +97,11 @@
             </div>
         </section>
         <section id="photogallery">
-            <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+            <div data-aos="fade-up" class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                 <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment1}}
                     - Galeria&nbsp;zdjęć</h3>
             </div>
-            <div class="flexbin flexbin-margin">
+            <div data-aos="fade-up" class="flexbin flexbin-margin">
                 <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery" data-alt="" class="gallery-imglink">
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
                     <span class="sr-only">Link do powiększonego zdjęcia</span></a>
@@ -124,11 +127,11 @@
                     <img src="https://picsum.photos/300/400" alt="" loading="lazy" class="rounded-md">
                     <span class="sr-only">Link do powiększonego zdjęcia</span></a>
             </div>
-            <div class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
+            <div data-aos="fade-up" class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                 <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">Apartament nr {{apartment2}}
                     - Galeria&nbsp;zdjęć</h3>
             </div>
-            <div class="flexbin flexbin-margin">
+            <div data-aos="fade-up" class="flexbin flexbin-margin">
                 <a href="{% static 'img/sypialnia.jpg' %}" data-fslightbox="gallery2" data-alt="" class="gallery-imglink">
                     <img src="{% static 'img/sypialnia.jpg' %}" alt="" loading="lazy" class="rounded-md">
                     <span class="sr-only">Link do powiększonego zdjęcia</span></a>
@@ -171,5 +174,7 @@
         <h1 class="font-['Rozha_One'] text-5xl text-black">B4B</h1>
     </div>
 </div>
+<script src="{% static 'js/aos.js' %}"></script>
+<script>AOS.init();</script>
 <script src="{% static 'js/fslightbox.js' %}"></script>
 {% endblock%}
