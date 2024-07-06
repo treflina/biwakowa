@@ -87,12 +87,9 @@ p-2 md:p-4 bg-white flex-grow max-w-xl mx-auto">
             focus:decoration-transparent focus:text-blue-600 transition-all
              duration-300">politykę prywatności</a></label>
     </div>
-
-
     {{ form.arrival }}
     {{ form.departure }}
     {{ form.pk }}
-
     {% if messages %}
         {% for message in messages %}
         <div class="text-red-700 font-semibold mt-2 text-center">{{ message|safe }}</div>
@@ -117,4 +114,7 @@ p-2 md:p-4 bg-white flex-grow max-w-xl mx-auto">
    basis-3/5 max-w-full xsm:max-w-[350px] bg-gray-50 border-2 border-blue-300 text-gray-900 rounded-md focus:ring-amber-300 focus:border-amber-300 block
    ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 </main>
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+    {% include 'includes/footer.html' %}
+</div>
 {% endblock %}

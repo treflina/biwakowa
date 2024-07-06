@@ -5,6 +5,7 @@ module.exports = {
         datepicker: "./assets/datepicker.js",
         biwakowa: "./assets/biwakowa.js",
         modal: "./assets/modal.js",
+        aos: "./assets/aos.js",
     },
     output: {
         filename: "[name].js",
