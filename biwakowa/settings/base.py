@@ -10,7 +10,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = False
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
@@ -81,6 +81,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "utils.context_processors.biwakowa_phone",
+                "utils.context_processors.bank_account_number",
             ],
         },
     },
