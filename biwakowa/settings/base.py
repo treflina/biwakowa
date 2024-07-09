@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     "django_filters",
     "django_htmx",
     "querystring_tag",
+    "django_dump_load_utf8",
     #
-    # "apartments",
-    "apartments.apps.ApartmentsConfig",
+    "apartments",
+    # "apartments.apps.ApartmentsConfig",
     "bookings",
     "users",
 ]

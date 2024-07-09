@@ -11,6 +11,7 @@ from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
 
 
+@register_snippet
 class ApartmentType(models.Model):
     type_name = models.CharField(
         _("apartment's type"),
