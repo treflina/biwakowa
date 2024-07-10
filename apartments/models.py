@@ -3,10 +3,9 @@ from datetime import datetime
 from django.db import models
 from django.utils.translation import gettext as _
 
-from wagtail import blocks
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-from wagtail.fields import StreamField, RichTextField
-from wagtail.images.blocks import ImageChooserBlock
+from wagtail.fields import RichTextField
+
 from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
 

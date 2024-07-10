@@ -1,0 +1,18 @@
+{
+    "short_name": "Biwakowa 4B",
+    "name": "Biwakowa 4B",
+    "description": "B4B Rezerwacje",
+    "icons": [
+        {
+            "src": "/static/img/favicon/android-chrome-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "background_color": "rgb(240, 240, 245)",
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "rgb(240, 240, 245)"
+}

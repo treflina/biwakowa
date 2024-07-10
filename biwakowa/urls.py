@@ -2,7 +2,9 @@ from django.conf import settings
 from django.urls import include, path
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
+from django.views.i18n import JavaScriptCatalog
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -15,7 +17,26 @@ urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
+    path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
     path("search/", search_views.search, name="search"),
+    path("webpush/", include('webpush.urls')),
+    path(
+        "manifest.json",
+        TemplateView.as_view(
+            template_name="manifest.json", content_type="application/json"
+        ),
+        name="manifest.json",
+    ),
+    path(
+        "sw.js",
+        (
+            TemplateView.as_view(
+                template_name="sw.js",
+                content_type="application/javascript",
+            )
+        ),
+        name="serviceworker",
+    ),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('img/favicon/favicon.ico'))),
     path("__reload__/", include("django_browser_reload.urls")),
     path("", include("users.urls")),

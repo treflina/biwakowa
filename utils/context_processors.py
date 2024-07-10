@@ -1,5 +1,3 @@
-from django.conf import settings
-
 from home.models import BankAccountNumberSnippet, PhoneSnippet
 
 

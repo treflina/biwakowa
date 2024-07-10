@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_htmx",
     "querystring_tag",
+    "webpush",
     "django_dump_load_utf8",
     #
     "apartments",
@@ -240,6 +241,12 @@ DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY_TEST")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET_TEST")
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": env("VAPID_PUBLIC_KEY"),
+    "VAPID_PRIVATE_KEY": env("VAPID_PRIVATE_KEY"),
+    "VAPID_ADMIN_EMAIL": env("ADMIN_EMAIL"),
+}
 
 
 LOGGING = {

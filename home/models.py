@@ -45,7 +45,7 @@ class AdminEmail(models.Model):
 
     class Meta:
         verbose_name = _("email")
-        verbose_name_plural = _("emails")
+        verbose_name_plural = _("email")
 
 
 class HomePage(Page):

@@ -1,9 +1,15 @@
 import calendar
 from datetime import timedelta
+import logging
+from webpush import send_user_notification
 
 from django.apps import apps
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db.models import Q
 
+logger = logging.getLogger("django")
 
 def daterange(start_date, end_date):
     """Iterate over dates in a given period."""
@@ -96,3 +102,28 @@ def get_next_prev_month(year, month):
         "next_month": next_month,
     }
     return calendar_months
+
+def handle_error_notification(err_subj, err_msg):
+    """Send error messages to admin."""
+
+    logger.error(f"{err_subj}: err_msg")
+    # webpush notification
+    payload = {"head": err_subj, "body": err_msg}
+    try:
+        admin_email = settings.ADMIN_EMAIL
+        admin = User.objects.filter(email=admin_email).first()
+        send_user_notification(user=admin, payload=payload, ttl=1000)
+    except User.DoesNotExist:
+        admin = None
+        logger.error("Notification not sent. User doesn't exist.")
+    except Exception as e:
+        logger.error(f"{e}")
+    # email notification
+    send_mail(
+        subject=err_subj,
+        message=err_msg,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[settings.ADMIN_EMAIL],
+        fail_silently=True,
+    )
+

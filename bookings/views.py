@@ -4,10 +4,12 @@ import stripe
 import time
 from datetime import date, datetime
 from django_filters import views
+from webpush import send_user_notification
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -32,7 +34,7 @@ from .forms import (
     OnlineBookingDetailsForm,
 )
 from .models import Booking
-from .utils import calculated_price
+from .utils import calculated_price, handle_error_notification
 
 logger = logging.getLogger("django")
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -279,18 +281,12 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(
                     request, _("Booking this apartment is not possible now.")
                 )
-                err_msg = f"Error. Brak stripe id dla apartamentu {ap_to_book.name}. \n\r \
-                    {guest} {guest_phone} {email} \n\r \
-                    {arrival} - {departure} \n\r \
-                    {guest_notes}"
-                logger.error(err_msg)
-                send_mail(
-                    subject=_("Error. No stripe product_id"),
-                    message=err_msg,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.ADMIN_EMAIL],
-                    fail_silently=True,
-                )
+                err_subject = _("Error. No stripe product_id")
+                err_msg = f"No stripe id for apartment {ap_to_book.name}. \
+                    Booking details: {guest} {guest_phone} {email} \
+                    from {arrival} to {departure} \
+                    notes: {guest_notes}"
+                handle_error_notification(err_subject, err_msg)
 
                 return redirect("bookings_app:booking-search")
 
@@ -354,20 +350,12 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                             płatności. \n \
                             Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
                 )
-                err_msg = f"""{ex} \n
-                apartment: {ap_to_book.name}  \n
-                {guest} {guest_phone} {email} \n
-                {arrival} - {departure} \n
-                {guest_notes}"""
-                logger.error(err_msg)
-                send_mail(
-                    subject=_("Error while creating checkout session"),
-                    message=err_msg,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.ADMIN_EMAIL],
-                    fail_silently=True,
-                )
-
+                err_subject = "Error while creating checkout session or db saving"
+                err_msg = f"{ex} while booking apartment {ap_to_book.name}. \
+                    Booking details: {guest} {guest_phone} {email} \
+                    from {arrival} to {departure} \
+                    notes: {guest_notes}"
+                handle_error_notification(err_subject, err_msg)
                 return redirect("bookings_app:booking-search")
 
         else:
@@ -376,6 +364,9 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
 
 def success(request):
+    for key in list(request.session.keys()):
+        if not key.startswith("_"): # skip keys set by the django system
+            del request.session[key]
     stripe.api_key = settings.STRIPE_SECRET_KEY
     # checkout_session_id = request.GET.get('session_id', None)
     # session = stripe.checkout.Session.retrieve(checkout_session_id)
@@ -408,14 +399,9 @@ def stripe_webhook(request):
         logger.error(f"Stripe-webhook error: {e}")
         return HttpResponse(status=400)
     except Exception as e:
-        logger.error(f"Stripe-webhook error: {e}")
-        send_mail(
-            subject=_("Webhook error"),
-            message=e,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[settings.ADMIN_EMAIL],
-            fail_silently=True,
-        )
+        error_subj = "Webhook error"
+        error_msg = f"{e}"
+        handle_error_notification(error_subj, error_msg)
         return HttpResponse(status=400)
 
     if event["type"] == "checkout.session.completed":
@@ -426,19 +412,12 @@ def stripe_webhook(request):
             booking = Booking.objects.get(stripe_checkout_id=session_id)
         except Booking.DoesNotExist:
             booking = None
-            logger.error(
-                f"""Session completed (session id: {session_id}) webhook was sent,
-                but related booking was not found in the database.
+            error_subj = _("Session completed, booking not found")
+            error_msg = f"""Session completed (session id: {session_id})
+                webhook was sent, but related booking was not found
+                in the database.
                 """
-            )
-            send_mail(
-                subject=_("Session completed webhook error"),
-                message=f"Session id:{session_id}. Session completed webhook was sent, \n \
-                but corresponding booking was not found in the database.",
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.ADMIN_EMAIL],
-                fail_silently=True,
-            )
+            handle_error_notification(error_subj, error_msg)
 
         if booking and session.payment_status == "paid":
             booking.stripe_transaction_status = "success"
@@ -446,36 +425,53 @@ def stripe_webhook(request):
             booking.save()
 
             from_email = settings.EMAIL_HOST_USER
+            hotel_email = AdminEmail.objects.last()
+            subject = (
+                f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
+            )
+            notes = booking.notes if booking.notes else "-"
+            msg = f"""Nowa rezerwacja: \n
+    Apartament nr {booking.apartment.name} \n
+    od {booking.date_from} do {booking.date_to} \n
+    Gość: {booking.guest} \n
+    Uwagi gościa: {notes} \n
+    utworzona: {booking.created_at} """
 
             # send email to hotel
             try:
-                admin_email = AdminEmail.objects.last()
-                notes = booking.notes if booking.notes else "-"
-                subject = f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
-                msg = f"""Nowa rezerwacja: \n
-        Apartament nr {booking.apartment.name} \n
-        od {booking.date_from} do {booking.date_to} \n
-        Gość: {booking.guest} \n
-        Uwagi gościa: {notes} \n
-        utworzona: {booking.created_at} """
-                to = admin_email
-                send_mail(subject, msg, from_email, [to])
+                send_mail(subject, msg, from_email, [hotel_email])
             except Exception as e:
-                logger.error(f"Confirmation email not sent for {booking}. {e}")
+                error_subj = "Confirmation email not sent for booking"
+                error_msg = (
+                    f"Confirmation email not sent for booking num {booking.id}. {e}"
+                )
+                handle_error_notification(error_subj, error_msg)
+
+            # send webpush notification to hotel
+            try:
+                hotel = User.objects.filter(email=hotel_email).last()
+                send_user_notification(user=hotel, payload=payload, ttl=1000)
+            except User.DoesNotExist:
+                hotel = None
+                logger.error("Notification not sent. User doesn't exist.")
 
             # send email to guest
             try:
                 hotel_phone = PhoneSnippet.objects.last()
-                subject = 'Potwierdzenie rezerwacji B4B'
+                subject = "Potwierdzenie rezerwacji B4B"
                 html_message = render_to_string(
-                    'bookings/confirmation-email.html',
-                    {'booking': booking, 'phone': hotel_phone}
-                    )
+                    "bookings/confirmation-email.html",
+                    {"booking": booking, "phone": hotel_phone},
+                )
                 plain_message = strip_tags(html_message)
                 to = booking.email
-                send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+                send_mail(
+                    subject, plain_message, from_email, [to], html_message=html_message
+                )
             except Exception as e:
-                logger.error(f"Confirmation email not sent for {booking}. {e}")
+                error_subj = "Sending confirmation email failed"
+                error_msg = f"Confirmation email not sent for {booking}. {e}"
+                handle_error_notification(error_subj, error_msg)
 
     elif event["type"] == "checkout.session.expired":
         session = event["data"]["object"]
