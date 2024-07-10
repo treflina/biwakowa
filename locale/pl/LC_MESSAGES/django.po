@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-07 08:57+0200\n"
+"POT-Creation-Date: 2024-07-10 11:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,7 +123,7 @@ msgstr ""
 "Data zameldowania nie może być wcześniejsza lub taka sama jak data "
 "wymeldowania"
 
-#: .\bookings\forms.py:102 .\bookings\forms.py:286 .\bookings\views.py:226
+#: .\bookings\forms.py:102 .\bookings\forms.py:286 .\bookings\views.py:228
 msgid "There is already a booking in the given date range."
 msgstr "Niestety istnieje już rezerwacja na podany okres."
 
@@ -137,7 +137,7 @@ msgstr ""
 "OŚwiadczenie o zapoznaniu się z regulaminem i polityką prywatności jest "
 "obowiązkowe aby kontynuować."
 
-#: .\bookings\forms.py:211 .\bookings\views.py:258
+#: .\bookings\forms.py:211 .\bookings\views.py:260
 #, python-brace-format
 msgid "Apartment with id {pk} was not found"
 msgstr "Apartament z podanym nr {pk} nie został znaleziony."
@@ -186,7 +186,7 @@ msgstr "imię i nazwisko gościa"
 msgid "phone number"
 msgstr "telefon"
 
-#: .\bookings\models.py:28 .\home\models.py:47
+#: .\bookings\models.py:28 .\home\models.py:47 .\home\models.py:48
 msgid "email"
 msgstr "e-mail"
 
@@ -210,25 +210,17 @@ msgstr "numer id płatności Stripe"
 msgid "transaction status"
 msgstr "status transakcji"
 
-#: .\bookings\views.py:280
+#: .\bookings\views.py:282
 msgid "Booking this apartment is not possible now."
 msgstr "zarezerwowanie wybranego apartamentu nie jest obecnie możliwe"
 
-#: .\bookings\views.py:288
+#: .\bookings\views.py:284
 msgid "Error. No stripe product_id"
 msgstr "Numer id produktu (stripe)"
 
-#: .\bookings\views.py:364
-msgid "Error while creating checkout session"
-msgstr "Błąd podczas utworzenia sesji stripe"
-
-#: .\bookings\views.py:413
-msgid "Webhook error"
-msgstr "Błąd: stripe webhook."
-
-#: .\bookings\views.py:435
-msgid "Session completed webhook error"
-msgstr "Błąd: webhook session completed"
+#: .\bookings\views.py:415
+msgid "Session completed, booking not found"
+msgstr "Sesja płatności zakończona, rezerwacja nie została znaleziona w bazie."
 
 #: .\home\models.py:17
 msgid "bank account number"
@@ -249,12 +241,6 @@ msgstr "telefon"
 #: .\home\models.py:36
 msgid "phones"
 msgstr "telefon"
-
-#: .\home\models.py:48
-#, fuzzy
-#| msgid "email"
-msgid "emails"
-msgstr "e-mail"
 
 #: .\home\models.py:55
 msgid "subtitle"
@@ -336,6 +322,17 @@ msgstr "Podano nieprawidłowe dane do logowania."
 #: .\users\models.py:6
 msgid "Customer's name"
 msgstr "Imię i nazwisko gościa."
+
+#~ msgid "Error while creating checkout session"
+#~ msgstr "Błąd podczas utworzenia sesji stripe"
+
+#~ msgid "Webhook error"
+#~ msgstr "Błąd: stripe webhook."
+
+#, fuzzy
+#~| msgid "email"
+#~ msgid "emails"
+#~ msgstr "e-mail"
 
 #~ msgid "description part I"
 #~ msgstr "opis część I"

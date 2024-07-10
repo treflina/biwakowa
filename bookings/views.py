@@ -367,9 +367,8 @@ def success(request):
     for key in list(request.session.keys()):
         if not key.startswith("_"): # skip keys set by the django system
             del request.session[key]
-    stripe.api_key = settings.STRIPE_SECRET_KEY
+    # stripe.api_key = settings.STRIPE_SECRET_KEY
     # checkout_session_id = request.GET.get('session_id', None)
-    # session = stripe.checkout.Session.retrieve(checkout_session_id)
     return render(request, "bookings/success.html")
 
 
@@ -430,12 +429,14 @@ def stripe_webhook(request):
                 f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
             )
             notes = booking.notes if booking.notes else "-"
-            msg = f"""Nowa rezerwacja: \n
+            url = f"{reverse('bookings:booking', kwargs={'pk': booking.id})}"
+            msg = f"""Nowa rezerwacja: #{booking.id} \n
     Apartament nr {booking.apartment.name} \n
     od {booking.date_from} do {booking.date_to} \n
     Gość: {booking.guest} \n
     Uwagi gościa: {notes} \n
-    utworzona: {booking.created_at} """
+    utworzona: {booking.created_at} \n
+    Zobacz: {url}"""
 
             # send email to hotel
             try:
@@ -450,10 +451,17 @@ def stripe_webhook(request):
             # send webpush notification to hotel
             try:
                 hotel = User.objects.filter(email=hotel_email).last()
+                payload = {
+                    "head": subject,
+                    "body": f"Nowa rezerwacja: #{booking.id}",
+                    "url":url
+                    }
                 send_user_notification(user=hotel, payload=payload, ttl=1000)
             except User.DoesNotExist:
                 hotel = None
                 logger.error("Notification not sent. User doesn't exist.")
+            except Exception as e:
+                logger.error(f"{e}")
 
             # send email to guest
             try:
