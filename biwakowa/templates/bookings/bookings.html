@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags querystring_tag filter_tags %}
+{% load wagtailcore_tags querystring_tag filter_tags webpush_notifications %}
 {% load static %}
+{% block extra_head %}
+ {% webpush_header %}
+{% endblock %}
 {% block content %}
 {% include 'includes/nav.html' %}
 <main class="flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
-    <h1 class="text-2xl font-semibold text-center my-6 md:my-10">Lista rezerwacji</h1>
-    <div class="flex flex-wrap justify-center items-center gap-2  mb-3">
+    <div class="flex items-center my-6 md:my-10 gap-3">
+        <h1 class="text-2xl font-semibold text-center">Lista rezerwacji</h1>
+        <button type="button" class="openModal" data-toggle="modal"
+        data-target="#notificationsModal">
+            <svg class="w-6 h-6 inline-block align-middle gap-2 fill-black">
+                <use xlink:href="{% static 'img/sprite.svg#bell' %}"
+                    href="{% static 'img/sprite.svg#bell' %}" />
+            </svg>
+        </button>
+    </div>
+    {% include 'includes/notifications-modal.html' %}
+    <div class="flex flex-wrap justify-center items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
         <a href="{% url 'bookings_app:upcoming-bookings' %}"  class="btn-admin cursor-pointer"
         {%if upcoming %} style="background-color:#fcd34d">{% endif %}
             <p>Pokaż nadchodzące</p>

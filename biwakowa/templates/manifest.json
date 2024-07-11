@@ -7,9 +7,19 @@
             "src": "/static/img/favicon/android-chrome-96x96.png",
             "sizes": "96x96",
             "type": "image/png"
+        },
+        {
+            "src": "/static/img/favicon/icon192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/favicon/icon512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
         }
     ],
-    "start_url": "/",
+    "start_url": "/rezerwacje/",
     "scope": "/",
     "background_color": "rgb(240, 240, 245)",
     "display": "standalone",

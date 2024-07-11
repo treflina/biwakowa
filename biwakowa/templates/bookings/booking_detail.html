@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load wagtailcore_tags %}
 {% load static %}
-
 {% block content %}
 {% include 'includes/nav.html' %}
-
 <main class="flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
-
-    <h1 class="my-10 font-semibold text-center text-2xl">Szczegóły rezerwacji #{{booking.id}}</h1>
+    <div class="flex flex-col justify-center w-full mt-8 mb-6 mx-auto max-w-[800px]">
+        <h1 class="font-semibold text-center text-2xl">Szczegóły rezerwacji #{{booking.id}}</h1>
+        <a class="text-center mt-2 px-1 font-semibold text-blue-800 transition-all hover:underline"
+        href="{% url 'bookings_app:bookings' %}">&laquo;&nbsp;Lista rezerwacji</a>
+    </div>
     <div class="text-lg space-y-4 min-w-[50%] bg-gray-100 p-2 md:p-6 lg:p-10 sm:p-4 mb-10">
-
         <p>
             <span class="font-semibold">Apartament: </span>
             <span class="font-bold text-2xl px-2 border-2 rounded-md bg-amber-300 "> {{booking.apartment.name}}</span>
@@ -18,11 +18,9 @@
             <span class="font-semibold"> do </span><span class="p-2 border-2 rounded-md bg-white">{{booking.date_to|date:"d.m.Y"}}</span>
         </p>
         <p><span class="font-semibold">Ilość nocy: </span> {{booking.nights_num}}</p>
-
         <p><span class="font-semibold">Gość: </span> {% if booking.guest %}{{booking.guest}}{% endif %}</p>
         <p><span class="font-semibold">Email: </span> {% if booking.email %}{{booking.email}}{% endif %}</p>
         <p><span class="font-semibold">Telefon: </span> {% if booking.phone %}{{booking.phone}}{% endif %}</p>
-
         <p>
             <span class="font-semibold">
                     Cena: </span>{% if booking.total_price %} {{booking.total_price}} zł{% endif%}
@@ -42,6 +40,5 @@
             {{ booking.stripe_checkout_id}}</p>
         {% endif %}
     </div>
-
 </main>
 {% endblock %}
