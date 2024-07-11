@@ -35,6 +35,12 @@ option {
     }
 }
 
+.show {
+    max-height: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
 .sr-only {
     border: 0;
     clip: rect(0 0 0 0);

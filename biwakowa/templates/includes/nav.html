@@ -16,9 +16,9 @@
         </button>
         {% if not page and request.user.is_authenticated %}
         <ul
-            class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-dvh transition-all duration-300
+            class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-[100vh] transition-all duration-300
             origin-top-right sm:hidden flex flex-col justify-center
-            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gray-100">
+            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gray-100 py-16">
             {% include 'includes/admin-nav-content.html' %}
         </ul>
         <ul
@@ -28,9 +28,9 @@
         </ul>
         {% else %}
         <ul
-            class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-dvh transition-all duration-300
+            class="fixed -mt-2 z-50 nav-list scale-0 opacity-0 max-h-0 h-[100vh] transition-all duration-300
             origin-top-right sm:hidden flex flex-col justify-center
-            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gradient-to-bl to-gray-300  from-blue-300">
+            gap-10 items-center max-w-6xl w-full text-lg font-semibold uppercase pr-2 bg-gradient-to-bl to-gray-300  from-blue-300 py-16">
             {% include 'includes/nav-content.html' %}
         </ul>
         <ul

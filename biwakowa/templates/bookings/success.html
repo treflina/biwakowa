@@ -4,11 +4,13 @@
 {% block content %}
 {% include 'includes/nav.html' %}
 <main
-    class="max-w-4xl mx-auto relative flex flex-col w-full min-h-[calc(100dvh-60px)] justify-center items-center gap-4">
-
-    <h1 class="font-semibold text-2xl">Transakcja przebiegła pomyślnie.</h1>
-    <h2 class="font-semibold text-2xl">Dziękujemy za zarezerwowanie pobytu w naszym apartamencie.</h2>
-    <a href="/" class="btn-cta mt-3">Wróć na stronę główną</a>
+    class="max-w-4xl mx-auto relative flex flex-col w-full justify-center items-center text-center gap-4 px-2 my-16">
+    <h1 class="font-semibold text-xl sm:text-2xl mb-4">Transakcja przebiegła pomyślnie.</h1>
+    <p class="text-lg">Dziękujemy za zarezerwowanie pobytu w&nbsp;naszym apartamencie.</p>
+    <p class="text-lg">Na podany adres e-mail wysłaliśmy potwierdzenie rezerwacji.</p>
+    <a href="/" class="btn-cta mt-6">Wróć na stronę główną</a>
 </main>
-
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+{% include 'includes/footer.html' %}
+</div>
 {% endblock %}

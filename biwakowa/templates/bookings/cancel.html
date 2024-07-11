@@ -2,9 +2,10 @@
 {% load wagtailcore_tags %}
 {% load static %}
 {% block content %}
+<div class="flex flex-col justify-between h-dvh">
 {% include 'includes/nav.html' %}
 <main
-    class="max-w-4xl mx-auto relative flex flex-col w-full min-h-[calc(70dvh-60px)] sm:min-h-[calc(100dvh-60px)] justify-center items-center gap-4">
+    class="max-w-4xl mx-auto relative flex flex-col w-full justify-center items-center gap-4 py-16">
 
     <h1 class="font-semibold text-xl sm:text-2xl px-2 text-center">Transakcja została przerwana.</h1>
     <div class="flex gap-2 flex-wrap justify-center items-center">
@@ -14,7 +15,11 @@
         <a href="{{session_url}}" class="btn-cta mt-3">Ponów płatność&nbsp;&raquo;</a>
     </div>
 
-    <p class="sm:text-xl px-2 text-center mt-4">W razie pytań zapraszamy do kontaktu pod nr&nbsp;tel. {{phone}}.
+    <p class="sm:text-xl px-2 text-center mt-4">W razie pytań zapraszamy do kontaktu pod nr&nbsp;tel.&nbsp;{{phone}}.
     </p>
 </main>
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+    {% include 'includes/footer.html' %}
+</div>
+</div>
 {% endblock %}

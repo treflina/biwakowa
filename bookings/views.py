@@ -429,7 +429,7 @@ def stripe_webhook(request):
                 f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
             )
             notes = booking.notes if booking.notes else "-"
-            url = f"{request.build_absolute_uri('/')}{reverse('bookings_app:booking', kwargs={'pk': booking.id})}"
+            url = f"{request.build_absolute_uri(reverse('bookings_app:booking', kwargs={'pk': booking.id}))}"
             msg = f"""Nowa rezerwacja: #{booking.id} \n
     Apartament nr {booking.apartment.name} \n
     od {booking.date_from} do {booking.date_to} \n

@@ -9,16 +9,22 @@
 <main class="flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
     <div class="flex items-center my-6 md:my-10 gap-3">
         <h1 class="text-2xl font-semibold text-center">Lista rezerwacji</h1>
-        <button type="button" class="openModal" data-toggle="modal"
+        <button type="button" class="openModal btn-admin" data-toggle="modal"
         data-target="#notificationsModal">
             <svg class="w-6 h-6 inline-block align-middle gap-2 fill-black">
                 <use xlink:href="{% static 'img/sprite.svg#bell' %}"
                     href="{% static 'img/sprite.svg#bell' %}" />
             </svg>
         </button>
+         <button type="button" class="btn-admin btn-filter lg:hidden">
+            <svg class="w-6 h-6 inline-block align-middle gap-2 fill-black">
+                <use xlink:href="{% static 'img/sprite.svg#filter' %}"
+                    href="{% static 'img/sprite.svg#filter' %}" />
+            </svg>
+        </button>
     </div>
     {% include 'includes/notifications-modal.html' %}
-    <div class="flex flex-wrap justify-center items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
+    <div class="collapsible max-h-0 opacity-0 invisible lg:visible lg:opacity-100 lg:max-h-full flex flex-wrap justify-center items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
         <a href="{% url 'bookings_app:upcoming-bookings' %}"  class="btn-admin cursor-pointer"
         {%if upcoming %} style="background-color:#fcd34d">{% endif %}
             <p>Pokaż nadchodzące</p>
@@ -46,5 +52,16 @@
     document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })
+</script>
+<script>
+    const collapsible = document.querySelector(".collapsible");
+    const filtersBtn = document.querySelector(".btn-filter")
+
+    const handleFilters = () => {
+        collapsible.classList.toggle("show");
+
+    }
+
+    filtersBtn.addEventListener("click", handleFilters)
 </script>
 {% endblock %}
