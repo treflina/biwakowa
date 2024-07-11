@@ -1,0 +1,11 @@
+User-Agent: *
+Disallow: /admin/
+Disallow: /django-admin/
+Disallow: /rezerwacje
+Disallow: /rezerwacja
+Disallow: /success
+Disallow: /cancel
+Disallow: /stripe-webhook
+Disallow: /calendars
+Disallow: /logowanie
+Disallow: /wyloguj

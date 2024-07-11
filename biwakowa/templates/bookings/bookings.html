@@ -26,7 +26,7 @@
     {% include 'includes/notifications-modal.html' %}
     <div class="collapsible max-h-0 opacity-0 invisible lg:visible lg:opacity-100 lg:max-h-full flex flex-wrap justify-center items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
         <a href="{% url 'bookings_app:upcoming-bookings' %}"  class="btn-admin cursor-pointer"
-        {%if upcoming %} style="background-color:#fcd34d">{% endif %}
+        {%if upcoming %} style="background-color:#fcd34d" rel="nofollow">{% endif %}
             <p>Pokaż nadchodzące</p>
         </a>
         <form method="get" hx-get="{% url 'bookings_app:bookings' %}" hx-target="#bookings-table"
@@ -35,7 +35,7 @@
             <button type="submit" class="btn-admin">Filtruj</button>
         </form>
         <a href="{% url 'bookings_app:bookings' %}"
-            class="cursor-pointer inline-block text-blue-600 font-semibold">
+            class="cursor-pointer inline-block text-blue-600 font-semibold" rel="nofollow">
             <p>Wyczyść filtry</p>
         </a>
     </div>
