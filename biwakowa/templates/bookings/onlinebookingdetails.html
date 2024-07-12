@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags %}
-{% load static %}
-
+{% load static wagtailcore_tags %}
+{% block meta_tag %}
+  <title>Formularz rezerwacyjny</title>
+{% endblock %}
 {% block content %}
 {% include 'includes/nav.html' %}
 <main class="w-full min-h-[calc(100dvh-75px)] bg-gray-50">

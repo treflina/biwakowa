@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags wagtailimages_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags i18n wagtailmetadata_tags %}
 {% load static %}
+{% block meta_tag %}
+  {% meta_tags %}
+{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load wagtailcore_tags %}
 {% load static %}
+{% block meta_tag %}
+  <title>Rezerwacja internetowa</title>
+  <meta name="description" content="Wyszukiwarka dostępnych terminów oraz rezerwacja internetowa apartamentów.">
+{% endblock %}
 {% block content %}
 {% include 'includes/nav.html' %}
 <main>

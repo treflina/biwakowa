@@ -3,9 +3,9 @@ from datetime import datetime
 from django.db import models
 from django.utils.translation import gettext as _
 
+from wagtailmetadata.models import MetadataPageMixin
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField
-
 from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
 
@@ -87,7 +87,7 @@ class Apartment(models.Model):
         verbose_name_plural = _("apartments")
 
 
-class ApartmentPage(Page):
+class ApartmentPage(MetadataPageMixin, Page):
 
     template = "apartments/apartment.html"
     subpage_types = []

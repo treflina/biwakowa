@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     #
     "tailwind",
     "theme",
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_htmx",
     "querystring_tag",
+    "wagtailmetadata",
     "webpush",
     "django_dump_load_utf8",
     #

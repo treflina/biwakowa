@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.fields import ParentalKey
+from wagtailmetadata.models import MetadataPageMixin
 from wagtail.models import Orderable, Page
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import (
@@ -48,7 +49,7 @@ class AdminEmail(models.Model):
         verbose_name_plural = _("email")
 
 
-class HomePage(Page):
+class HomePage(MetadataPageMixin, Page):
     template = "home/home_page.html"
     max_count = 1
 
