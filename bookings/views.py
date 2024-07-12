@@ -281,7 +281,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(
                     request, _("Booking this apartment is not possible now.")
                 )
-                err_subject = _("Error. No stripe product_id")
+                err_subject = str(_("Error. No stripe product_id"))
                 err_msg = f"No stripe id for apartment {ap_to_book.name}. \
                     Booking details: {guest} {guest_phone} {email} \
                     from {arrival} to {departure} \
@@ -328,7 +328,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 return redirect(checkout_session.url, code=303)
 
             except stripe._error.APIConnectionError as e:
-                logger.error(f"Błąd podczas próby płatności: {e}.")
+                logger.error(f"Błąd podczas próby płatności: {repr(e)}.")
                 phone = PhoneSnippet.objects.last()
 
                 messages.error(
@@ -341,7 +341,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 return redirect("bookings_app:booking-search")
 
             except Exception as ex:
-                logger.error(f"Błąd podczas próby płatności: {ex}.")
+                logger.error(f"Błąd podczas próby płatności: {repr(ex)}.")
                 phone = PhoneSnippet.objects.last()
 
                 messages.error(
@@ -395,11 +395,11 @@ def stripe_webhook(request):
             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
     except stripe.error.SignatureVerificationError as e:
-        logger.error(f"Stripe-webhook error: {e}")
+        logger.error(f"Stripe-webhook error: {repr(e)}")
         return HttpResponse(status=400)
     except Exception as e:
         error_subj = "Webhook error"
-        error_msg = f"{e}"
+        error_msg = f"{repr(e)}"
         handle_error_notification(error_subj, error_msg)
         return HttpResponse(status=400)
 
@@ -411,7 +411,7 @@ def stripe_webhook(request):
             booking = Booking.objects.get(stripe_checkout_id=session_id)
         except Booking.DoesNotExist:
             booking = None
-            error_subj = _("Session completed, booking not found")
+            error_subj = str(_("Session completed, booking not found"))
             error_msg = f"""Session completed (session id: {session_id})
                 webhook was sent, but related booking was not found
                 in the database.
@@ -444,7 +444,7 @@ def stripe_webhook(request):
             except Exception as e:
                 error_subj = "Confirmation email not sent for booking"
                 error_msg = (
-                    f"Confirmation email not sent for booking num {booking.id}. {e}"
+                    f"Confirmation email not sent for booking num {booking.id}. {repr(e)}"
                 )
                 handle_error_notification(error_subj, error_msg)
 
@@ -461,7 +461,10 @@ def stripe_webhook(request):
                 hotel = None
                 logger.error("Notification not sent. User doesn't exist.")
             except Exception as e:
-                logger.error(f"{e}")
+                handle_error_notification(
+                    "Error while sending webpush confirmation to hotel",
+                    repr(e)
+                    )
 
             # send email to guest
             try:
@@ -478,7 +481,7 @@ def stripe_webhook(request):
                 )
             except Exception as e:
                 error_subj = "Sending confirmation email failed"
-                error_msg = f"Confirmation email not sent for {booking}. {e}"
+                error_msg = f"Confirmation email not sent for {booking}. {repr(e)}"
                 handle_error_notification(error_subj, error_msg)
 
     elif event["type"] == "checkout.session.expired":
