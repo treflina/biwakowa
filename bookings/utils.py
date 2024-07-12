@@ -106,7 +106,7 @@ def get_next_prev_month(year, month):
 def handle_error_notification(err_subj, err_msg):
     """Send error messages to admin."""
 
-    logger.error(f"{err_subj}: err_msg")
+    logger.error(f"{err_subj}: {err_msg}")
     # webpush notification
     payload = {"head": err_subj, "body": err_msg}
     try:

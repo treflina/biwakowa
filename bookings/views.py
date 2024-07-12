@@ -412,10 +412,9 @@ def stripe_webhook(request):
         except Booking.DoesNotExist:
             booking = None
             error_subj = str(_("Session completed, booking not found"))
-            error_msg = f"""Session completed (session id: {session_id})
-                webhook was sent, but related booking was not found
-                in the database.
-                """
+            error_msg = f"Session completed (session id: {session_id}) \
+                webhook was sent, but related booking was not found \
+                in the database."
             handle_error_notification(error_subj, error_msg)
 
         if booking and session.payment_status == "paid":
@@ -454,7 +453,8 @@ def stripe_webhook(request):
                 payload = {
                     "head": subject,
                     "body": f"Nowa rezerwacja: #{booking.id}",
-                    "url":url
+                    "url":url,
+                    "icon": "static/img/favicon/android-chrome-96x96.png"
                     }
                 send_user_notification(user=hotel, payload=payload, ttl=1000)
             except User.DoesNotExist:
