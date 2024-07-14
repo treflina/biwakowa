@@ -7,6 +7,7 @@ def biwakowa_phone(request):
         "phone": phone,
     }
 
+
 def bank_account_number(request):
     bank_account = BankAccountNumberSnippet.objects.last()
     return {

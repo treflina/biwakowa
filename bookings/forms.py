@@ -1,27 +1,48 @@
 import datetime as dt
 
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.db.models import Q
 from django.forms import (
-    TextInput,
-    EmailInput,
-    DateInput,
-    NumberInput,
     CheckboxInput,
+    DateInput,
+    EmailInput,
+    NumberInput,
     Select,
     Textarea,
+    TextInput,
 )
 from django.utils.translation import gettext_lazy as _
 
 from apartments.models import Apartment
 from home.models import PhoneSnippet
+
 from .models import Booking
 
 
 def get_today():
     return dt.date.today()
+
+
+def error_msg(msg):
+    phone = PhoneSnippet.objects.last()
+    err_msg_dict = {
+        "MIN_7_NIGHTS": (
+            f"Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
+            przy rezerwacjach dokonywanych ponad tydzień \
+            przed planowanym przyjazdem.\n \
+            W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
+        ),
+        "FIRST_DAY_SUNDAY": (
+            f"Rezerwacja pobytu w okresie wakacyjnym \
+            jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
+            (przy rezerwacjach dokonywanych ponad tydzień przed \
+            planowanym przyjazdem).\n \
+            W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
+        ),
+    }
+    return err_msg_dict.get(msg)
 
 
 class BookingBaseForm(forms.ModelForm):
@@ -64,7 +85,11 @@ class BookingBaseForm(forms.ModelForm):
                 attrs={"class": "rounded-md", "placeholder": _("Phone")}
             ),
             "email": EmailInput(
-                attrs={"class": "rounded-md", "placeholder": "Email", "type": "email"}
+                attrs={
+                    "class": "rounded-md",
+                    "placeholder": "Email",
+                    "type": "email",
+                }
             ),
             "total_price": NumberInput(
                 attrs={
@@ -77,7 +102,11 @@ class BookingBaseForm(forms.ModelForm):
                 }
             ),
             "notes": Textarea(
-                attrs={"rows": 3, "class": "rounded-md w-full", "required": False}
+                attrs={
+                    "rows": 3,
+                    "class": "rounded-md w-full",
+                    "required": False,
+                }
             ),
         }
 
@@ -108,7 +137,6 @@ class BookingUpdateForm(BookingBaseForm):
         super().clean()
         date_from = self.cleaned_data.get("date_from")
         date_to = self.cleaned_data.get("date_to")
-        # apartment = self.cleaned_data.get("apartment")
         if date_from >= date_to:
             raise ValidationError(
                 _("Start date cannot be later or the same as end date")
@@ -125,7 +153,6 @@ class OnlineBookingForm(forms.Form):
         departure = cleaned_data.get("departure")
 
         today = get_today()
-        # add_days = 7 -  today.weekday()
         if not arrival or not departure:
             raise ValidationError(_("Please provide both dates."))
         else:
@@ -138,31 +165,26 @@ class OnlineBookingForm(forms.Form):
                     "Wybrana data nie może być wcześniejsza od dzisiaj."
                 )
             if arrival.month in [7, 8] and departure.month in [7, 8]:
-                if (departure - arrival).days < 7 and (arrival - today).days > 7:
-                    phone = PhoneSnippet.objects.last()
-                    raise ValidationError(
-                        f"Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
-                        przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
-                    )
+                if (departure - arrival).days < 7 and (
+                    (arrival - today).days > 7
+                ):
+                    raise ValidationError(error_msg("MIN_7_NIGHTS"))
                 if (arrival - today).days > 7 and arrival.weekday() != 6:
-                    phone = PhoneSnippet.objects.last()
-                    raise ValidationError(
-                        f"Rezerwacja pobytu w okresie wakacyjnym \
-                        jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
-                        (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
-                    )
+                    raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
             if (departure - arrival).days < 3:
-                raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
+                raise ValidationError(
+                    "Minimalna długość pobytu wynosi 3 doby."
+                )
 
 
 class OnlineBookingDetailsForm(forms.Form):
-    input_class = """basis-3/5 flex-grow w-full xsm:max-w-[350px] rounded-md border-2
-                     focus:outline-none border-2 border-blue-300 text-gray-900
-                     rounded-md focus:ring-amber-300 focus:border-amber-300
-                     block  p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-                     dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"""
+    input_class = """basis-3/5 flex-grow w-full xsm:max-w-[350px]
+        rounded-md border-2
+        focus:outline-none border-2 border-blue-300 text-gray-900
+        rounded-md focus:ring-amber-300 focus:border-amber-300
+        block  p-2.5  dark:bg-gray-700 dark:border-gray-600
+        dark:placeholder-gray-400
+        dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"""
 
     error_css_class = "text-red-700 font-semibold mt-2 text-center"
 
@@ -192,7 +214,8 @@ class OnlineBookingDetailsForm(forms.Form):
         error_messages={"required": _("You must confirm rodo")},
         widget=forms.CheckboxInput(
             attrs={
-                "class": "w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mx-2"
+                "class": "w-5 h-5 text-blue-600 bg-gray-100 \
+                border-gray-300  rounded focus:ring-blue-500 focus:ring-2 mx-2"
             }
         ),
     )
@@ -252,32 +275,29 @@ class OnlineBookingDetailsForm(forms.Form):
                     "Wybrana data nie może być wcześniejsza od dzisiaj."
                 )
             if arrival.month in [7, 8] and departure.month in [7, 8]:
-                if (departure - arrival).days < 7 and (arrival - today).days > 7:
-                    phone = PhoneSnippet.objects.last()
-                    raise ValidationError(
-                        f"Minimalna długość pobytu w okresie wakacyjnym wynosi 7 nocy \
-                        przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem.\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
-                    )
+                if (departure - arrival).days < 7 and (
+                    (arrival - today).days > 7
+                ):
+                    raise ValidationError(error_msg("MIN_7_NIGHTS"))
                 if (arrival - today).days > 7 and arrival.weekday() != 6:
-                    phone = PhoneSnippet.objects.last()
-                    raise ValidationError(
-                        f"Rezerwacja pobytu w okresie wakacyjnym \
-                        jest możliwa jedynie na pełny tydzień od niedzieli do niedzieli \
-                        (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).\n \
-                        W razie wątpliwości zachęcamy do kontaktu pod nr tel. {phone}"
-                    )
+                    raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
             if (departure - arrival).days < 3:
-                raise ValidationError("Minimalna długość pobytu wynosi 3 doby.")
+                raise ValidationError(
+                    "Minimalna długość pobytu wynosi 3 doby."
+                )
 
         if self.session:
             session_email = self.session.get("email", None)
 
         qs = Booking.objects.filter(
-            Q(apartment__id=id) & Q(date_to__gt=arrival) & Q(date_from__lt=departure)
+            Q(apartment__id=id)
+            & Q(date_to__gt=arrival)
+            & Q(date_from__lt=departure)
         )
         if session_email is not None:
-            qs_check = qs.exclude(Q(email=email) | Q(email=session_email)).exists()
+            qs_check = qs.exclude(
+                Q(email=email) | Q(email=session_email)
+            ).exists()
         else:
             qs_check = qs.exclude(Q(email=email)).exists()
 

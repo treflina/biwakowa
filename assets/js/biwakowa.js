@@ -86,4 +86,13 @@
             setVisible("#loading", false);
         })
     );
+
+    // collapsible filters
+    const collapsible = document.querySelector(".collapsible");
+    const filtersBtn = document.querySelector(".btn-filter");
+
+    const handleFilters = () => {
+        collapsible?.classList.toggle("show");
+    };
+    filtersBtn?.addEventListener("click", handleFilters);
 })();

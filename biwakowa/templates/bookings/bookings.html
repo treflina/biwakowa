@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags querystring_tag filter_tags webpush_notifications %}
+{% load wagtailcore_tags querystring_tag bookings_tags webpush_notifications %}
 {% load static %}
 {% block extra_head %}
  {% webpush_header %}
@@ -15,17 +15,19 @@
                 <use xlink:href="{% static 'img/sprite.svg#bell' %}"
                     href="{% static 'img/sprite.svg#bell' %}" />
             </svg>
+            <span class="sr-only">Ustawienia powiadomień</span>
         </button>
          <button type="button" class="btn-admin btn-filter lg:hidden">
             <svg class="w-6 h-6 inline-block align-middle gap-2 fill-black">
                 <use xlink:href="{% static 'img/sprite.svg#filter' %}"
                     href="{% static 'img/sprite.svg#filter' %}" />
             </svg>
+            <span class="sr-only">Filtrowanie</span>
         </button>
     </div>
     {% include 'includes/notifications-modal.html' %}
     <div class="collapsible max-h-0 opacity-0 invisible lg:visible lg:opacity-100 lg:max-h-full flex flex-wrap justify-center items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
-        <a href="{% url 'bookings_app:upcoming-bookings' %}"  class="btn-admin cursor-pointer"
+        <a href="{% url 'bookings_app:upcoming_bookings' %}"  class="btn-admin cursor-pointer"
         {%if upcoming %} style="background-color:#fcd34d" rel="nofollow">{% endif %}
             <p>Pokaż nadchodzące</p>
         </a>
@@ -45,23 +47,10 @@
         {% include 'bookings/fragments/booking-table.html' %}
     </div>
 </main>
-
 <script src="{% static 'js/modal.js' %}"></script>
-<script src="{% static 'js/htmx.min.js' %}"></script>
 <script>
     document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })
-</script>
-<script>
-    const collapsible = document.querySelector(".collapsible");
-    const filtersBtn = document.querySelector(".btn-filter")
-
-    const handleFilters = () => {
-        collapsible.classList.toggle("show");
-
-    }
-
-    filtersBtn.addEventListener("click", handleFilters)
 </script>
 {% endblock %}

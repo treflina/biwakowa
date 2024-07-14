@@ -1,15 +1,16 @@
 import calendar
-from datetime import timedelta
 import logging
-from webpush import send_user_notification
+from datetime import timedelta
 
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Q
+from webpush import send_user_notification
 
 logger = logging.getLogger("django")
+
 
 def daterange(start_date, end_date):
     """Iterate over dates in a given period."""
@@ -44,7 +45,8 @@ def get_base_price(apartment, date):
 def calculated_price(apartment, arrival, departure):
     """Calculate apartment total price for a given booking period."""
     price_list = [
-        get_base_price(apartment, date) for date in daterange(arrival, departure)
+        get_base_price(apartment, date)
+        for date in daterange(arrival, departure)
     ]
     return sum(price_list)
 
@@ -54,7 +56,9 @@ def booking_dates_assignment(apartment, year, month):
     Necessary for display purposes in calendars."""
 
     Booking = apps.get_model("bookings", "Booking")
-    bookings_list = Booking.objects.bookings_per_month(apartment.name, year, month)
+    bookings_list = Booking.objects.bookings_per_month(
+        apartment.name, year, month
+    )
 
     c = calendar.Calendar()
 
@@ -64,7 +68,11 @@ def booking_dates_assignment(apartment, year, month):
 
     for d in c.itermonthdates(year, month):
         for booking in bookings_list:
-            if d.month == month and d > booking.date_from and d < booking.date_to:
+            if (
+                d.month == month
+                and d > booking.date_from
+                and d < booking.date_to
+            ):
                 dates.append(d.day)
             elif d.month == month and d == booking.date_from:
                 arrival_dates.append(d.day)
@@ -103,6 +111,7 @@ def get_next_prev_month(year, month):
     }
     return calendar_months
 
+
 def handle_error_notification(err_subj, err_msg):
     """Send error messages to admin."""
 
@@ -126,4 +135,3 @@ def handle_error_notification(err_subj, err_msg):
         recipient_list=[settings.ADMIN_EMAIL],
         fail_silently=True,
     )
-

@@ -2,12 +2,11 @@ from datetime import datetime
 
 from django.db import models
 from django.utils.translation import gettext as _
-
-from wagtailmetadata.models import MetadataPageMixin
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.fields import RichTextField
 from wagtail.models import Page
 from wagtail.snippets.models import register_snippet
+from wagtailmetadata.models import MetadataPageMixin
 
 
 @register_snippet
@@ -17,12 +16,12 @@ class ApartmentType(models.Model):
         max_length=50,
     )
 
-    def __str__(self):
-        return self.type_name
-
     class Meta:
         verbose_name = _("apartment's type")
         verbose_name_plural = _("apartments types")
+
+    def __str__(self):
+        return self.type_name
 
 
 @register_snippet
@@ -39,6 +38,10 @@ class Price(models.Model):
         FieldPanel("end_date"),
     ]
 
+    class Meta:
+        verbose_name = _("price")
+        verbose_name_plural = _("prices")
+
     def __str__(self):
         start = datetime.strftime(self.start_date, "%d.%m.%Y")
         if self.end_date:
@@ -46,10 +49,6 @@ class Price(models.Model):
         else:
             end = "..."
         return f"{self.amount} ({start} - {end}) {self.apartment_type}"
-
-    class Meta:
-        verbose_name = _("price")
-        verbose_name_plural = _("prices")
 
 
 @register_snippet
@@ -77,21 +76,19 @@ class Apartment(models.Model):
         FieldPanel("base_price"),
     ]
 
-    def __str__(self):
-        return self.name
-
-
     class Meta:
         ordering = ["name"]
         verbose_name = _("apartment")
         verbose_name_plural = _("apartments")
 
+    def __str__(self):
+        return self.name
+
 
 class ApartmentPage(MetadataPageMixin, Page):
-
     template = "apartments/apartment.html"
     subpage_types = []
-    parent_page_types = ['home.HomePage']
+    parent_page_types = ["home.HomePage"]
     max_count = 2
 
     apartment_type = models.ForeignKey(
@@ -100,7 +97,7 @@ class ApartmentPage(MetadataPageMixin, Page):
         related_name="apartment_type",
         null=True,
         blank=True,
-        verbose_name="apartaments' type"
+        verbose_name="apartaments' type",
     )
     # TODO  remove null=True
 
@@ -127,8 +124,6 @@ class ApartmentPage(MetadataPageMixin, Page):
     )
     caption_2 = models.CharField(_("caption"), max_length=50, null=True)
 
-
-
     content_panels = Page.content_panels + [
         FieldPanel("apartment_type"),
         MultiFieldPanel(
@@ -150,13 +145,14 @@ class ApartmentPage(MetadataPageMixin, Page):
         ),
     ]
 
-    def get_context(self, request):
-        context = super(ApartmentPage, self).get_context(request)
-        apartments = Apartment.objects.filter(apartment_type=self.apartment_type)
-        context["apartment1"] = apartments.first()
-        context["apartment2"] = apartments.last()
-        return context
-
     class Meta:
         verbose_name = _("Apartment Page")
 
+    def get_context(self, request):
+        context = super(ApartmentPage, self).get_context(request)
+        apartments = Apartment.objects.filter(
+            apartment_type=self.apartment_type
+        )
+        context["apartment1"] = apartments.first()
+        context["apartment2"] = apartments.last()
+        return context

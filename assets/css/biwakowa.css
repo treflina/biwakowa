@@ -1,0 +1,586 @@
+@font-face {
+    font-family: "Rozha One";
+    src:
+        url("/static/fonts/rozhaone.woff2") format("woff2"),
+        url("/static/fonts/rozhaone.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Red Hat Text";
+    src:
+        url("/static/fonts/redhattext-italic.woff2") format("woff2"),
+        url("/static/fonts/redhattext-italic.woff") format("woff");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Red Hat Text";
+    src:
+        url("/static/fonts/RedHatText-Medium.woff2") format("woff2"),
+        url("/static/fonts/RedHatText-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Red Hat Text";
+    src:
+        url("/static/fonts/RedHatText-SemiBold.woff2") format("woff2"),
+        url("/static/fonts/RedHatText-SemiBold.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Red Hat Text";
+
+    src:
+        url("/static/fonts/RedHatText-Bold.woff2") format("woff2"),
+        url("/static/fonts/RedHatText-Bold.woff") format("woff");
+
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Red Hat Text";
+    src:
+        url("/static/fonts/RedHatText-Regular.woff2") format("woff2"),
+        url("/static/fonts/RedHatText-Regular.woff") format("woff");
+
+    font-weight: 400;
+    font-style: normal;
+}
+
+.sr-only {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.bg-header {
+    background:
+        linear-gradient(
+            to top right,
+            rgba(0, 0, 56, 0.4) 0%,
+            rgba(0, 0, 56, 0.4) 100%
+        ),
+        url("/static/img/sypialnialg.jpg") no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.gallery-imglink {
+    position: relative;
+    display: block;
+
+    &::before,
+    &::after {
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    &::before {
+        content: "";
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    &::after {
+        content: url("/static/img/magnifying.svg");
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &:hover::before,
+    &:hover::after {
+        opacity: 1;
+    }
+}
+
+.apartment-description p {
+    padding: 0.5rem;
+}
+
+/* htmx loading indicator */
+
+.hx-indicator {
+    display: none;
+}
+.htmx-request .hx-indicator {
+    display: inline-block;
+}
+.htmx-request.hx-indicator {
+    display: inline-block;
+}
+
+.htmx-request .txt-content {
+    display: none;
+}
+.htmx-request.txt-content {
+    display: none;
+}
+
+/* Mini loading spinner HTML: <div class="loader"></div> */
+.loader {
+    width: 35px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, #6b6969 90%, #73737300);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+    20% {
+        background-position:
+            0% 0%,
+            50% 50%,
+            100% 50%;
+    }
+    40% {
+        background-position:
+            0% 100%,
+            50% 0%,
+            100% 50%;
+    }
+    60% {
+        background-position:
+            0% 50%,
+            50% 100%,
+            100% 0%;
+    }
+    80% {
+        background-position:
+            0% 50%,
+            50% 50%,
+            100% 100%;
+    }
+}
+
+/* loading spinner - full screen */
+
+#loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+}
+
+.lds-ring,
+.lds-ring div {
+    box-sizing: border-box;
+}
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid currentColor;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: currentColor transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* modal */
+
+.modal {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 20;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(77, 77, 77, 0.8);
+    transition: all 0.4s;
+}
+
+.show {
+    max-height: 100%;
+    visibility: visible;
+    opacity: 1;
+}
+
+.hide {
+    display: none;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.modal__content {
+    border-radius: 4px;
+    position: relative;
+    width: 500px;
+    max-width: 90%;
+    background: #fff;
+}
+
+.modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #585858;
+    text-decoration: none;
+}
+
+/* animations */
+
+@keyframes bounceInDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    20% {
+        transform: translateY(-60px);
+    }
+
+    40% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-30px);
+    }
+
+    70% {
+        transform: translateY(0px);
+    }
+
+    90% {
+        transform: translateY(-20px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@media print, (prefers-reduced-motion: reduce) {
+    .animated {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        opacity: 0;
+    }
+}
+
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+.bounceInDown {
+    animation-name: bounceInDown;
+    animation-delay: 2s;
+}
+
+/*!
+ * Hamburgers
+ * @description Tasty CSS-animated hamburgers
+ * @author Jonathan Suh @jonsuh
+ * @site https://jonsuh.com/hamburgers
+ * @link https://github.com/jonsuh/hamburgers
+ */
+.hamburger {
+    display: inline-block;
+    cursor: pointer;
+    transition-property: opacity, filter;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+    font: inherit;
+    color: inherit;
+    text-transform: none;
+    background-color: transparent;
+    border: 0;
+    margin-top: 0.75rem;
+    margin-right: 1.25rem;
+    margin-left: 0;
+    margin-bottom: 0;
+    overflow: visible;
+}
+
+.hamburger:hover {
+    opacity: 0.7;
+}
+
+.hamburger.is-active:hover {
+    opacity: 0.7;
+}
+
+.hamburger.is-active .hamburger-inner,
+.hamburger.is-active .hamburger-inner::before,
+.hamburger.is-active .hamburger-inner::after {
+    background-color: black;
+}
+
+.hamburger-box {
+    width: 3rem;
+    height: 1.8rem;
+    display: inline-block;
+    position: relative;
+}
+
+.hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -0.2rem;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+    width: 3rem;
+    height: 0.3rem;
+    background-color: black;
+    border-radius: 4px;
+    position: absolute;
+    transition-property: transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+    content: "";
+    display: block;
+}
+
+.hamburger-inner::before {
+    top: -0.3rem;
+}
+
+.hamburger-inner::after {
+    bottom: -0.5rem;
+}
+
+/*
+   * Spring
+   */
+.hamburger--spring .hamburger-inner {
+    top: 0.2rem;
+    transition: background-color 0s 0.13s linear;
+}
+
+.hamburger--spring .hamburger-inner::before {
+    top: 0.8rem;
+    transition:
+        top 0.1s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1),
+        transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--spring .hamburger-inner::after {
+    top: 1.6rem;
+    transition:
+        top 0.2s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1),
+        transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--spring.is-active .hamburger-inner {
+    transition-delay: 0.22s;
+    background-color: transparent !important;
+}
+
+.hamburger--spring.is-active .hamburger-inner::before {
+    top: 0;
+    transition:
+        top 0.1s 0.15s cubic-bezier(0.33333, 0, 0.66667, 0.33333),
+        transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 1rem, 0) rotate(45deg);
+}
+
+.hamburger--spring.is-active .hamburger-inner::after {
+    top: 0;
+    transition:
+        top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333),
+        transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 1rem, 0) rotate(-45deg);
+}
+
+/*
+   * Spring Reverse
+   */
+.hamburger--spring-r .hamburger-inner {
+    top: auto;
+    bottom: 0;
+    transition-duration: 0.13s;
+    transition-delay: 0s;
+    transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--spring-r .hamburger-inner::after {
+    top: -2rem;
+    transition:
+        top 0.2s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1),
+        opacity 0s linear;
+}
+
+.hamburger--spring-r .hamburger-inner::before {
+    transition:
+        top 0.1s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1),
+        transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--spring-r.is-active .hamburger-inner {
+    transform: translate3d(0, -1rem, 0) rotate(-45deg);
+    transition-delay: 0.22s;
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.hamburger--spring-r.is-active .hamburger-inner::after {
+    top: 0;
+    opacity: 0;
+    transition:
+        top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333),
+        opacity 0s 0.22s linear;
+}
+
+.hamburger--spring-r.is-active .hamburger-inner::before {
+    top: 0;
+    transform: rotate(90deg);
+    transition:
+        top 0.1s 0.15s cubic-bezier(0.33333, 0, 0.66667, 0.33333),
+        transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+/* Author: https://github.com/guoyunhe/flexbin */
+.flexbin {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
+    margin: -4px;
+}
+.flexbin:after {
+    content: "";
+    flex-grow: 999999999;
+    min-width: 300px;
+    height: 0;
+}
+.flexbin > * {
+    position: relative;
+    display: block;
+    height: 300px;
+    margin: 4px;
+    flex-grow: 1;
+}
+.flexbin > * > img {
+    height: 300px;
+    object-fit: cover;
+    max-width: 100%;
+    min-width: 100%;
+    vertical-align: bottom;
+}
+.flexbin.flexbin-margin {
+    margin: 4px;
+}
+
+@media (max-width: 980px) {
+    .flexbin {
+        display: flex;
+        overflow: hidden;
+        flex-wrap: wrap;
+        margin: -4px;
+    }
+    .flexbin:after {
+        content: "";
+        flex-grow: 999999999;
+        min-width: 150px;
+        height: 0;
+    }
+    .flexbin > * {
+        position: relative;
+        display: block;
+        height: 150px;
+        margin: 4px;
+        flex-grow: 1;
+    }
+    .flexbin > * > img {
+        height: 150px;
+        object-fit: cover;
+        max-width: 100%;
+        min-width: 100%;
+        vertical-align: bottom;
+    }
+    .flexbin.flexbin-margin {
+        margin: 4px;
+    }
+}
+
+@media (max-width: 400px) {
+    .flexbin {
+        display: flex;
+        overflow: hidden;
+        flex-wrap: wrap;
+        margin: -4px;
+    }
+    .flexbin:after {
+        content: "";
+        flex-grow: 999999999;
+        min-width: 100px;
+        height: 0;
+    }
+    .flexbin > * {
+        position: relative;
+        display: block;
+        height: 100px;
+        margin: 4px;
+        flex-grow: 1;
+    }
+    .flexbin > * > img {
+        height: 100px;
+        object-fit: cover;
+        max-width: 100%;
+        min-width: 100%;
+        vertical-align: bottom;
+    }
+    .flexbin.flexbin-margin {
+        margin: 4px;
+    }
+}

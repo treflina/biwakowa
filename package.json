@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack --mode development --watch",
-        "build": "webpack"
+        "build": "webpack",
+        "postcss": "postcss --use postcss-cssnext --use cssnano --output biwakowa/static/css/biwakowa.min.css assets/css/biwakowa.css"
     },
     "author": "",
     "license": "ISC",
@@ -15,6 +16,10 @@
         "flowbite-datepicker": "^1.2.6"
     },
     "devDependencies": {
+        "cssnano": "^7.0.4",
+        "postcss": "^8.4.39",
+        "postcss-cli": "^11.0.0",
+        "postcss-cssnext": "^3.1.1",
         "webpack": "^5.92.0",
         "webpack-cli": "^5.1.4"
     }

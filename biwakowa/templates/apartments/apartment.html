@@ -5,12 +5,10 @@
 {% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/flexbin.css' %}" />
 {% endblock %}
 {% block content %}
 <div class="page flex-col">
     {% include 'includes/nav.html' %}
-
     <header class="flex justify-center items-center bg-header h-64">
         <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
             Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>

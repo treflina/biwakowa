@@ -9,7 +9,7 @@
             <th scope="col" class="text-center">Noce</th>
             <th scope="col" class="text-center">Gość</th>
             <th scope="col" class="text-align-cl info-cell">Uwagi</th>
-            <th scope="col" class="text-align-cl"></th>
+            <th scope="col" class="text-align-cl"><span class="sr-only">Akcje</span></th>
         </tr>
     </thead>
     <tbody>
@@ -35,17 +35,20 @@
                         <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
                             <use xlink:href="{% static 'img/sprite.svg#search' %}" href="{% static 'img/sprite.svg#search' %}" />
                         </svg>
-                    </A>
-                    <a href="{%url 'bookings_app:update-booking' booking.id%}" role="button" class="mx-1 fill-gray-700">
+                        <span class="sr-only">Szczegóły</span>
+                    </a>
+                    <a href="{%url 'bookings_app:update_booking' booking.id%}" role="button" class="mx-1 fill-gray-700">
                         <svg class="w-6 h-6 inline-block">
                             <use xlink:href="{% static 'img/sprite.svg#pencil' %}" href="{% static 'img/sprite.svg#pencil' %}" />
                         </svg>
+                        <span class="sr-only">Edytuj</span>
                     </a>
                     <button type="button" class="openModal" data-toggle="modal"
                         data-target="#deleteModal-{{booking.id}}">
                         <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
                             <use xlink:href="{% static 'img/sprite.svg#trash' %}" href="{% static 'img/sprite.svg#trash' %}" />
                         </svg>
+                        <span class="sr-only">Usuń</span>
                     </button>
 
                     <!-- Delete modal -->
@@ -57,9 +60,8 @@
                                     class="flex justify-between items-center p-2 bg-gradient-to-r to-amber-300  from-gray-300">
                                     <p class="modal-title font-semibold  uppercase text-md"
                                         id="deleteModalLabel{{booking.id}}">Ostrzeżenie</p>
-                                    <button type="button" class="close text-2xl" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                    <button type="button" class="close text-2xl" data-dismiss="modal">
+                                        <span aria-hidden="true">&times;</span><span class="sr-only">Zamknij</span>
                                     </button>
                                 </div>
                                 <div class="modal-bod px-2 py-4">
@@ -73,7 +75,7 @@
                                     <button type="button" class="close btn-admin"
                                         data-dismiss="modal">Wróć</button>
                                     <form method="POST"
-                                        action="{% url 'bookings_app:delete-booking' booking.id %}">
+                                        action="{% url 'bookings_app:delete_booking' booking.id %}">
                                         {%csrf_token%}
                                         <button type="submit" class="btn-admin">Tak, usuń</button>
                                     </form>

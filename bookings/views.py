@@ -1,37 +1,39 @@
 import calendar
 import logging
-import stripe
 import time
-from datetime import date, datetime
-from django_filters import views
-from webpush import send_user_notification
+from datetime import date
 
+import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
+from django.templatetags.static import static
+from django.urls import reverse, reverse_lazy
 from django.utils.html import strip_tags
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, DetailView, UpdateView
+from django_filters import views
+from webpush import send_user_notification
 
 from apartments.models import Apartment
-from home.models import PhoneSnippet, AdminEmail
-from bookings.utils import get_next_prev_month, booking_dates_assignment
+from bookings.utils import booking_dates_assignment, get_next_prev_month
+from home.models import AdminEmail, PhoneSnippet
+
 from .filters import BookingsFilter
 from .forms import (
     BookingForm,
     BookingUpdateForm,
-    OnlineBookingForm,
     OnlineBookingDetailsForm,
+    OnlineBookingForm,
 )
 from .models import Booking
 from .utils import calculated_price, handle_error_notification
@@ -66,7 +68,9 @@ def booking_search(request, year=None, month=None):
         # TODO REMOVE
         form = OnlineBookingForm(request.GET)
         if form.is_valid():
-            arrival = datetime.strptime(request.GET.get("arrival"), "%d.%m.%Y").date()
+            arrival = datetime.strptime(
+                request.GET.get("arrival"), "%d.%m.%Y"
+            ).date()
             departure = datetime.strptime(
                 request.GET.get("departure"), "%d.%m.%Y"
             ).date()
@@ -82,7 +86,9 @@ def booking_search(request, year=None, month=None):
                         apartment, arrival, departure
                     ).exclude(email=session_email)
                 else:
-                    qs = Booking.objects.bookings_periods(apartment, arrival, departure)
+                    qs = Booking.objects.bookings_periods(
+                        apartment, arrival, departure
+                    )
                 if not qs.exists():
                     price = calculated_price(apartment, arrival, departure)
                     apartment.price = price
@@ -148,7 +154,9 @@ def calendars(request, year=None, month=None):
         "ap4_dates": ap4_bookings_dict,
     }
 
-    return render(request, "bookings/fragments/booking-calendar.html", context=context)
+    return render(
+        request, "bookings/fragments/booking-calendar.html", context=context
+    )
 
 
 class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
@@ -218,7 +226,9 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         start = form.cleaned_data["date_from"]
         end = form.cleaned_data["date_to"]
         qs = (
-            Booking.objects.filter(apartment__id=self.get_object().apartment.id)
+            Booking.objects.filter(
+                apartment__id=self.get_object().apartment.id
+            )
             .filter(Q(date_to__gt=start) & Q(date_from__lt=end))
             .exclude(Q(id=self.get_object().id))
             .exists()
@@ -258,7 +268,9 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
         context["apartment"] = ap_to_book
     except Apartment.DoesNotExist:
         messages.error(request, _(f"Apartment with id {pk} was not found"))
-        return render(request, "bookings/onlinebookingdetails.html", context=context)
+        return render(
+            request, "bookings/onlinebookingdetails.html", context=context
+        )
 
     total_price = calculated_price(ap_to_book, date_from, date_to)
     context["price"] = total_price
@@ -334,9 +346,10 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(
                     request,
                     f"Bardzo nam przykro, ale wystąpił problem \
-                            z połączeniem internetowym podczas \
-                            próby utworzenia płatności. \n \
-                            Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
+                    z połączeniem internetowym podczas \
+                    próby utworzenia płatności. \n \
+                    Spróbuj ponownie lub zarezerwuj \
+                    telefonicznie pod nr {phone}.",
                 )
                 return redirect("bookings_app:booking-search")
 
@@ -346,12 +359,16 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
                 messages.error(
                     request,
-                    f"Bardzo nam przykro, ale wystąpił problem podczas próby utworzenia \
-                            płatności. \n \
-                            Spróbuj ponownie lub zarezerwuj telefonicznie pod nr {phone}.",
+                    f"Bardzo nam przykro, ale wystąpił problem \
+                    podczas próby utworzenia płatności. \n \
+                    Spróbuj ponownie lub zarezerwuj \
+                    telefonicznie pod nr {phone}.",
                 )
-                err_subject = "Error while creating checkout session or db saving"
-                err_msg = f"{ex} while booking apartment {ap_to_book.name}. \
+                err_subject = (
+                    "Error while creating checkout session or db saving"
+                )
+                err_msg = f"{repr(ex)} while booking apartment \
+                    {ap_to_book.name}. \
                     Booking details: {guest} {guest_phone} {email} \
                     from {arrival} to {departure} \
                     notes: {guest_notes}"
@@ -360,12 +377,14 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
         else:
             context["form"] = form
-    return render(request, "bookings/onlinebookingdetails.html", context=context)
+    return render(
+        request, "bookings/onlinebookingdetails.html", context=context
+    )
 
 
 def success(request):
     for key in list(request.session.keys()):
-        if not key.startswith("_"): # skip keys set by the django system
+        if not key.startswith("_"):  # skip keys set by the django system
             del request.session[key]
     # stripe.api_key = settings.STRIPE_SECRET_KEY
     # checkout_session_id = request.GET.get('session_id', None)
@@ -424,11 +443,14 @@ def stripe_webhook(request):
 
             from_email = settings.EMAIL_HOST_USER
             hotel_email = AdminEmail.objects.last()
-            subject = (
-                f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
-            )
+            subject = f"Rezerwacja Ap. nr {booking.apartment.name} \
+                od {booking.date_from}"
             notes = booking.notes if booking.notes else "-"
-            url = f"{request.build_absolute_uri(reverse('bookings_app:booking', kwargs={'pk': booking.id}))}"
+            url = str(
+                request.build_absolute_uri(
+                    reverse("bookings_app:booking", kwargs={"pk": booking.id})
+                )
+            )
             msg = f"""Nowa rezerwacja: #{booking.id} \n
     Apartament nr {booking.apartment.name} \n
     od {booking.date_from} do {booking.date_to} \n
@@ -442,9 +464,8 @@ def stripe_webhook(request):
                 send_mail(subject, msg, from_email, [hotel_email])
             except Exception as e:
                 error_subj = "Confirmation email not sent for booking"
-                error_msg = (
-                    f"Confirmation email not sent for booking num {booking.id}. {repr(e)}"
-                )
+                error_msg = f"Confirmation email not sent for booking num \
+                    {booking.id}. {repr(e)}"
                 handle_error_notification(error_subj, error_msg)
 
             # send webpush notification to hotel
@@ -453,9 +474,9 @@ def stripe_webhook(request):
                 payload = {
                     "head": subject,
                     "body": f"Nowa rezerwacja: #{booking.id}",
-                    "url":url,
-                    "icon": "static/img/favicon/android-chrome-96x96.png"
-                    }
+                    "url": url,
+                    "icon": static("img/favicon/android-chrome-96x96.png"),
+                }
                 send_user_notification(user=hotel, payload=payload, ttl=1000)
             except User.DoesNotExist:
                 hotel = None
@@ -463,8 +484,8 @@ def stripe_webhook(request):
             except Exception as e:
                 handle_error_notification(
                     "Error while sending webpush confirmation to hotel",
-                    repr(e)
-                    )
+                    repr(e),
+                )
 
             # send email to guest
             try:
@@ -477,11 +498,17 @@ def stripe_webhook(request):
                 plain_message = strip_tags(html_message)
                 to = booking.email
                 send_mail(
-                    subject, plain_message, from_email, [to], html_message=html_message
+                    subject,
+                    plain_message,
+                    from_email,
+                    [to],
+                    html_message=html_message,
                 )
             except Exception as e:
                 error_subj = "Sending confirmation email failed"
-                error_msg = f"Confirmation email not sent for {booking}. {repr(e)}"
+                error_msg = (
+                    f"Confirmation email not sent for {booking}. {repr(e)}"
+                )
                 handle_error_notification(error_subj, error_msg)
 
     elif event["type"] == "checkout.session.expired":
@@ -492,7 +519,8 @@ def stripe_webhook(request):
             booking.delete()
         except Booking.DoesNotExist:
             logger.error(
-                f"""Session expired (session id: {session_id}) webhook was sent,
+                f"""Session expired (session id: {session_id})
+                webhook was sent,
                 but related booking was not found in the database.
                 """
             )

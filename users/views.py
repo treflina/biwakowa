@@ -1,8 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.views.generic import View
 from django.views.generic.edit import FormView
 
@@ -16,7 +14,9 @@ class LoginUser(FormView):
     form_class = LoginForm
 
     def get_success_url(self):
-        next_url = self.request.GET.get('next', reverse('bookings_app:bookings'))
+        next_url = self.request.GET.get(
+            "next", reverse("bookings_app:bookings")
+        )
         return f"{self.request.build_absolute_uri(next_url)}"
 
     def form_valid(self, form):
