@@ -27,21 +27,16 @@ urlpatterns = [
         name="manifest.json",
     ),
     path(
-        "favicon.ico",
-        RedirectView.as_view(
-            url=staticfiles_storage.url("img/favicon/favicon.ico")
-        ),
-    ),
-    path(
         "robots.txt",
         TemplateView.as_view(
             template_name="robots.txt", content_type="text/plain"
         ),
     ),
     path("sitemap.xml", sitemap),
-    path("__reload__/", include("django_browser_reload.urls")),
     path("", include("users.urls")),
     path("", include("bookings.urls")),
+    path("", include("core.urls")),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 

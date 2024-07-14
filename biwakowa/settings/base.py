@@ -40,19 +40,19 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     #
-    "tailwind",
-    "theme",
     "django_browser_reload",
+    "django_dump_load_utf8",
     "django_filters",
     "django_htmx",
+    "tailwind",
+    "theme",
     "querystring_tag",
     "wagtailmetadata",
     "webpush",
-    "django_dump_load_utf8",
     #
     "apartments",
-    # "apartments.apps.ApartmentsConfig",
     "bookings",
+    "core",
     "users",
 ]
 

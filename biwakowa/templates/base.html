@@ -22,18 +22,17 @@
         {% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {% robots %}
-        <script src="{% url 'javascript-catalog' %}"></script>
         {# Force all links in the live preview panel to be opened in a new tab#}
         {% if request.in_preview_panel %}
         <base target="_blank" />
         {% endif %} {# Global stylesheets #}
         <link rel="manifest" href="/manifest.json">
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
-        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'img/favicon/apple-touch-icon.png' %}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
-        <link rel="mask-icon" href="{% static 'img/favicon/safari-pinned-tab.svg" color="#5bbad5">
-        <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="/favicon.ico">
         <meta name="msapplication-TileColor" content="#2d89ef">
         <meta name="theme-color" content="#ffffff">
         <link rel="stylesheet" href="{% static 'css/biwakowa.min.css' %}" />
@@ -42,6 +41,7 @@
         {% endblock %}
         {% block extra_css %}
         {% endblock %}
+        <script src="{% url 'javascript-catalog' %}" defer></script>
         <script src="{% static 'js/htmx.min.js' %}" defer></script>
     </head>
     <body class="{% block body_class %}bg-grey-50{% endblock %}" style="font-family: 'Red Hat Text', sans-serif;">
