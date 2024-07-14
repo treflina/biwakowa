@@ -1,5 +1,4 @@
 import os
-
 import environ
 
 env = environ.Env()
@@ -232,6 +231,8 @@ INTERNAL_IPS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+ADMINS=[("Admin", env("ADMIN_EMAIL"))]
 ADMIN_EMAIL = env("ADMIN_EMAIL")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
@@ -240,6 +241,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY_TEST")
@@ -254,10 +256,21 @@ WEBPUSH_SETTINGS = {
 
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse"
+        }
+    },
     "loggers": {
         "django": {
             "handlers": ["logfile"],
             "level": "WARNING",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["mail_admins", "logfile" ],
+            "level": "ERROR",
             "propagate": True,
         },
     },
@@ -270,6 +283,11 @@ LOGGING = {
             "filename": "django.log",
             "formatter": "verbose",
             "encoding": "utf-8",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "utils.log.CustomAdminEmailHandler",
         },
     },
     "formatters": {
