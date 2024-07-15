@@ -8,9 +8,8 @@ node_modules/
 
 data.json
 logo.txt
-tox.ini
-.pre-commit-config.yaml
 .prettierignore
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

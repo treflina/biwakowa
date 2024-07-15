@@ -1,18 +1,13 @@
 {% extends "base.html" %}
-
 {% block title %}Strona nie została znaleziona.{% endblock %}
-
 {% block body_class %}template-404{% endblock %}
-
 {% block content %}
-<div class="flex flex-col h-dvh justify-between">
-{% include 'includes/nav.html' %}
-<div class="flex flex-col items-center px-2 py-8">
-    <h1 class="font-['Rozha_One'] text-center text-3xl ">Strona nie została znaleziona.</h1>
-    <a href="/" class="btn-cta mt-8">Wróć na stronę główną</a>
-</div>
-<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
-    {% include 'includes/footer.html' %}
-</div>
-</div>
+    <div class="flex flex-col h-dvh justify-between">
+        {% include "includes/nav.html" %}
+        <div class="flex flex-col items-center px-2 py-8">
+            <h1 class="font-['Rozha_One'] text-center text-3xl ">Strona nie została znaleziona.</h1>
+            <a href="/" class="btn-cta mt-8">Wróć na stronę główną</a>
+        </div>
+        <div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
+    </div>
 {% endblock %}

@@ -1,44 +1,54 @@
 {% load wagtailcore_tags wagtailroutablepage_tags %}
 {% load static %}
 {% block content %}
-<div class="calendar w-min mx-auto p-2 border-gray-300 border-2 rounded-md shadow-sm bg-gray-50">
-    <ul class="gap-1 text-center grid list-none py-1 mb-2 rounded-md bg-gray-300"
-        style="grid-template-columns: repeat(7, auto); ">
-        <li class="cal-item">Pon</li>
-        <li class="cal-item">Wt</li>
-        <li class="cal-item">Śr</li>
-        <li class="cal-item">Czw</li>
-        <li class="cal-item">Pt</li>
-        <li class="cal-item">Sob</li>
-        <li class="cal-item">Nd</li>
-    </ul>
-    <ol class="calendar-days gap-1 text-center grid list-none"
-        style="grid-template-columns: repeat(7, auto);">
-        {% for num in num_days %}
-        {% if num == 1 and num in dates %}
-        <li class="cal-item shadow-sm bg-slate-100 text-slate-600" style='grid-column-start: {{first_day|add:1}};'>{{ num }}</li>
-        {% elif num in dates %}
-        <li class="cal-item shadow-sm bg-slate-100 text-slate-600">{{ num }}</li>
-        {% elif num  in departure_dates and num == 1 %}
-        <li class="cal-item shadow-sm" style='grid-column-start: {{first_day|add:1}};
-            background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%);'>
-            {{ num }}</li>
-        {% elif num  in departure_dates %}
-        <li class="cal-item shadow-sm" style='background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%);'>
-            {{ num }}</li>
-        {% elif num in arrival_dates and num == 1 %}
-        <li class="cal-item shadow-sm text-slate-600"
-            style='grid-column-start: {{first_day|add:1}}; background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%);'>
-            {{ num }}</li>
-        {% elif num in arrival_dates %}
-        <li class="cal-item shadow-sm text-slate-600" style='background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%);'>
-            {{ num }}</li>
-        {% elif num == 1 %}
-        <li class="cal-item shadow-sm bg-[#83d183]"  style="grid-column-start: {{first_day|add:1}};">{{ num }}</li>
-        {% else %}
-        <li class="cal-item shadow-sm bg-[#83d183]">{{ num }}</li>
-        {% endif %}
-        {% endfor %}
-    </ol>
-</div>
-{%endblock%}
+    <div class="calendar w-min mx-auto p-2 border-gray-300 border-2 rounded-md shadow-sm bg-gray-50">
+        <ul class="gap-1 text-center grid list-none py-1 mb-2 rounded-md bg-gray-300"
+            style="grid-template-columns: repeat(7, auto)">
+            <li class="cal-item">Pon</li>
+            <li class="cal-item">Wt</li>
+            <li class="cal-item">Śr</li>
+            <li class="cal-item">Czw</li>
+            <li class="cal-item">Pt</li>
+            <li class="cal-item">Sob</li>
+            <li class="cal-item">Nd</li>
+        </ul>
+        <ol class="calendar-days gap-1 text-center grid list-none"
+            style="grid-template-columns: repeat(7, auto)">
+            {% for num in num_days %}
+                {% if num == 1 and num in dates %}
+                    <li class="cal-item shadow-sm bg-slate-100 text-slate-600"
+                        style="grid-column-start: {{ first_day|add:1 }}"">{{ num }}</li>
+                {% elif num in dates %}
+                    <li class="cal-item shadow-sm bg-slate-100 text-slate-600">{{ num }}</li>
+                {% elif num  in departure_dates and num == 1 %}
+                    <li class="cal-item shadow-sm"
+                        style="grid-column-start: {{ first_day|add:1 }};
+                               background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%)">
+                        {{ num }}
+                    </li>
+                {% elif num  in departure_dates %}
+                    <li class="cal-item shadow-sm"
+                        style="background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%)">
+                        {{ num }}
+                    </li>
+                {% elif num in arrival_dates and num == 1 %}
+                    <li class="cal-item shadow-sm text-slate-600"
+                        style="grid-column-start: {{ first_day|add:1 }};
+                               background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%)">
+                        {{ num }}
+                    </li>
+                {% elif num in arrival_dates %}
+                    <li class="cal-item shadow-sm text-slate-600"
+                        style="background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%)">
+                        {{ num }}
+                    </li>
+                {% elif num == 1 %}
+                    <li class="cal-item shadow-sm bg-[#83d183]"
+                        style="grid-column-start: {{ first_day|add:1 }}">{{ num }}</li>
+                {% else %}
+                    <li class="cal-item shadow-sm bg-[#83d183]">{{ num }}</li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+{% endblock %}

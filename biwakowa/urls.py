@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views.generic import TemplateView
-from django.views.generic.base import RedirectView
 from django.views.i18n import JavaScriptCatalog
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -51,11 +49,5 @@ if settings.DEBUG:
     )
 
 urlpatterns = urlpatterns + [
-    # For anything not caught by a more specific rule above, hand over to
-    # Wagtail's page serving mechanism. This should be the last pattern in
-    # the list:
     path("", include(wagtail_urls)),
-    # Alternatively, if you want Wagtail pages to be served from a subpath
-    # of your site, rather than the site root:
-    #    path("pages/", include(wagtail_urls)),
 ]

@@ -1,4 +1,5 @@
 import os
+
 import environ
 
 env = environ.Env()
@@ -232,7 +233,7 @@ INTERNAL_IPS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-ADMINS=[("Admin", env("ADMIN_EMAIL"))]
+ADMINS = [("Admin", env("ADMIN_EMAIL"))]
 ADMIN_EMAIL = env("ADMIN_EMAIL")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
@@ -258,9 +259,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse"
-        }
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}
     },
     "loggers": {
         "django": {
@@ -269,7 +268,7 @@ LOGGING = {
             "propagate": True,
         },
         "django.request": {
-            "handlers": ["mail_admins", "logfile" ],
+            "handlers": ["mail_admins", "logfile"],
             "level": "ERROR",
             "propagate": True,
         },

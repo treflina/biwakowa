@@ -2,155 +2,201 @@
 {% load wagtailcore_tags wagtailimages_tags i18n wagtailmetadata_tags %}
 {% load static %}
 {% block meta_tag %}
-  {% meta_tags %}
+    {% meta_tags %}
 {% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'vendors/leaflet/leaflet.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'vendors/leaflet/leaflet.css' %}" />
 {% endblock %}
 {% block content %}
-{% include 'includes/cookies.html' %}
-<div class="page flex-col max-w-[100vw]">
-    <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
-        {% include 'includes/nav.html' %}
-        <video playsinline autoplay muted poster="{% static 'img/lake.jpg' %}" id="lake"
-            class="object-cover w-full h-full absolute left-0 top-0 ">
-            <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
-        </video>
-        <div
-            class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60">
-        </div>
-        <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
-            <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
-                <div
-                    class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4 overflow-hidden">
-                    {% image header_imgs.0.image width-500 as himg0 %}
-                    {% image header_imgs.0.image original as himg_full0 %}
-                    <a class="gallery-imglink w-full h-full" href="{{ himg_full0.url }}" data-fslightbox="i1"><span class="sr-only inline-block">Powiększ zdjęcie</span>
-                    <img src="{{ himg0.url }}" alt="{{ header_imgs.0.alt_attr }}" width="{{ himg0.width }}" height="{{ himg0.height }}"
-                    class="inline-block w-full h-full object-cover" /></a>
-                </div>
-                <div
-                    class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6 overflow-hidden z-20">
-                    {% image header_imgs.1.image width-500 as himg1 %}
-                    {% image header_imgs.1.image original as himg_full1 %}
-                    <a class="gallery-imglink w-full h-full" href="{{ himg_full1.url }}" data-fslightbox="i2"><span class="sr-only">Powiększ zdjęcie</span>
-                    <img src="{{ himg1.url }}" alt="{{ header_imgs.1.alt_attr }}" width="{{ himg1.width }}" height="{{ himg1.height }}"
-                        class="inline-block w-full h-full object-cover" /></a>
-                </div>
-                <div
-                    class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7 overflow-hidden z-30">
-                    {% image header_imgs.2.image width-500 as himg2 %}
-                    {% image header_imgs.2.image original as himg_full2 %}
-                    <a class="gallery-imglink w-full h-full" href="{{ himg_full2.url }}" data-fslightbox="i3"><span class="sr-only">Powiększ zdjęcie</span>
-                    <img src="{{ himg2.url }}" alt="{{ header_imgs.2.alt_attr }}" width="{{ himg2.width }}" height="{{ himg2.height }}"
-                        class="inline-block w-full h-full object-cover" /></a>
-                </div>
+    {% include 'includes/cookies.html' %}
+    <div class="page flex-col max-w-[100vw]">
+        <header class="relative flex flex-col w-full min-h-dvh h-full justify-between">
+            {% include "includes/nav.html" %}
+            <video playsinline
+                   autoplay
+                   muted
+                   poster="{% static 'img/lake.jpg' %}"
+                   id="lake"
+                   class="object-cover w-full h-full absolute left-0 top-0 ">
+                <source src="{% static 'img/jezioro5.mp4' %}" type="video/mp4">
+            </video>
+            <div class="overlay absolute left-0 top-0 w-full h-full bg-gradient-to-bl to-blue-300  from-blue-500 opacity-60"></div>
+            <div class="flex-col lg:flex-row flex justify-between gap-0 lg:gap-10 ">
+                <div class="grid grid-cols-11 grid-rows-[repeat(6,_1fr)] z-30 basis-1/2 mt-2 lg:mt-6 px-2 ">
+                    <div class="border-4 border-amber-50 rounded-md col-start-6 col-end-12 row-start-1 row-end-4 overflow-hidden">
+                        {% image header_imgs.0.image width-500 as himg0 %}
+                        {% image header_imgs.0.image original as himg_full0 %}
+                    <a class="gallery-imglink w-full h-full"
+                       href="{{ himg_full0.url }}"
+                       data-fslightbox="i1"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                    <img src="{{ himg0.url }}"
+                         alt="{{ header_imgs.0.alt_attr }}"
+                         width="{{ himg0.width }}"
+                         height="{{ himg0.height }}"
+                         class="inline-block w-full h-full object-cover" />
+                </a>
             </div>
-            <div
-                class="flex flex-col justify-center lg:items-start gap-5 basis-1/2 z-30 px-2 mt-6 sm:mt-8 order-first lg:order-last py-10 lg:py-2 max-w-[95%] sm:max-w-[80%] mx-auto">
-                <h1 class="text-5xl sm:text-6xl font-['Rozha_One']  md:text-left ">
-                    Apartamenty Biwakowa&nbsp;4B
-                </h1>
-                <h2 class="font-semibold text-3xl sm:text-4xl text-amber-50 md:text-left">{{ page.subtitle }}</h2>
-            </div>
-        </div>
-        <a href="#aboutus" class="animated bounceInDown flex justify-center items-center  rounded-full uppercase border-4 border-amber-300 z-30 cursor-pointer
-        font-semibold text-lg px-3 py-3 ml-auto mr-4 lg:mx-auto mt-3 mb-1 bg-opacity-20 bg-amber-300"><p class="sr-only">Czytaj dalej</p>
-            <svg class="w-6 h-6 inline-block ">
-                <use xlink:href="{% static 'img/sprite.svg#chevrondown' %}" href="{% static 'img/sprite.svg#chevrondown' %}" />
-            </svg>
+            <div class="border-4 border-amber-50 rounded-md col-start-1 col-end-7 row-start-2 row-end-6 overflow-hidden z-20">
+                {% image header_imgs.1.image width-500 as himg1 %}
+                {% image header_imgs.1.image original as himg_full1 %}
+            <a class="gallery-imglink w-full h-full"
+               href="{{ himg_full1.url }}"
+               data-fslightbox="i2"><span class="sr-only">Powiększ zdjęcie</span>
+            <img src="{{ himg1.url }}"
+                 alt="{{ header_imgs.1.alt_attr }}"
+                 width="{{ himg1.width }}"
+                 height="{{ himg1.height }}"
+                 class="inline-block w-full h-full object-cover" />
         </a>
-    </header>
-    <div class="bg-gradient-to-tl to-gray-200 from-blue-200">
-        <main>
-            <section id="aboutus" class="  py-10 px-4 lg:px-1 sm:py-14  bg-gray-50 w-full">
-                <div class="flex flex-col md:flex-row flex-wrap gap-8 md:gap-4 max-w-7xl mx-auto">
-                    <div class="flex flex-col basis-1/2 shrink text-lg gap-2 justify-between">
-                        <h3 class="font-['Rozha_One'] text-4xl mb-2">O nas</h3>
-                        <p>{{ page.paragraph1 }}</p>
-                        <p>{{ page.paragraph2 }}</p>
-                        <div class="ml-auto flex flex-col justify-center items-center mt-2">
-                            <p class="font-semibold">{{ page.signature1 }}</p>
-                            <p>{{ page.signature2 }}</p>
-                        </div>
-                    </div>
-                    <div
-                        class="relative basis-2/5 shrink flex justify-center items-center mx-auto rounded-md shadow-xl">
-                        {% image page.image1 width-600 as img %}
-                        <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
-                            alt="{{ page.image1_alt }}"
-                            class="w-full h-full object-cover object-center rounded-md z-10">
-                    </div>
-                </div>
-            </section>
-            <section id="apartments" class="w-full bg-gray-50">
-                <div class="flex flex-col gap-5 max-w-7xl mx-auto pt-10 pb-10 sm:pb-28 sm:pt-14 px-4 lg:px-1 ">
-                    <h3 class="font-['Rozha_One'] text-4xl mb-6">Apartamenty</h3>
-                    <div class="relative flex flex-col md:flex-row gap-8">
-                        <div data-aos="flip-up" data-aos-duration="700"
-                            class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
-                            {% image page.image_ap1 width-500 as img_ap1 %}
-                            <img src="{{ img_ap1.url }}" width="{{ img_ap1.width }}" height="{{ img_ap1.height }}"
-                                alt="{{ page.image_ap1_alt }}"
-                                class="ssm:w-2/5 shrink-0 inline-block object-cover object-center">
-                            <div class="px-4 pt-4 pb-6 flex flex-col">
-                                <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap1|richtext }}</h4>
-                                <p>{{ page.description_ap1 }}</p>
-                                <a {% if page.page_ap1 %} href="{{ page.page_ap1.url }}" {% else %}href="#"{% endif %} class="btn-admin mt-4 ml-auto after:absolute after:inset-0">Zobacz szczegóły &raquo;</a>
-                            </div>
-                        </div>
-                        <div data-aos="flip-up" data-aos-duration="700" class="relative flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full
-                            rounded-md shrink overflow-hidden shadow-lg">
-                            {% image page.image_ap2 width-500 as img_ap2 %}
-                            <img src="{{ img_ap2.url }}" width="{{ img_ap2.width }}" height="{{ img_ap2.height }}"
-                                alt="{{page.image_ap2_alt}}"
-                                class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
-                            <div class="px-4 pt-4 pb-6 flex flex-col">
-                                <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap2|richtext }}</h4>
-                                <p>{{ page.description_ap2 }}</p>
-                                <a {% if page.page_ap2 %} href="{{ page.page_ap2.url }}" {% else %}href="#"{% endif %}
-                                class="btn-admin mt-4 ml-auto after:absolute after:inset-0">Zobacz szczegóły &raquo;</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-            <section class="gallery px-2  pb-10 pt-10">
-                <div class="flex flex-wrap items-center justify-center gap-5 mt-6 mb-12 ">
-                    <h3 class="font-['Rozha_One'] text-4xl text-center">Jezioro
-                        Duże w&nbsp;Turawie</h3>
-                    <button class="btn-admin">Nasza okolica &raquo;</button>
-                </div>
-                <div class="w-full flex flex-col sm:flex-row gap-2 lg:h-[85vh]">
-                    <div class="flex flex-row sm:flex-col sm:basis-1/3  gap-2 h-full">
-                        {% image lake_imgs.0.image width-500 as img0 %}
-                        {% image lake_imgs.0.image original as img_full0 %}
-                        <a class="gallery-imglink block sm:h-[calc(50%-4px)]" href="{{ img_full0.url }}" data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
-                        <img class="object-fit object-cover w-full h-full rounded-md"
-                            src="{{ img0.url }}" alt="{{ header_imgs.0.alt_attr }}" width="{{ img0.width }}" height="{{ img0.height }}"></a>
-                        {% image lake_imgs.1.image width-500 as img1 %}
-                        {% image lake_imgs.1.image original as img_full1 %}
-                        <a class="gallery-imglink block sm:h-[calc(50%-4px)]" href="{{ img_full1.url }}" data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
-                        <img class="object-fit object-cover w-full h-full rounded-md"
-                            src="{{ img1.url }}" alt="{{ header_imgs.1.alt_attr }}" width="{{ img1.width }}" height="{{ img1.height }}"></a>
-                    </div>
-                    <div class="h-48 sm:hidden md:h-auto md:basis-1/3 md:block">
-                        {% image lake_imgs.2.image width-500 as img2 %}
-                        {% image lake_imgs.2.image original as img_full2 %}
-                        <a class="h-full gallery-imglink" data-fslightbox href="{{ img_full2.url }}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
-                        <img class="object-fit object-cover object-right w-full h-full rounded-md"
-                            src="{{ img_full2.url }}" alt="{{ header_imgs.2.alt_attr }}" width="{{ img_full2.width }}" height="{{ img_full2.height }}"></a>
-                    </div>
-                    <div class="h-[300px] sm:h-auto flex sm:basis-2/3 md:basis-1/3 grow-1">
-                        <div id="map" class="grow-1 h-full w-full rounded-md"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        {% include 'includes/footer.html' %}
     </div>
+    <div class="border-4 border-amber-50 rounded-md col-start-5 col-end-10 row-start-3 row-end-7 overflow-hidden z-30">
+        {% image header_imgs.2.image width-500 as himg2 %}
+        {% image header_imgs.2.image original as himg_full2 %}
+    <a class="gallery-imglink w-full h-full"
+       href="{{ himg_full2.url }}"
+       data-fslightbox="i3"><span class="sr-only">Powiększ zdjęcie</span>
+    <img src="{{ himg2.url }}"
+         alt="{{ header_imgs.2.alt_attr }}"
+         width="{{ himg2.width }}"
+         height="{{ himg2.height }}"
+         class="inline-block w-full h-full object-cover" />
+</a>
+</div>
+</div>
+<div class="flex flex-col justify-center lg:items-start gap-5 basis-1/2 z-30 px-2 mt-6 sm:mt-8 order-first
+            lg:order-last py-10 lg:py-2 max-w-[95%] sm:max-w-[80%] mx-auto">
+    <h1 class="text-5xl sm:text-6xl font-['Rozha_One']  md:text-left ">Apartamenty Biwakowa&nbsp;4B</h1>
+    <h2 class="font-semibold text-3xl sm:text-4xl text-amber-50 md:text-left">{{ page.subtitle }}</h2>
+</div>
+</div>
+<a href="#aboutus"
+   class="animated bounceInDown flex justify-center items-center  rounded-full uppercase border-4 border-amber-300 z-30
+          cursor-pointer font-semibold text-lg px-3 py-3 ml-auto mr-4 lg:mx-auto mt-3 mb-1 bg-opacity-20 bg-amber-300">
+    <p class="sr-only">Czytaj dalej</p>
+    <svg class="w-6 h-6 inline-block ">
+        <use xlink:href="{% static 'img/sprite.svg#chevrondown' %}" href="{% static 'img/sprite.svg#chevrondown' %}" />
+    </svg>
+</a>
+</header>
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
+    <main>
+        <section id="aboutus" class="  py-10 px-4 lg:px-1 sm:py-14  bg-gray-50 w-full">
+            <div class="flex flex-col md:flex-row flex-wrap gap-8 md:gap-4 max-w-7xl mx-auto">
+                <div class="flex flex-col basis-1/2 shrink text-lg gap-2 justify-between">
+                    <h3 class="font-['Rozha_One'] text-4xl mb-2">O nas</h3>
+                    <p>{{ page.paragraph1 }}</p>
+                    <p>{{ page.paragraph2 }}</p>
+                    <div class="ml-auto flex flex-col justify-center items-center mt-2">
+                        <p class="font-semibold">{{ page.signature1 }}</p>
+                        <p>{{ page.signature2 }}</p>
+                    </div>
+                </div>
+                <div class="relative basis-2/5 shrink flex justify-center items-center mx-auto rounded-md shadow-xl">
+                    {% image page.image1 width-600 as img %}
+                    <img src="{{ img.url }}"
+                         width="{{ img.width }}"
+                         height="{{ img.height }}"
+                         alt="{{ page.image1_alt }}"
+                         class="w-full h-full object-cover object-center rounded-md z-10">
+                </div>
+            </div>
+        </section>
+        <section id="apartments" class="w-full bg-gray-50">
+            <div class="flex flex-col gap-5 max-w-7xl mx-auto pt-10 pb-10 sm:pb-28 sm:pt-14 px-4 lg:px-1 ">
+                <h3 class="font-['Rozha_One'] text-4xl mb-6">Apartamenty</h3>
+                <div class="relative flex flex-col md:flex-row gap-8">
+                    <div data-aos="flip-up"
+                         data-aos-duration="700"
+                         class="flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
+                        {% image page.image_ap1 width-500 as img_ap1 %}
+                        <img src="{{ img_ap1.url }}"
+                             width="{{ img_ap1.width }}"
+                             height="{{ img_ap1.height }}"
+                             alt="{{ page.image_ap1_alt }}"
+                             class="ssm:w-2/5 shrink-0 inline-block object-cover object-center">
+                        <div class="px-4 pt-4 pb-6 flex flex-col">
+                            <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap1|richtext }}</h4>
+                            <p>{{ page.description_ap1 }}</p>
+                            <a {% if page.page_ap1 %} href="{{ page.page_ap1.url }}" {% else %}href="#"{% endif %}
+                               class="btn-admin mt-4 ml-auto after:absolute after:inset-0">Zobacz szczegóły &raquo;</a>
+                        </div>
+                    </div>
+                    <div data-aos="flip-up"
+                         data-aos-duration="700"
+                         class="relative flex flex-col ssm:flex-row  basis-1/2 bg-gray-100 h-full rounded-md shrink overflow-hidden shadow-lg">
+                        {% image page.image_ap2 width-500 as img_ap2 %}
+                        <img src="{{ img_ap2.url }}"
+                             width="{{ img_ap2.width }}"
+                             height="{{ img_ap2.height }}"
+                             alt="{{ page.image_ap2_alt }}"
+                             class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
+                        <div class="px-4 pt-4 pb-6 flex flex-col">
+                            <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap2|richtext }}</h4>
+                            <p>{{ page.description_ap2 }}</p>
+                            <a {% if page.page_ap2 %} href="{{ page.page_ap2.url }}" {% else %}href="#"{% endif %}
+                               class="btn-admin mt-4 ml-auto after:absolute after:inset-0">Zobacz szczegóły &raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="gallery px-2  pb-10 pt-10">
+            <div class="flex flex-wrap items-center justify-center gap-5 mt-6 mb-12 ">
+                <h3 class="font-['Rozha_One'] text-4xl text-center">
+                    Jezioro
+                    Duże w&nbsp;Turawie
+                </h3>
+                <button class="btn-admin">Nasza okolica &raquo;</button>
+            </div>
+            <div class="w-full flex flex-col sm:flex-row gap-2 lg:h-[85vh]">
+                <div class="flex flex-row sm:flex-col sm:basis-1/3  gap-2 h-full">
+                    {% image lake_imgs.0.image width-500 as img0 %}
+                    {% image lake_imgs.0.image original as img_full0 %}
+                <a class="gallery-imglink block sm:h-[calc(50%-4px)]"
+                   href="{{ img_full0.url }}"
+                   data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
+                <img class="object-fit object-cover w-full h-full rounded-md"
+                     src="{{ img0.url }}"
+                     alt="{{ header_imgs.0.alt_attr }}"
+                     width="{{ img0.width }}"
+                     height="{{ img0.height }}">
+            </a>
+            {% image lake_imgs.1.image width-500 as img1 %}
+            {% image lake_imgs.1.image original as img_full1 %}
+        <a class="gallery-imglink block sm:h-[calc(50%-4px)]"
+           href="{{ img_full1.url }}"
+           data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
+        <img class="object-fit object-cover w-full h-full rounded-md"
+             src="{{ img1.url }}"
+             alt="{{ header_imgs.1.alt_attr }}"
+             width="{{ img1.width }}"
+             height="{{ img1.height }}">
+    </a>
+</div>
+<div class="h-48 sm:hidden md:h-auto md:basis-1/3 md:block">
+    {% image lake_imgs.2.image width-500 as img2 %}
+    {% image lake_imgs.2.image original as img_full2 %}
+<a class="h-full gallery-imglink"
+   data-fslightbox
+   href="{{ img_full2.url }}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
+<img class="object-fit object-cover object-right w-full h-full rounded-md"
+     src="{{ img_full2.url }}"
+     alt="{{ header_imgs.2.alt_attr }}"
+     width="{{ img_full2.width }}"
+     height="{{ img_full2.height }}">
+</a>
+</div>
+<div class="h-[300px] sm:h-auto flex sm:basis-2/3 md:basis-1/3 grow-1">
+    <div id="map" class="grow-1 h-full w-full rounded-md"></div>
+</div>
+</div>
+</section>
+</main>
+{% include "includes/footer.html" %}
+</div>
 </div>
 <div id="loading" class="bg-gradient-to-tl to-gray-300 from-blue-400">
     <div class="flex justify-center items-center text-amber-300 p-4 rounded-md bg-gray-100">
@@ -165,10 +211,10 @@
 </div>
 {% endblock %}
 {% block extra_js %}
-<script src="{% static 'js/aos.js' %}"></script>
-<script src="{% static 'js/fslightbox.js' %}"></script>
-<script src="{% static 'vendors/leaflet/leaflet.js' %}"></script>
-<script>
+    <script src="{% static 'js/aos.js' %}"></script>
+    <script src="{% static 'js/fslightbox.js' %}"></script>
+    <script src="{% static 'vendors/leaflet/leaflet.js' %}"></script>
+    <script>
     const map = L.map('map').setView([50.74062, 18.12041], 12);
     setTimeout(() => {
         map.invalidateSize();
@@ -192,5 +238,5 @@
     L.marker([50.74062, 18.12041], { icon: markerIcon })
         .addTo(map)
         .bindTooltip("Apartamenty Biwakowa 4B");
-</script>
+    </script>
 {% endblock %}

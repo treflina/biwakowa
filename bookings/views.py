@@ -30,9 +30,7 @@ from home.models import AdminEmail, PhoneSnippet
 
 from .filters import BookingsFilter
 from .forms import (
-    BookingForm,
-    BookingUpdateForm,
-    OnlineBookingDetailsForm,
+    BookingForm, BookingUpdateForm, OnlineBookingDetailsForm,
     OnlineBookingForm,
 )
 from .models import Booking

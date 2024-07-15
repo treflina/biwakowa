@@ -1,92 +1,128 @@
 {% load static %}
-
 <section id="results" class="flex flex-col gap-4 max-w-5xl mx-auto mb-10">
     {% if form.non_field_errors %}
-    <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold sm:text-lg text-center px-3">
-        {{ form.non_field_errors|linebreaks }}
-    </div>
-    {% endif%}
+        <div class="max-w-5xl my-4 mx-auto text-amber-600 font-semibold sm:text-lg text-center px-3">
+            {{ form.non_field_errors|linebreaks }}
+        </div>
+    {% endif %}
     {% if not results %}
-    <div class="max-w-5xl mx-auto">
-        {% if messages %}
-        <ul class="messages mb-4">
-            {% for message in messages %}
-            <li class="text-amber-600 font-semibold sm:text-lg text-center my-4 px-3">{{ message|linebreaks}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <p class="text-center">Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
-            okresie
-            <span class="font-semibold">lipiec-sierpień 7 noclegów od niedzieli do niedzieli</span>
-            (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).
-        </p>
-    </div>
+        <div class="max-w-5xl mx-auto">
+            {% if messages %}
+                <ul class="messages mb-4">
+                    {% for message in messages %}
+                        <li class="text-amber-600 font-semibold sm:text-lg text-center my-4 px-3">{{ message|linebreaks }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p class="text-center">
+                Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
+                okresie
+                <span class="font-semibold">lipiec-sierpień 7 noclegów od niedzieli do niedzieli</span>
+                (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).
+            </p>
+        </div>
     {% endif %}
     {% if available_apartments %}
-    <h2 class="font-semibold text-2xl text-center mb-4">Dostępne apartamenty w terminie
-        <span class="text-amber-600">{{arrival|date:'d.m.Y'}}</span> do
-        <span class="text-amber-600">{{departure|date:'d.m.Y'}} </span>
-        ({{num_nights}}{% if num_nights == 3 or num_nights == 4 %}&nbsp;noclegi{% else %}&nbsp;noclegów{% endif %}):
-    </h2>
-    {% for apartment in available_apartments %}
-    <div class="flex flex-wrap sm:flex-nowrap mx-2 p-2 gap-4 border-2 border-gray-300 rounded-md">
-        <img src="{% static 'img/sypialnia.jpg' %}" alt=""
-            class="inline-block w-full sm:w-72 object-cover object-center rounded-sm">
-        <div class="flex flex-col gap-3">
-            <h3 class="text-lg font-semibold mb-2">
-                Apartament {{ apartment.apartment_type.type_name }} nr {{ apartment.name }}
-            </h3>
-            <p>Salon z aneksem kuchennym,
-                {% if apartment.apartment_type.type_name == "4-osobowy" %}dwie sypialnie,{% endif %} łazienka z
-                prysznicem, {% if apartment.floor == "0" %}taras {% else %}
-                balkon{% endif %}.
-                Położony na <span class="font-semibold">
-                {% if apartment.floor == "0" %}parterze{% else %} I&nbsp;piętrze{% endif %}</span>.
-                <br>Możliwość zakwaterowania {% if apartment.apartment_type.type_name == "2-osobowy" %} dodatkowej
-                osoby {% else %}
-                2 dodatkowych osób {% endif %} (kanapa w salonie) za dopłatą 50zł&nbsp;os./doba.
-            </p>
-            <p class="flex-wrap">
-                <span class="inline-block">
-                <svg class="w-4 h-4 inline-block align-middle mx-1 mb-1 fill-blue-600">
-                    <use xlink:href="{% static 'img/sprite.svg#surface' %}" href="{% static 'img/sprite.svg#surface' %}" />
-                </svg>{% if  apartment.apartment_type.type_name == "2-osobowy" %}31m2 {% else %}49m2{% endif %}</span>
-                <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
-                    <use xlink:href="{% static 'img/sprite.svg#parking' %}"
-                        href="{% static 'img/sprite.svg#parking' %}" />
-                </svg>parking
-                <span class="inline-block">
+        <h2 class="font-semibold text-2xl text-center mb-4">
+            Dostępne apartamenty w terminie
+            <span class="text-amber-600">{{ arrival|date:'d.m.Y' }}</span> do
+            <span class="text-amber-600">{{ departure|date:'d.m.Y' }}</span>
+            ({{ num_nights }}
+            {% if num_nights == 3 or num_nights == 4 %}
+                &nbsp;noclegi
+            {% else %}
+                &nbsp;noclegów
+            {% endif %}
+            ):
+        </h2>
+        {% for apartment in available_apartments %}
+            <div class="flex flex-wrap sm:flex-nowrap mx-2 p-2 gap-4 border-2 border-gray-300 rounded-md">
+                <img src="{% static 'img/sypialnia.jpg' %}"
+                     alt=""
+                     class="inline-block w-full sm:w-72 object-cover object-center rounded-sm">
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-lg font-semibold mb-2">Apartament {{ apartment.apartment_type.type_name }} nr {{ apartment.name }}</h3>
+                    <p>
+                        Salon z aneksem kuchennym,
+                        {% if apartment.apartment_type.type_name == "4-osobowy" %}dwie sypialnie,{% endif %}
+                        łazienka z
+                        prysznicem,
+                        {% if apartment.floor == "0" %}
+                            taras
+                        {% else %}
+                            balkon
+                        {% endif %}
+                        .
+                        Położony na <span class="font-semibold">
+                        {% if apartment.floor == "0" %}
+                            parterze
+                        {% else %}
+                            I&nbsp;piętrze
+                        {% endif %}
+                    </span>.
+                    <br>
+                    Możliwość zakwaterowania
+                    {% if apartment.apartment_type.type_name == "2-osobowy" %}
+                        dodatkowej
+                        osoby
+                    {% else %}
+                        2 dodatkowych osób
+                    {% endif %}
+                    (kanapa w salonie) za dopłatą 50zł&nbsp;os./doba.
+                </p>
+                <p class="flex-wrap">
+                    <span class="inline-block">
+                        <svg class="w-4 h-4 inline-block align-middle mx-1 mb-1 fill-blue-600">
+                            <use xlink:href="{% static 'img/sprite.svg#surface' %}" href="{% static 'img/sprite.svg#surface' %}" />
+                        </svg>
+                        {% if  apartment.apartment_type.type_name == "2-osobowy" %}
+                            31m2
+                        {% else %}
+                            49m2
+                        {% endif %}
+                    </span>
+                    <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
+                        <use xlink:href="{% static 'img/sprite.svg#parking' %}" href="{% static 'img/sprite.svg#parking' %}" />
+                    </svg>
+                    parking
+                    <span class="inline-block">
                         <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
                             <use xlink:href="{% static 'img/sprite.svg#wifi' %}" href="{% static 'img/sprite.svg#wifi' %}" />
-                        </svg>WiFi</span>
-                <span class="inline-block">
+                        </svg>
+                    WiFi</span>
+                    <span class="inline-block">
                         <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
                             <use xlink:href="{% static 'img/sprite.svg#tv' %}" href="{% static 'img/sprite.svg#tv' %}" />
-                        </svg>TV</span>
-                <span class="inline-block">
+                        </svg>
+                    TV</span>
+                    <span class="inline-block">
                         <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
                             <use xlink:href="{% static 'img/sprite.svg#kitchen' %}" href="{% static 'img/sprite.svg#kitchen' %}" />
-                        </svg>przybory kuchenne, czajnik, lodówka, płyta kuchenna</span>
-                <span class="inline-block">
+                        </svg>
+                    przybory kuchenne, czajnik, lodówka, płyta kuchenna</span>
+                    <span class="inline-block">
                         <svg class="w-4 h-4 inline-block align-middle mr-1 ml-1 mb-1 fill-blue-600">
                             <use xlink:href="{% static 'img/sprite.svg#shower' %}" href="{% static 'img/sprite.svg#shower' %}" />
-                        </svg> ręczniki, kosmetyki łazienkowe</span>
-            </p>
-            <div class="flex justify-between sm:justify-end items-center my-3 w-full gap-2 sm:gap-4">
-                <p>Cena: <span class="font-semibold text-xl md:text-2xl">{{ apartment.price }}&nbsp;zł</span></p>
-                <form action="{% url 'bookings_app:onlinebooking' arrival departure apartment.id %}" method="GET">
-
-                    <button type="submit" class="btn-cta mr-1 md:mr-4 text-center">Rezerwuję i płacę</button>
-                </form>
-
+                        </svg>
+                    ręczniki, kosmetyki łazienkowe</span>
+                </p>
+                <div class="flex justify-between sm:justify-end items-center my-3 w-full gap-2 sm:gap-4">
+                    <p>
+                        Cena: <span class="font-semibold text-xl md:text-2xl">{{ apartment.price }}&nbsp;zł</span>
+                    </p>
+                    <form action="{% url 'bookings_app:onlinebooking' arrival departure apartment.id %}"
+                          method="GET">
+                        <button type="submit" class="btn-cta mr-1 md:mr-4 text-center">Rezerwuję i płacę</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     {% endfor %}
-    {% endif %}
-
-    {% if results and not available_apartments %}
-    <p class="text-amber-600 font-semibold text-lg text-center my-4">Przykro nam, ale nie mamy wolnych apartamentów
-        w okresie od {{arrival}} do {{departure}}</p>
-    {% endif %}
+{% endif %}
+{% if results and not available_apartments %}
+    <p class="text-amber-600 font-semibold text-lg text-center my-4">
+        Przykro nam, ale nie mamy wolnych apartamentów
+        w okresie od {{ arrival }} do {{ departure }}
+    </p>
+{% endif %}
 </section>

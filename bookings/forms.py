@@ -5,12 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.forms import (
-    CheckboxInput,
-    DateInput,
-    EmailInput,
-    NumberInput,
-    Select,
-    Textarea,
+    CheckboxInput, DateInput, EmailInput, NumberInput, Select, Textarea,
     TextInput,
 )
 from django.utils.translation import gettext_lazy as _

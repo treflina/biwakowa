@@ -1,69 +1,75 @@
 {% load bookings_tags querystring_tag %}
 {% if is_paginated %}
-<nav aria-label="Paginacja" class="my-4" style="z-index:20;">
-    <ul class="pagination flex justify-center gap-1">
-        {% if page_obj.has_previous %}
-        <li class="border-2 rounded-md">
-            <div class="cursor-pointer px-2 py-1"
-                role="link"
-                tabindex="0"
-                hx-get="?{% param_replace page=page_obj.previous_page_number %}"
-                hx-trigger="click"
-                hx-target="#bookings-table"
-                hx-push-url="true"
-                hx-swap="innerHTML"
-            ><p>Poprzednia</p></div>
-        </li>
-        {% else %}
-        <li class="px-2 py-1 border-2 text-gray-500 rounded-md">
-            <div class="">Poprzednia</div>
-        </li>
-        {% endif %}
-        {% if page_obj.has_previous %}
-        <li class="border-2 rounded-md">
-            <div class="cursor-pointer px-2 py-1"
-            role="link"
-            tabindex="0"
-            hx-get="?{% param_replace page=page_obj.previous_page_number %}"
-            hx-trigger="click"
-            hx-target="#bookings-table"
-            hx-push-url="true"
-            hx-swap="innerHTML"><p>{{page_obj.previous_page_number}}</p></div>
-        </li>
-        {% endif %}
-        <li class="px-2 py-1 border-2 rounded-md border-gray-400 bg-amber-300" aria-current="page">
-            <span class="" style="border-color: green;">{{page_obj.number}}</span>
-        </li>
-        {% if page_obj.has_next %}
-        <li class="border-2 rounded-md">
-            <div class="px-2 py-1 cursor-pointer"
-            role="link"
-            tabindex="0"
-            hx-get="?{% param_replace page=page_obj.next_page_number %}"
-            hx-trigger="click"
-            hx-target="#bookings-table"
-            hx-swap="innerHTML"
-            hx-push-url="true"
-            ><p>{{page_obj.next_page_number}}</p></div>
-        </li>
-        {% endif %}
-        {% if page_obj.has_next %}
-        <li class="border-2 rounded-md">
-            <div class="cursor-pointer px-2 py-1"
-                role="link"
-                tabindex="0"
-                hx-get="?{% param_replace page=page_obj.next_page_number %}"
-                hx-trigger="click"
-                hx-target="#bookings-table"
-                hx-swap="innerHTML"
-                hx-push-url="true"
-            ><p>Następna</p></div>
-        </li>
-        {% else %}
-        <li class="px-2 py-1 border-2 text-gray-400 rounded-md">
-            <div class="page-link">Następna</div>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
+    <nav aria-label="Paginacja" class="my-4" style="z-index:20;">
+        <ul class="pagination flex justify-center gap-1">
+            {% if page_obj.has_previous %}
+                <li class="border-2 rounded-md">
+                    <div class="cursor-pointer px-2 py-1"
+                         role="link"
+                         tabindex="0"
+                         hx-get="?{% param_replace page=page_obj.previous_page_number %}"
+                         hx-trigger="click"
+                         hx-target="#bookings-table"
+                         hx-push-url="true"
+                         hx-swap="innerHTML">
+                        <p>Poprzednia</p>
+                    </div>
+                </li>
+            {% else %}
+                <li class="px-2 py-1 border-2 text-gray-500 rounded-md">
+                    <div class="">Poprzednia</div>
+                </li>
+            {% endif %}
+            {% if page_obj.has_previous %}
+                <li class="border-2 rounded-md">
+                    <div class="cursor-pointer px-2 py-1"
+                         role="link"
+                         tabindex="0"
+                         hx-get="?{% param_replace page=page_obj.previous_page_number %}"
+                         hx-trigger="click"
+                         hx-target="#bookings-table"
+                         hx-push-url="true"
+                         hx-swap="innerHTML">
+                        <p>{{ page_obj.previous_page_number }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            <li class="px-2 py-1 border-2 rounded-md border-gray-400 bg-amber-300"
+                aria-current="page">
+                <span class="" style="border-color: green;">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+                <li class="border-2 rounded-md">
+                    <div class="px-2 py-1 cursor-pointer"
+                         role="link"
+                         tabindex="0"
+                         hx-get="?{% param_replace page=page_obj.next_page_number %}"
+                         hx-trigger="click"
+                         hx-target="#bookings-table"
+                         hx-swap="innerHTML"
+                         hx-push-url="true">
+                        <p>{{ page_obj.next_page_number }}</p>
+                    </div>
+                </li>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <li class="border-2 rounded-md">
+                    <div class="cursor-pointer px-2 py-1"
+                         role="link"
+                         tabindex="0"
+                         hx-get="?{% param_replace page=page_obj.next_page_number %}"
+                         hx-trigger="click"
+                         hx-target="#bookings-table"
+                         hx-swap="innerHTML"
+                         hx-push-url="true">
+                        <p>Następna</p>
+                    </div>
+                </li>
+            {% else %}
+                <li class="px-2 py-1 border-2 text-gray-400 rounded-md">
+                    <div class="page-link">Następna</div>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endif %}

@@ -1,50 +1,47 @@
 {% load wagtailcore_tags wagtailroutablepage_tags i18n l10n %}
 {% load static %}
-
 <div>
-    <div class="flex flex-col sm:flex-row w-full justify-center items-center gap-4
-        pt-6 pb-10 relative">
-        <h2 class="font-semibold text-2xl text-center ">Kalendarz rezerwacji: </h2>
-        <div
-            class="flex flex-row gap-3 items-center justify-between min-w-[275px] border-2 border-gray-300 rounded-md bg-gray-50">
-            <div hx-get="/calendars/{{previous_year}}/{{previous_month}}/"
-                hx-target="#booking-calendar"
-                hx-swap="innerHTML" class="cal-link inline-block text-3xl pb-1 border-r-2 px-2  bg-gray-300 cursor-pointer
-                hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
+    <div class="flex flex-col sm:flex-row w-full justify-center items-center gap-4 pt-6 pb-10 relative">
+        <h2 class="font-semibold text-2xl text-center ">Kalendarz rezerwacji:</h2>
+        <div class="flex flex-row gap-3 items-center justify-between min-w-[275px] border-2 border-gray-300 rounded-md bg-gray-50">
+            <div hx-get="/calendars/{{ previous_year }}/{{ previous_month }}/"
+                 hx-target="#booking-calendar"
+                 hx-swap="innerHTML"
+                 class="cal-link inline-block text-3xl pb-1 border-r-2 px-2  bg-gray-300 cursor-pointer hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
                 <p>&laquo;</p>
             </div>
             <p class="font-semibold text-xl text-center text-gray-800 uppercase">
-                {% language 'pl' %}{{ displayed_month|date:"F Y"}}{% endlanguage %}
-            </p>
-            <div
-                hx-get="/calendars/{{next_year}}/{{next_month}}/" hx-target="#booking-calendar"
-                hx-swap="innerHTML" class="cal-link inline-block text-3xl pb-1 border-l-2 px-2 bg-gray-300 cursor-pointer
-                hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
-                <p>&raquo;</p>
+                {% language 'pl' %}
+                    {{ displayed_month|date:"F Y" }}{% endlanguage %}
+                </p>
+                <div hx-get="/calendars/{{ next_year }}/{{ next_month }}/"
+                     hx-target="#booking-calendar"
+                     hx-swap="innerHTML"
+                     class="cal-link inline-block text-3xl pb-1 border-l-2 px-2 bg-gray-300 cursor-pointer hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
+                    <p>&raquo;</p>
+                </div>
+            </div>
+        </div>
+        <div class="calendars flex flex-wrap flex-col sm:flex-row w-full justify-center gap-3"
+             id="calendars">{% include 'includes/calendars.html' %}</div>
+        <div class="flex flex-wrap flex-row  justify-center gap-3 md:items-left mt-4 flex-grow min-w-64 px-3 mb-6">
+            <div class="flex items-center pb-1 gap-2 ">
+                <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400 bg-[#83d183]"></div>
+                <p class="w-max">termin wolny</p>
+            </div>
+            <div class="flex items-center pb-1 gap-2 max-w-max">
+                <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400 bg-slate-100"></div>
+                <p class="w-max">termin zajęty</p>
+            </div>
+            <div class="flex items-center pb-1 gap-2 max-w-max">
+                <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400"
+                     style='background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%)'></div>
+                <p class="w-max">tylko przyjazd</p>
+            </div>
+            <div class="flex items-center pb-1 gap-2 max-w-max">
+                <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400"
+                     style='background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%)'></div>
+                <p class="w-max">tylko wyjazd</p>
             </div>
         </div>
     </div>
-    <div class="calendars flex flex-wrap flex-col sm:flex-row w-full justify-center gap-3" id="calendars">
-        {% include 'includes/calendars.html' %}
-    </div>
-    <div class="flex flex-wrap flex-row  justify-center gap-3 md:items-left mt-4 flex-grow min-w-64 px-3 mb-6">
-        <div class="flex items-center pb-1 gap-2 ">
-            <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400 bg-[#83d183]"> </div>
-            <p class="w-max">termin wolny</p>
-        </div>
-        <div class="flex items-center pb-1 gap-2 max-w-max">
-            <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400 bg-slate-100"> </div>
-            <p class="w-max">termin zajęty</p>
-        </div>
-        <div class="flex items-center pb-1 gap-2 max-w-max">
-            <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400"
-                style='background: linear-gradient(135deg,  rgb(241 245 249) 20%, rgb(131,209,131) 20%);'></div>
-            <p class="w-max">tylko przyjazd</p>
-        </div>
-        <div class="flex items-center pb-1 gap-2 max-w-max">
-            <div class="h-10 w-10 rounded-md pb-1 border-2 border-gray-400"
-                style='background: linear-gradient(135deg, rgb(131,209,131) 40%, rgb(241 245 249) 40%);'> </div>
-            <p class="w-max">tylko wyjazd</p>
-        </div>
-    </div>
-</div>

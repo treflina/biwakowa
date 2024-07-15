@@ -1,33 +1,45 @@
 {% load wagtailcore_tags %}
 {% load static %}
 {% if request.user.is_authenticated %}
-<li><a href="{% url 'bookings_app:bookings' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-8 inline-block">
-        <use xlink:href="{% static 'img/sprite.svg#list' %}" href="{% static 'img/sprite.svg#list' %}" />
-    </svg>Rezerwacje</a>
-</li>
-<li><a href="{% url 'bookings_app:add_booking' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-6 inline-block">
-        <use xlink:href="{% static 'img/sprite.svg#plus' %}" href="{% static 'img/sprite.svg#plus' %}" />
-    </svg>Dodaj</a></li>
-<li><a href="{% url 'bookings_app:booking-search' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-6 inline-block">
-        <use xlink:href="{% static 'img/sprite.svg#calendar' %}" href="{% static 'img/sprite.svg#calendar' %}" />
-    </svg>
-    Kalendarz</a></li>
-<li>
-    <a href="{% url 'users_app:logout' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-6 inline-block">
-    <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
-</svg>
-<span>Wyloguj</span></a>
-</li>
+    <li>
+        <a href="{% url 'bookings_app:bookings' %}"
+           class="menu-close flex items-center gap-1">
+            <svg class="w-6 h-8 inline-block">
+                <use xlink:href="{% static 'img/sprite.svg#list' %}" href="{% static 'img/sprite.svg#list' %}" />
+            </svg>
+        Rezerwacje</a>
+    </li>
+    <li>
+        <a href="{% url 'bookings_app:add_booking' %}"
+           class="menu-close flex items-center gap-1">
+            <svg class="w-6 h-6 inline-block">
+                <use xlink:href="{% static 'img/sprite.svg#plus' %}" href="{% static 'img/sprite.svg#plus' %}" />
+            </svg>
+        Dodaj</a>
+    </li>
+    <li>
+        <a href="{% url 'bookings_app:booking-search' %}"
+           class="menu-close flex items-center gap-1">
+            <svg class="w-6 h-6 inline-block">
+                <use xlink:href="{% static 'img/sprite.svg#calendar' %}" href="{% static 'img/sprite.svg#calendar' %}" />
+            </svg>
+        Kalendarz</a>
+    </li>
+    <li>
+        <a href="{% url 'users_app:logout' %}"
+           class="menu-close flex items-center gap-1">
+            <svg class="w-6 h-6 inline-block">
+                <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
+            </svg>
+            <span>Wyloguj</span></a>
+    </li>
 {% else %}
-<li>
-    <a href="{% url 'users_app:user-login' %}" class="menu-close flex items-center gap-1">
-    <svg class="w-6 h-6 inline-block">
-    <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
-</svg>
-<span>Zaloguj</span></a>
-</li>
+    <li>
+        <a href="{% url 'users_app:user-login' %}"
+           class="menu-close flex items-center gap-1">
+            <svg class="w-6 h-6 inline-block">
+                <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
+            </svg>
+            <span>Zaloguj</span></a>
+    </li>
 {% endif %}

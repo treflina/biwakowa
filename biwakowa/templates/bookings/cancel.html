@@ -2,24 +2,18 @@
 {% load wagtailcore_tags %}
 {% load static %}
 {% block content %}
-<div class="flex flex-col justify-between h-dvh">
-{% include 'includes/nav.html' %}
-<main
-    class="max-w-4xl mx-auto relative flex flex-col w-full justify-center items-center gap-4 py-16">
-
-    <h1 class="font-semibold text-xl sm:text-2xl px-2 text-center">Transakcja została przerwana.</h1>
-    <div class="flex gap-2 flex-wrap justify-center items-center">
-        <a href="/" class="rounded-md border-4 px-2 py-1 md:px-4 md:py-2  bg-gray-300 shadow-md
-                     border-gray-300 font-semibold transition-all duration-300 hover:bg-gray-200
-                     active:bg-gray-200 focus:bg-gray-100 mt-3">&laquo;&nbsp;Wróć na stronę główną</a>
-        <a href="{{session_url}}" class="btn-cta mt-3">Ponów płatność&nbsp;&raquo;</a>
+    <div class="flex flex-col justify-between h-dvh">
+        {% include "includes/nav.html" %}
+        <main class="max-w-4xl mx-auto relative flex flex-col w-full justify-center items-center gap-4 py-16">
+            <h1 class="font-semibold text-xl sm:text-2xl px-2 text-center">Transakcja została przerwana.</h1>
+            <div class="flex gap-2 flex-wrap justify-center items-center">
+                <a href="/"
+                   class="rounded-md border-4 px-2 py-1 md:px-4 md:py-2  bg-gray-300 shadow-md border-gray-300 font-semibold
+                   transition-all duration-300 hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-100 mt-3">&laquo;&nbsp;Wróć na stronę główną</a>
+                <a href="{{ session_url }}" class="btn-cta mt-3">Ponów płatność&nbsp;&raquo;</a>
+            </div>
+            <p class="sm:text-xl px-2 text-center mt-4">W razie pytań zapraszamy do kontaktu pod nr&nbsp;tel.&nbsp;{{ phone }}.</p>
+        </main>
+        <div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
     </div>
-
-    <p class="sm:text-xl px-2 text-center mt-4">W razie pytań zapraszamy do kontaktu pod nr&nbsp;tel.&nbsp;{{phone}}.
-    </p>
-</main>
-<div class="bg-gradient-to-tl to-gray-200 from-blue-200">
-    {% include 'includes/footer.html' %}
-</div>
-</div>
 {% endblock %}

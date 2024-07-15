@@ -9,5 +9,5 @@ from django.views.decorators.http import require_GET
 def favicon_file(request):
     """Serve site's icons"""
     name = "favicon" + str(request.path)
-    url=staticfiles_storage.url(name)
+    url = staticfiles_storage.url(name)
     return HttpResponseRedirect(url)

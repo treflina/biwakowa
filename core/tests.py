@@ -4,7 +4,7 @@ from django.test import SimpleTestCase
 
 
 class FaviconFileTests(SimpleTestCase):
-    databases = '__all__'
+    databases = "__all__"
 
     def test_get(self):
         names = [
@@ -17,14 +17,16 @@ class FaviconFileTests(SimpleTestCase):
             "favicon.ico",
             "mstile-150x150.png",
             "safari-pinned-tab.svg",
-            "browserconfig.xml"
+            "browserconfig.xml",
         ]
 
         for name in names:
             with self.subTest(name):
                 response = self.client.get(f"/{name}")
 
-                self.assertIn(response.status_code, [HTTPStatus.OK, HTTPStatus.FOUND])
+                self.assertIn(
+                    response.status_code, [HTTPStatus.OK, HTTPStatus.FOUND]
+                )
                 self.assertEqual(
                     response["Cache-Control"],
                     "max-age=86400, immutable, public",
