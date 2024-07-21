@@ -2,21 +2,21 @@
 {% load static %}
 <div class="flex flex-wrap gap-3 justify-evenly ">
     {% if ap1_dates %}
-        <div class="mb-3 ">
-            <h2 class="text-center mb-5 mt-2 text-lg font-semibold">
-                Apartament nr {{ ap1_dates.apartment.name }} <span class="font-normal text-base">({{ ap1_dates.apartment.apartment_type.type_name }})</span>
+    <div class="mb-3 ">
+        <h2 class="text-center mb-5 mt-2 text-lg font-semibold">
+            Apartament nr {{ ap1_dates.apartment.name }} <span class="font-normal text-base">({{ ap1_dates.apartment.apartment_type.type_name }})</span>
         </h2>
-        {% include "includes/calendar.html" with dates=ap1_dates.dates arrival_dates=ap1_dates.arr_dates departure_dates=ap1_dates.dep_dates %}
+    {% include "includes/calendar.html" with dates=ap1_dates.dates arrival_dates=ap1_dates.arr_dates departure_dates=ap1_dates.dep_dates %}
     </div>
-{% endif %}
-{% if ap2_dates %}
+    {% endif %}
+    {% if ap2_dates %}
     <div class="mb-3">
         <h2 class="text-center mb-5 mt-2 text-lg font-semibold">
             Apartament nr {{ ap2_dates.apartment.name }} <span class="font-normal text-base">({{ ap2_dates.apartment.apartment_type.type_name }})</span>
-    </h2>
-    {% include "includes/calendar.html" with dates=ap2_dates.dates arrival_dates=ap2_dates.arr_dates departure_dates=ap2_dates.dep_dates %}
-</div>
-{% endif %}
+        </h2>
+        {% include "includes/calendar.html" with dates=ap2_dates.dates arrival_dates=ap2_dates.arr_dates departure_dates=ap2_dates.dep_dates %}
+    </div>
+    {% endif %}
 </div>
 <div class="flex flex-wrap gap-3 justify-evenly">
     {% if ap3_dates %}

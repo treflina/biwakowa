@@ -1,0 +1,67 @@
+from datetime import date, timedelta
+
+from django.utils.timezone import datetime as dt
+from django.contrib.auth import get_user_model
+import factory
+
+
+from apartments.models import ApartmentType, Apartment, Price
+from ..models import Booking
+from .base import faker
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = get_user_model()
+
+    username = "Test User"
+    password = "somepass1234"
+
+
+class ApartmentTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ApartmentType
+
+    type_name = "2-osobowy"
+
+
+class ApartmentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Apartment
+
+    name = factory.Sequence(lambda n: "ap%d" % n)
+    apartment_type = factory.SubFactory(ApartmentTypeFactory)
+    stripe_product_id = "stripe_id_1513"
+    base_price = 400
+    floor = "0"
+
+
+class PriceFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Price
+
+    amount = 500
+    apartment_type = factory.SubFactory(ApartmentTypeFactory)
+    start_date = date(2024, 7, 1)
+    end_date = None
+
+
+class BookingFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Booking
+
+    created_at = factory.LazyFunction(dt.now)
+    apartment = factory.SubFactory(ApartmentFactory)
+    guest = factory.LazyAttribute(lambda _: faker.name())
+    email = factory.LazyAttribute(lambda _: faker.unique.email())
+    phone = "+48/000-000-000"
+    date_from = date(2024, 7, 1)
+    date_to = factory.LazyAttribute(lambda o: o.date_from + o.duration)
+    total_price = 0
+    paid = False
+    notes = ""
+    stripe_checkout_id = None
+    stripe_transaction_status = "unpaid"
+
+    class Params:
+        duration = timedelta(days=3)

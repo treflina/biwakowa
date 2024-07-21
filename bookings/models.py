@@ -1,9 +1,5 @@
-from datetime import timedelta
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from bookings.utils import get_base_price
 
 from .managers import BookingManager
 
@@ -51,22 +47,17 @@ class Booking(models.Model):
     )
     objects = BookingManager()
 
-    def daterange(self, start_date, end_date):
-        for n in range(int((end_date - start_date).days)):
-            yield start_date + timedelta(n)
-
     @property
-    def calculated_price(self):
-        price_list = []
-        for date in self.daterange(self.date_from, self.date_to):
-            price_per_day = get_base_price(self.apartment, date)
-            price_list.append(price_per_day)
-
-        return sum(price_list)
+    def nights_num(self):
+        return (self.date_to - self.date_from).days
 
     def __str__(self):
         return f"{self.apartment.name}: {self.date_from} - {self.date_to}"
 
-    @property
-    def nights_num(self):
-        return (self.date_to - self.date_from).days
+    def as_dict(self):
+        excluded = ["stripe_checkout_id", "stripe_transaction_status"]
+        return dict(
+            (f.name, getattr(self, f.name))
+            for f in self._meta.fields
+            if f.name not in excluded
+        )

@@ -19,7 +19,7 @@ class BookingsFilter(django_filters.FilterSet):
         ),
     )
     arrival = django_filters.DateFilter(
-        field_name="date_from",
+        field_name="date_to",
         lookup_expr="gte",
         label="Od:",
         widget=DateInput(
@@ -31,7 +31,7 @@ class BookingsFilter(django_filters.FilterSet):
         ),
     )
     departure = django_filters.DateFilter(
-        field_name="date_to",
+        field_name="date_from",
         lookup_expr="lte",
         label="Do:",
         widget=DateInput(

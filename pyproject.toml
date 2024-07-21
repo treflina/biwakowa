@@ -11,3 +11,15 @@ line_length = 79
 
 [tool.djlint]
 profile="django"
+
+[tool.coverage.report]
+omit=[
+    "*/migrations/*",
+    "biwakowa/*",
+    "*/__init__.py",
+    "*/urls.py",
+    "*/tests/*",
+    "manage.py",
+    "passenger_wsgi.py",
+    "search/*",
+    ]

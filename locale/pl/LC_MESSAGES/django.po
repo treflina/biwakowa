@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-10 11:05+0200\n"
+"POT-Creation-Date: 2024-07-17 09:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,161 +20,168 @@ msgstr ""
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: .\apartments\models.py:16 .\apartments\models.py:24
+#: .\apartments\models.py:15 .\apartments\models.py:20
 msgid "apartment's type"
 msgstr "typ apartmamentu"
 
-#: .\apartments\models.py:25
+#: .\apartments\models.py:21
 msgid "apartments types"
 msgstr "typy apartmamentów"
 
-#: .\apartments\models.py:30 .\apartments\models.py:51
+#: .\apartments\models.py:29 .\apartments\models.py:42
 msgid "price"
 msgstr "Cena"
 
-#: .\apartments\models.py:32
+#: .\apartments\models.py:31
 msgid "start date"
 msgstr "Data zameldowania"
 
-#: .\apartments\models.py:52
+#: .\apartments\models.py:43
 msgid "prices"
 msgstr "Ceny"
 
-#: .\apartments\models.py:57
+#: .\apartments\models.py:56
 msgid "apartment's name"
 msgstr "Numer apartamentu"
 
-#: .\apartments\models.py:60
+#: .\apartments\models.py:59
 msgid "stripe product id"
 msgstr "Numer id produktu (stripe)"
 
-#: .\apartments\models.py:63
+#: .\apartments\models.py:62
 msgid "base price"
 msgstr "Cena bazowa"
 
-#: .\apartments\models.py:66
+#: .\apartments\models.py:65
 msgid "floor"
 msgstr "piętro"
 
-#: .\apartments\models.py:67
+#: .\apartments\models.py:66
 msgid "ground floor"
 msgstr "parter"
 
-#: .\apartments\models.py:67
+#: .\apartments\models.py:66
 msgid "first floor"
 msgstr "pierwsze piętro"
 
-#: .\apartments\models.py:86
+#: .\apartments\models.py:81
 msgid "apartment"
 msgstr "apartament"
 
-#: .\apartments\models.py:87
+#: .\apartments\models.py:82
 msgid "apartments"
 msgstr "apartamenty"
 
-#: .\apartments\models.py:107 .\home\models.py:66 .\home\models.py:83
+#: .\apartments\models.py:104 .\home\models.py:78 .\home\models.py:101
 msgid "heading"
 msgstr "Nagłówek"
 
-#: .\apartments\models.py:108 .\apartments\models.py:119
+#: .\apartments\models.py:105 .\apartments\models.py:116
 msgid "text"
 msgstr "Tekst"
 
-#: .\apartments\models.py:117 .\apartments\models.py:128
+#: .\apartments\models.py:114 .\apartments\models.py:125
 msgid "caption"
 msgstr "Opis zdjęcia"
 
-#: .\apartments\models.py:141
+#: .\apartments\models.py:136
 msgid "Description part I"
 msgstr "Część I"
 
-#: .\apartments\models.py:149
+#: .\apartments\models.py:144
 msgid "Description part II"
 msgstr "Część II"
 
-#: .\apartments\models.py:161
+#: .\apartments\models.py:149
 msgid "Apartment Page"
 msgstr "Strona z opisem apartamentów"
 
-#: .\bookings\forms.py:44
-msgid "Apartment"
-msgstr "Apartament"
+#: .\bookings\forms.py:42
+msgid "Please provide both dates."
+msgstr "Proszę podać obydwie daty (zameldowania i wymeldowania)."
 
-#: .\bookings\forms.py:49
-msgid "Date from"
-msgstr "Data zameldowania"
-
-#: .\bookings\forms.py:56
-msgid "Date to"
-msgstr "Data wymeldowania"
-
-#: .\bookings\forms.py:61
-msgid "Guest's name"
-msgstr "Imię i nazwisko gościa"
-
-#: .\bookings\forms.py:64 .\users\models.py:7
-msgid "Phone"
-msgstr "Telefon"
-
-#: .\bookings\forms.py:93 .\bookings\forms.py:114 .\bookings\forms.py:134
-#: .\bookings\forms.py:248
+#: .\bookings\forms.py:46 .\bookings\forms.py:140 .\bookings\forms.py:156
 msgid "Start date cannot be later or the same as end date"
 msgstr ""
 "Data zameldowania nie może być wcześniejsza lub taka sama jak data "
 "wymeldowania"
 
-#: .\bookings\forms.py:102 .\bookings\forms.py:286 .\bookings\views.py:228
+#: .\bookings\forms.py:50
+msgid "Selected date can't be a past date."
+msgstr "Wybrana data nie może być przeszła."
+
+#: .\bookings\forms.py:61
+msgid "Minimum 3-nights stay required."
+msgstr "Minimalna długość pobytu wynosi 3 doby."
+
+#: .\bookings\forms.py:82
+msgid "Apartment"
+msgstr "Apartament"
+
+#: .\bookings\forms.py:87
+msgid "Date from"
+msgstr "Data zameldowania"
+
+#: .\bookings\forms.py:94
+msgid "Date to"
+msgstr "Data wymeldowania"
+
+#: .\bookings\forms.py:99
+msgid "Guest's name"
+msgstr "Imię i nazwisko gościa"
+
+#: .\bookings\forms.py:102 .\users\models.py:7
+msgid "Phone"
+msgstr "Telefon"
+
+#: .\bookings\forms.py:145 .\bookings\forms.py:275 .\bookings\views.py:236
 msgid "There is already a booking in the given date range."
 msgstr "Niestety istnieje już rezerwacja na podany okres."
 
-#: .\bookings\forms.py:130 .\bookings\forms.py:244
-msgid "Please provide both dates."
-msgstr "Proszę podać obydwie daty (zameldowania i wymeldowania)."
-
-#: .\bookings\forms.py:192
+#: .\bookings\forms.py:206
 msgid "You must confirm rodo"
 msgstr ""
 "OŚwiadczenie o zapoznaniu się z regulaminem i polityką prywatności jest "
 "obowiązkowe aby kontynuować."
 
-#: .\bookings\forms.py:211 .\bookings\views.py:260
+#: .\bookings\forms.py:226 .\bookings\views.py:268
 #, python-brace-format
 msgid "Apartment with id {pk} was not found"
 msgstr "Apartament z podanym nr {pk} nie został znaleziony."
 
-#: .\bookings\forms.py:219
+#: .\bookings\forms.py:234
 msgid "Invalid email has been provided."
 msgstr "Podano nieprawidłowy e-mail"
 
-#: .\bookings\forms.py:225
+#: .\bookings\forms.py:240
 msgid "Invalid name has been provided."
 msgstr "Podano nieprawidłowe imię i nazwisko."
 
-#: .\bookings\forms.py:231
+#: .\bookings\forms.py:246
 msgid "Invalid phone number has been provided."
 msgstr "Podano nieprawidłowy numer telefonu."
 
-#: .\bookings\models.py:12
+#: .\bookings\models.py:9
 msgid "unpaid"
 msgstr "nieopłacone"
 
-#: .\bookings\models.py:15
+#: .\bookings\models.py:12
 msgid "success"
 msgstr "opłacone"
 
-#: .\bookings\models.py:17
+#: .\bookings\models.py:14
 msgid "failed"
 msgstr "zakończone niepowodzeniem"
 
-#: .\bookings\models.py:18
+#: .\bookings\models.py:15
 msgid "pending"
 msgstr "oczekuje"
 
-#: .\bookings\models.py:24
+#: .\bookings\models.py:23
 msgid "date from"
 msgstr "od"
 
-#: .\bookings\models.py:25
+#: .\bookings\models.py:24
 msgid "date to"
 msgstr "do"
 
@@ -182,75 +189,75 @@ msgstr "do"
 msgid "guest's name"
 msgstr "imię i nazwisko gościa"
 
-#: .\bookings\models.py:27
+#: .\bookings\models.py:29
 msgid "phone number"
 msgstr "telefon"
 
-#: .\bookings\models.py:28 .\home\models.py:47 .\home\models.py:48
+#: .\bookings\models.py:31 .\home\models.py:44 .\home\models.py:45
 msgid "email"
 msgstr "e-mail"
 
-#: .\bookings\models.py:30
+#: .\bookings\models.py:33
 msgid "total price"
 msgstr "cena za pobyt"
 
-#: .\bookings\models.py:32
+#: .\bookings\models.py:35
 msgid "paid"
 msgstr "zapłacone"
 
-#: .\bookings\models.py:33
+#: .\bookings\models.py:37
 msgid "additional information"
 msgstr "uwagi"
 
-#: .\bookings\models.py:35
+#: .\bookings\models.py:40
 msgid "stripe transaction id"
 msgstr "numer id płatności Stripe"
 
-#: .\bookings\models.py:38
+#: .\bookings\models.py:43
 msgid "transaction status"
 msgstr "status transakcji"
 
-#: .\bookings\views.py:282
+#: .\bookings\views.py:292
 msgid "Booking this apartment is not possible now."
 msgstr "zarezerwowanie wybranego apartamentu nie jest obecnie możliwe"
 
-#: .\bookings\views.py:284
+#: .\bookings\views.py:294
 msgid "Error. No stripe product_id"
 msgstr "Numer id produktu (stripe)"
 
-#: .\bookings\views.py:415
+#: .\bookings\views.py:431
 msgid "Session completed, booking not found"
 msgstr "Sesja płatności zakończona, rezerwacja nie została znaleziona w bazie."
 
-#: .\home\models.py:17
+#: .\home\models.py:14
 msgid "bank account number"
 msgstr "numer konta bankowego"
 
-#: .\home\models.py:23
+#: .\home\models.py:20
 msgid "bank account"
 msgstr "konto bankowe"
 
-#: .\home\models.py:24
+#: .\home\models.py:21
 msgid "bank accounts"
 msgstr "konta bankowe"
 
-#: .\home\models.py:29 .\home\models.py:35
+#: .\home\models.py:26 .\home\models.py:32
 msgid "phone"
 msgstr "telefon"
 
-#: .\home\models.py:36
+#: .\home\models.py:33
 msgid "phones"
 msgstr "telefon"
 
-#: .\home\models.py:55
+#: .\home\models.py:53
 msgid "subtitle"
 msgstr "podtytuł"
 
-#: .\home\models.py:56
+#: .\home\models.py:55
 msgid "paragraph 1"
 msgstr "paragraf 1"
 
-#: .\home\models.py:57
+#: .\home\models.py:56
 msgid "paragraph 2"
 msgstr "paragraf 2"
 
@@ -258,52 +265,52 @@ msgstr "paragraf 2"
 msgid "signature 1"
 msgstr "podpis 1"
 
-#: .\home\models.py:58
+#: .\home\models.py:62
 msgid "in bold"
 msgstr "pogrubiony"
 
-#: .\home\models.py:59
+#: .\home\models.py:65
 msgid "signature 2"
 msgstr "podpis 2"
 
-#: .\home\models.py:65 .\home\models.py:73 .\home\models.py:90
-#: .\home\models.py:163 .\home\models.py:181
+#: .\home\models.py:75 .\home\models.py:89 .\home\models.py:112
+#: .\home\models.py:197 .\home\models.py:217
 msgid "alternative text"
 msgstr "opis alternatywny"
 
-#: .\home\models.py:80 .\home\models.py:98
+#: .\home\models.py:97 .\home\models.py:121
 msgid "link to page"
 msgstr "link do podstrony"
 
-#: .\home\models.py:82 .\home\models.py:91
+#: .\home\models.py:99 .\home\models.py:114
 msgid "description"
 msgstr "opis"
 
-#: .\home\models.py:103
+#: .\home\models.py:125
 msgid "Home Page"
 msgstr "Strona główna"
 
-#: .\home\models.py:109 .\home\models.py:141
+#: .\home\models.py:132 .\home\models.py:171
 msgid "Image"
 msgstr "zdjęcie"
 
-#: .\home\models.py:110
+#: .\home\models.py:135
 msgid "Header images"
 msgstr "Zdjęcia na czołówce"
 
-#: .\home\models.py:120
+#: .\home\models.py:146
 msgid "About us"
 msgstr "O nas"
 
-#: .\home\models.py:129
+#: .\home\models.py:156
 msgid "Apartment 1"
 msgstr "Apartament 1"
 
-#: .\home\models.py:138
+#: .\home\models.py:166
 msgid "Apartment 2"
 msgstr "Apartament 2"
 
-#: .\home\models.py:142
+#: .\home\models.py:174
 msgid "Lake images"
 msgstr "Zdjęcia jeziora"
 

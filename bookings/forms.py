@@ -1,11 +1,16 @@
 import datetime as dt
+import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from django.db.models import Q
 from django.forms import (
-    CheckboxInput, DateInput, EmailInput, NumberInput, Select, Textarea,
+    CheckboxInput,
+    DateInput,
+    EmailInput,
+    NumberInput,
+    Select,
+    Textarea,
     TextInput,
 )
 from django.utils.translation import gettext_lazy as _
@@ -14,10 +19,6 @@ from apartments.models import Apartment
 from home.models import PhoneSnippet
 
 from .models import Booking
-
-
-def get_today():
-    return dt.date.today()
 
 
 def error_msg(msg):
@@ -38,6 +39,27 @@ def error_msg(msg):
         ),
     }
     return err_msg_dict.get(msg)
+
+
+def validate_arrival_and_departure_dates(arrival, departure):
+    today = dt.date.today()
+
+    if not arrival or not departure:
+        raise ValidationError(_("Please provide both dates."))
+    else:
+        if arrival >= departure:
+            raise ValidationError(
+                _("Start date cannot be later or the same as end date")
+            )
+        if arrival < today or departure < today:
+            raise ValidationError(_("Selected date can't be a past date."))
+        if arrival.month in [7, 8] and departure.month in [7, 8]:
+            if (departure - arrival).days < 7 and ((arrival - today).days > 7):
+                raise ValidationError(error_msg("MIN_7_NIGHTS"))
+            if (arrival - today).days > 7 and arrival.weekday() != 6:
+                raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
+        if (departure - arrival).days < 3:
+            raise ValidationError(_("Minimum 3-nights stay required."))
 
 
 class BookingBaseForm(forms.ModelForm):
@@ -112,19 +134,18 @@ class BookingForm(BookingBaseForm):
         date_from = self.cleaned_data.get("date_from")
         date_to = self.cleaned_data.get("date_to")
         apartment = self.cleaned_data.get("apartment")
-        if date_from >= date_to:
-            raise ValidationError(
-                _("Start date cannot be later or the same as end date")
+        if date_from and date_to:
+            if date_from >= date_to:
+                raise ValidationError(
+                    _("Start date cannot be later or the same as end date")
+                )
+            qs = Booking.objects.bookings_periods(
+                apartment, date_from, date_to
             )
-        qs = Booking.objects.filter(
-            Q(apartment__id=apartment.id)
-            & Q(date_to__gt=date_from)
-            & Q(date_from__lt=date_to)
-        ).exists()
-        if qs:
-            raise ValidationError(
-                _("There is already a booking in the given date range.")
-            )
+            if qs.exists():
+                raise ValidationError(
+                    _("There is already a booking in the given date range.")
+                )
 
 
 class BookingUpdateForm(BookingBaseForm):
@@ -132,7 +153,7 @@ class BookingUpdateForm(BookingBaseForm):
         super().clean()
         date_from = self.cleaned_data.get("date_from")
         date_to = self.cleaned_data.get("date_to")
-        if date_from >= date_to:
+        if date_from and date_to and date_from >= date_to:
             raise ValidationError(
                 _("Start date cannot be later or the same as end date")
             )
@@ -147,29 +168,7 @@ class OnlineBookingForm(forms.Form):
         arrival = cleaned_data.get("arrival")
         departure = cleaned_data.get("departure")
 
-        today = get_today()
-        if not arrival or not departure:
-            raise ValidationError(_("Please provide both dates."))
-        else:
-            if arrival >= departure:
-                raise ValidationError(
-                    _("Start date cannot be later or the same as end date")
-                )
-            if arrival < today or departure < today:
-                raise ValidationError(
-                    "Wybrana data nie może być wcześniejsza od dzisiaj."
-                )
-            if arrival.month in [7, 8] and departure.month in [7, 8]:
-                if (departure - arrival).days < 7 and (
-                    (arrival - today).days > 7
-                ):
-                    raise ValidationError(error_msg("MIN_7_NIGHTS"))
-                if (arrival - today).days > 7 and arrival.weekday() != 6:
-                    raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
-            if (departure - arrival).days < 3:
-                raise ValidationError(
-                    "Minimalna długość pobytu wynosi 3 doby."
-                )
+        validate_arrival_and_departure_dates(arrival, departure)
 
 
 class OnlineBookingDetailsForm(forms.Form):
@@ -229,14 +228,6 @@ class OnlineBookingDetailsForm(forms.Form):
             raise ValidationError(_(f"Apartment with id {pk} was not found"))
         return pk
 
-    def clean_email(self):
-        email = self.cleaned_data.get("email")
-        try:
-            validate_email(email)
-        except ValidationError:
-            raise ValidationError(_("Invalid email has been provided."))
-        return email
-
     def clean_name(self):
         name = self.cleaned_data.get("name")
         if len(name) < 5:
@@ -245,7 +236,9 @@ class OnlineBookingDetailsForm(forms.Form):
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
-        if len(phone) < 7:
+        if not re.fullmatch(r"(^[\d +'\''/'-()eklonmtw.]*$)", phone):
+            raise ValidationError(_("Invalid phone number has been provided."))
+        if len(phone) < 7 or len(phone) > 25:
             raise ValidationError(_("Invalid phone number has been provided."))
         return phone
 
@@ -254,49 +247,33 @@ class OnlineBookingDetailsForm(forms.Form):
         arrival = self.cleaned_data.get("arrival")
         departure = self.cleaned_data.get("departure")
         email = self.cleaned_data.get("email")
-        id = self.cleaned_data.get("pk")
+        apartment_id = self.cleaned_data.get("pk")
 
-        today = dt.date.today()
+        validate_arrival_and_departure_dates(arrival, departure)
 
-        if not arrival or not departure:
-            raise ValidationError(_("Please provide both dates."))
-        else:
-            if arrival >= departure:
-                raise ValidationError(
-                    _("Start date cannot be later or the same as end date")
-                )
-            if arrival < today or departure < today:
-                raise ValidationError(
-                    "Wybrana data nie może być wcześniejsza od dzisiaj."
-                )
-            if arrival.month in [7, 8] and departure.month in [7, 8]:
-                if (departure - arrival).days < 7 and (
-                    (arrival - today).days > 7
-                ):
-                    raise ValidationError(error_msg("MIN_7_NIGHTS"))
-                if (arrival - today).days > 7 and arrival.weekday() != 6:
-                    raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
-            if (departure - arrival).days < 3:
-                raise ValidationError(
-                    "Minimalna długość pobytu wynosi 3 doby."
-                )
-
-        if self.session:
-            session_email = self.session.get("email", None)
-
-        qs = Booking.objects.filter(
-            Q(apartment__id=id)
-            & Q(date_to__gt=arrival)
-            & Q(date_from__lt=departure)
-        )
-        if session_email is not None:
-            qs_check = qs.exclude(
-                Q(email=email) | Q(email=session_email)
-            ).exists()
-        else:
-            qs_check = qs.exclude(Q(email=email)).exists()
-
-        if qs_check:
-            raise ValidationError(
-                _("There is already a booking in the given date range.")
+        def check_booked_periods(session_email=False):
+            qs = Booking.objects.filter(
+                Q(apartment__id=apartment_id)
+                & Q(date_to__gt=arrival)
+                & Q(date_from__lt=departure)
             )
+
+            if session_email:
+                qs_check = qs.exclude(
+                    Q(stripe_transaction_status="pending")
+                    & (Q(email=email) | Q(email=session_email))
+                ).exists()
+            else:
+                qs_check = qs.exclude(
+                    Q(stripe_transaction_status="pending") & Q(email=email)
+                ).exists()
+            if qs_check is True:
+                raise ValidationError(
+                    _("There is already a booking in the given date range.")
+                )
+
+        if hasattr(self, "session"):
+            session_email = self.session.get("email", None)
+            check_booked_periods(session_email)
+        else:
+            check_booked_periods()

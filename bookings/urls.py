@@ -1,9 +1,18 @@
 from django.urls import path
 
 from .views import (
-    BookingCreateView, BookingDetailView, BookingsListView, BookingUpdateView,
-    UpcomingBookingsListView, booking_search, calendars, cancel,
-    delete_booking, onlinebooking, stripe_webhook, success,
+    BookingCreateView,
+    BookingDetailView,
+    BookingsListView,
+    BookingUpdateView,
+    UpcomingBookingsListView,
+    booking_search,
+    calendars,
+    cancel,
+    delete_booking,
+    onlinebooking,
+    stripe_webhook,
+    success,
 )
 
 app_name = "bookings_app"
