@@ -147,8 +147,10 @@ def handle_error_notification(err_subj, err_msg):
 def send_email_about_booking_to_hotel(
     request, booking, from_email, hotel_email
 ):
-    subject = f"Rezerwacja Ap. nr {booking.apartment.name} \
-                od {booking.date_from}"
+    subject = (
+        f"Rezerwacja Ap. nr {booking.apartment.name} "
+        "od {booking.date_from}"
+    )
     url = str(
         request.build_absolute_uri(
             reverse("bookings_app:booking", kwargs={"pk": booking.id})
@@ -156,12 +158,12 @@ def send_email_about_booking_to_hotel(
     )
     notes = booking.notes if booking.notes else "-"
     msg = f"""Nowa rezerwacja: #{booking.id} \n
-    Apartament nr {booking.apartment.name} \n
-    od {booking.date_from} do {booking.date_to} \n
-    Gość: {booking.guest} \n
-    Uwagi gościa: {notes} \n
-    utworzona: {booking.created_at} \n
-    Zobacz: {url}"""
+Apartament nr {booking.apartment.name} \n
+od {booking.date_from} do {booking.date_to} \n
+Gość: {booking.guest} \n
+Uwagi gościa: {notes} \n
+utworzona: {booking.created_at} \n
+Zobacz: {url}"""
 
     try:
         send_mail(subject, msg, from_email, [hotel_email])
@@ -174,8 +176,10 @@ def send_email_about_booking_to_hotel(
 
 def send_webpush_notification_to_hotel(request, booking, hotel_email):
     hotel = User.objects.filter(email=hotel_email).last()
-    subject = f"Rezerwacja Ap. nr {booking.apartment.name} \
-                od {booking.date_from}"
+    subject = (
+        f"Rezerwacja Ap. nr {booking.apartment.name} "
+        f"od {booking.date_from}"
+    )
     url = str(
         request.build_absolute_uri(
             reverse("bookings_app:booking", kwargs={"pk": booking.id})

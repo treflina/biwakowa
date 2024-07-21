@@ -417,7 +417,7 @@ def stripe_webhook(request):
     try:
         session = event["data"]["object"]
         session_id = session.get("id", None)
-    except KeyError as e:
+    except KeyError:
         err_subj = "Webhook sent, but event['data']['object'] not found"
         err_msg = err_subj + "in it's content."
         handle_error_notification(err_subj, err_msg)

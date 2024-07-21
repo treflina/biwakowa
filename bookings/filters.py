@@ -25,7 +25,7 @@ class BookingsFilter(django_filters.FilterSet):
         widget=DateInput(
             format="%d.%m.%y",
             attrs={
-                "class": "rounded-md border-gray-300",
+                "class": "rounded-md border-gray-300 min-w-[155px]",
                 "type": "date",
             },
         ),
@@ -37,7 +37,7 @@ class BookingsFilter(django_filters.FilterSet):
         widget=DateInput(
             format="%d.%m.%y",
             attrs={
-                "class": "rounded-md border-gray-300",
+                "class": "rounded-md border-gray-300 min-w-[155px]",
                 "type": "date",
             },
         ),
