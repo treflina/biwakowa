@@ -223,32 +223,7 @@
         transform: rotate(360deg);
     }
 }
-
-/* modal */
-
-.modal {
-    visibility: hidden;
-    opacity: 0;
-    z-index: 20;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(77, 77, 77, 0.8);
-    transition: all 0.4s;
-}
-
-.show {
-    max-height: 100%;
-    visibility: visible;
-    opacity: 1;
-}
-
+/* filters */
 .not-shown {
     max-height: 0;
     visibility: hidden;
@@ -261,6 +236,32 @@
         visibility: visible;
         opacity: 1;
     }
+}
+
+/* modal */
+
+.modal {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 20;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(77, 77, 77, 0.8);
+    transition: all 0.4s;
+}
+
+.show {
+    max-height: 100%;
+    visibility: visible;
+    opacity: 1;
 }
 
 .hide {
