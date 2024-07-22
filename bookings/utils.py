@@ -146,7 +146,7 @@ def handle_error_notification(err_subj, err_msg):
 
 def send_email_about_booking_to_hotel(booking, from_email, hotel_email):
     subject = (
-        f"Rezerwacja Ap. nr {booking.apartment.name} " "od {booking.date_from}"
+        f"Rezerwacja Ap. nr {booking.apartment.name} od {booking.date_from}"
     )
     url = settings.BASE_URL + str(
         reverse("bookings_app:booking", kwargs={"pk": booking.id})

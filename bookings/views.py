@@ -432,8 +432,8 @@ def stripe_webhook(request):
             err_subj = str(_("Session completed, booking not found"))
             err_msg = (
                 f"Session completed (session id: {session_id}) "
-                "webhook was sent, but related booking was not found "
-                "in the database."
+                f"webhook was sent, but related booking was not found "
+                f"in the database."
             )
             handle_error_notification(err_subj, err_msg)
 
@@ -451,8 +451,8 @@ def stripe_webhook(request):
         except Booking.DoesNotExist:
             logger.error(
                 f"Session expired (session id: {session_id}) "
-                "webhook was sent, but related booking was "
-                "not found in the database."
+                f"webhook was sent, but related booking was "
+                f"not found in the database."
             )
 
     else:
