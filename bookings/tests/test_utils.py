@@ -1,14 +1,21 @@
+import logging
 from datetime import date
+from unittest.mock import MagicMock, patch
 
 import pytest
+from django.core import mail
 
 from ..utils import (
+    WebhookResponse,
     booking_dates_assignment,
     calculated_price,
     daterange,
     get_next_prev_month,
     get_price,
+    send_confirmation_email,
 )
+
+logger = logging.getLogger("django")
 
 
 @pytest.fixture
@@ -118,3 +125,29 @@ def test_get_next_prev_month():
 
     assert get_next_prev_month(2023, 12) == res_2023_12
     assert get_next_prev_month(2024, 1) == res_2024_1
+
+
+@pytest.mark.django_db
+def test_webhookhttp_response(booking):
+    mock_handle_sending_notifications_about_new_booking = MagicMock()
+    with patch(
+        "bookings.utils.handle_sending_notifications_about_new_booking",
+        mock_handle_sending_notifications_about_new_booking,
+    ):
+        resp = WebhookResponse(booking=booking)
+        resp.close()
+
+        assert resp.status_code == 200
+        mock_handle_sending_notifications_about_new_booking.assert_called()
+
+
+@pytest.mark.django_db
+def test_send_confirmation_email(booking_factory):
+    booking = booking_factory(email="guest@example.com")
+    from_email = "test@example.com"
+
+    send_confirmation_email(booking, from_email)
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].from_email == "test@example.com"
+    assert mail.outbox[0].to == ["guest@example.com"]
+    assert mail.outbox[0].subject == "Potwierdzenie rezerwacji B4B"

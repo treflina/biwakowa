@@ -1,8 +1,8 @@
 from datetime import date
+from unittest.mock import patch
 
 import pytest
 from pytest_factoryboy import register
-from unittest.mock import patch
 
 from .base import faker
 from .factories import (

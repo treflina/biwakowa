@@ -85,8 +85,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "utils.context_processors.biwakowa_phone",
-                "utils.context_processors.bank_account_number",
+                "core.utils.context_processors.biwakowa_phone",
+                "core.utils.context_processors.bank_account_number",
             ],
         },
     },
@@ -230,6 +230,8 @@ INTERNAL_IPS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/rezerwacje"
 
 ADMINS = [("Admin", env("ADMIN_EMAIL"))]
 ADMIN_EMAIL = env("ADMIN_EMAIL")
@@ -284,7 +286,7 @@ LOGGING = {
         "mail_admins": {
             "level": "ERROR",
             "filters": ["require_debug_false"],
-            "class": "utils.log.CustomAdminEmailHandler",
+            "class": "core.utils.log.CustomAdminEmailHandler",
         },
     },
     "formatters": {

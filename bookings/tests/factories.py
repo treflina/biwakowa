@@ -1,11 +1,11 @@
 from datetime import date, timedelta
 
-from django.utils.timezone import datetime as dt
-from django.contrib.auth import get_user_model
 import factory
+from django.contrib.auth import get_user_model
+from django.utils.timezone import datetime as dt
 
+from apartments.models import Apartment, ApartmentType, Price
 
-from apartments.models import ApartmentType, Apartment, Price
 from ..models import Booking
 from .base import faker
 

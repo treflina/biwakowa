@@ -1,10 +1,10 @@
 import json
 from datetime import date
-import pytest
-from pytest_django.asserts import assertTemplateUsed
 
+import pytest
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
-from django.test import TestCase, RequestFactory
+from pytest_django.asserts import assertTemplateUsed
 
 from ..models import Booking
 from ..views import calendars, success
@@ -14,7 +14,7 @@ from .base import anonymous_user_redirected_to_login
 @pytest.mark.django_db
 class TestBookingsListView:
     url = reverse("bookings_app:bookings")
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(self, client):
         anonymous_user_redirected_to_login(client, self.url, self.login_url)
@@ -39,7 +39,7 @@ class TestBookingsListView:
 class TestBookingCreateView:
 
     url = reverse("bookings_app:add_booking")
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(self, client):
         anonymous_user_redirected_to_login(client, self.url, self.login_url)
@@ -83,7 +83,7 @@ class TestBookingCreateView:
 @pytest.mark.django_db
 class TestBookingUpdateView:
 
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(
         self, client, booking_to_update
@@ -168,7 +168,7 @@ class TestBookingUpdateView:
 @pytest.mark.django_db
 class TestDeleteBooking:
 
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(self, client, booking):
         url = reverse("bookings_app:delete_booking", kwargs={"pk": booking.id})
@@ -186,7 +186,7 @@ class TestDeleteBooking:
 @pytest.mark.django_db
 class TestBookingDetailView:
 
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(self, client, booking):
         url = reverse("bookings_app:booking", kwargs={"pk": booking.id})
@@ -233,7 +233,7 @@ class TestCalendars:
 class TestUpcomingBookingsListView:
 
     url = reverse("bookings_app:upcoming_bookings")
-    login_url = reverse("users_app:user-login")
+    login_url = reverse("login")
 
     def test_anonymous_user_redirected_to_login(self, client):
         anonymous_user_redirected_to_login(client, self.url, self.login_url)

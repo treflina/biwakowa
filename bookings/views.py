@@ -30,7 +30,7 @@ from .forms import (
     OnlineBookingForm,
 )
 from .models import Booking
-from .utils import calculated_price, handle_error_notification, WebhookResponse
+from .utils import WebhookResponse, calculated_price, handle_error_notification
 
 logger = logging.getLogger("django")
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -42,7 +42,7 @@ class BookingsListView(LoginRequiredMixin, views.FilterView):
     model = Booking
     context_object_name = "bookings"
     template_name = "bookings/bookings.html"
-    login_url = reverse_lazy("users_app:user-login")
+    login_url = reverse_lazy("login")
     filterset_class = BookingsFilter
     paginate_by = 20
     ordering = ["-date_from"]
@@ -156,7 +156,7 @@ class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
     queryset = Booking.objects.filter(date_from__gte=today)
     context_object_name = "bookings"
     template_name = "bookings/bookings.html"
-    login_url = reverse_lazy("users_app:user-login")
+    login_url = reverse_lazy("login")
     filterset_class = BookingsFilter
     paginate_by = 20
     ordering = ["date_from"]
@@ -174,7 +174,7 @@ class UpcomingBookingsListView(LoginRequiredMixin, views.FilterView):
 
 class BookingDetailView(LoginRequiredMixin, DetailView):
     model = Booking
-    login_url = reverse_lazy("users_app:user-login")
+    login_url = reverse_lazy("login")
 
 
 class BookingCreateView(LoginRequiredMixin, CreateView):
@@ -184,7 +184,7 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingForm
     success_url = reverse_lazy("bookings_app:bookings")
-    login_url = reverse_lazy("users_app:user-login")
+    login_url = reverse_lazy("login")
 
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
@@ -194,7 +194,7 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
     form_class = BookingUpdateForm
     template_name = "bookings/add-booking.html"
     success_url = reverse_lazy("bookings_app:bookings")
-    login_url = reverse_lazy("users_app:user-login")
+    login_url = reverse_lazy("login")
 
     def get_initial(self):
         initials = super(BookingUpdateView, self).get_initial()
@@ -231,7 +231,7 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-@login_required(login_url="users_app:user-login")
+@login_required(login_url="login")
 def delete_booking(request, pk):
     """Delete booking."""
 
@@ -286,10 +286,12 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     request, _("Booking this apartment is not possible now.")
                 )
                 err_subject = str(_("Error. No stripe product_id"))
-                err_msg = f"No stripe id for apartment {ap_to_book.name}. \
-                    Booking details: {guest} {guest_phone} {email} \
-                    from {arrival} to {departure} \
-                    notes: {guest_notes}"
+                err_msg = (
+                    f"No stripe id for apartment {ap_to_book.name}. "
+                    f"Booking details: {guest} {guest_phone} {email} "
+                    f"from {arrival} to {departure} "
+                    f"notes: {guest_notes}"
+                )
                 handle_error_notification(err_subject, err_msg)
 
                 return redirect("bookings_app:booking-search")
@@ -440,9 +442,7 @@ def stripe_webhook(request):
             booking.paid = True
             booking.save()
 
-            return WebhookResponse(
-                request=request, booking=booking, status=200
-            )
+            return WebhookResponse(booking=booking, status=200)
 
     elif event["type"] == "checkout.session.expired":
         try:

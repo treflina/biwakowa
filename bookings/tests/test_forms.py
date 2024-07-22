@@ -3,13 +3,13 @@ from datetime import date
 import pytest
 from django.core.exceptions import NON_FIELD_ERRORS
 
-from .base import faker
 from ..forms import (
     BookingForm,
     BookingUpdateForm,
-    OnlineBookingForm,
     OnlineBookingDetailsForm,
+    OnlineBookingForm,
 )
+from .base import faker
 
 
 @pytest.mark.parametrize(

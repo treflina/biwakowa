@@ -10,8 +10,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.templatetags.static import static
-from django.utils.html import strip_tags
 from django.urls import reverse
+from django.utils.html import strip_tags
 from webpush import send_user_notification
 
 from home.models import AdminEmail, PhoneSnippet
@@ -144,17 +144,12 @@ def handle_error_notification(err_subj, err_msg):
     )
 
 
-def send_email_about_booking_to_hotel(
-    request, booking, from_email, hotel_email
-):
+def send_email_about_booking_to_hotel(booking, from_email, hotel_email):
     subject = (
-        f"Rezerwacja Ap. nr {booking.apartment.name} "
-        "od {booking.date_from}"
+        f"Rezerwacja Ap. nr {booking.apartment.name} " "od {booking.date_from}"
     )
-    url = str(
-        request.build_absolute_uri(
-            reverse("bookings_app:booking", kwargs={"pk": booking.id})
-        )
+    url = settings.BASE_URL + str(
+        reverse("bookings_app:booking", kwargs={"pk": booking.id})
     )
     notes = booking.notes if booking.notes else "-"
     msg = f"""Nowa rezerwacja: #{booking.id} \n
@@ -174,16 +169,14 @@ Zobacz: {url}"""
         handle_error_notification(error_subj, error_msg)
 
 
-def send_webpush_notification_to_hotel(request, booking, hotel_email):
+def send_webpush_notification_to_hotel(booking, hotel_email):
     hotel = User.objects.filter(email=hotel_email).last()
     subject = (
         f"Rezerwacja Ap. nr {booking.apartment.name} "
         f"od {booking.date_from}"
     )
-    url = str(
-        request.build_absolute_uri(
-            reverse("bookings_app:booking", kwargs={"pk": booking.id})
-        )
+    url = settings.BASE_URL + str(
+        reverse("bookings_app:booking", kwargs={"pk": booking.id})
     )
     try:
         payload = {
@@ -226,33 +219,33 @@ def send_confirmation_email(booking, from_email):
         handle_error_notification(error_subj, error_msg)
 
 
-def handle_sending_notifications_about_new_booking(booking, request=None):
+def handle_sending_notifications_about_new_booking(booking):
     from_email = settings.EMAIL_HOST_USER
     hotel_email = AdminEmail.objects.last()
 
     if hotel_email:
         send_email_about_booking_to_hotel(
-            request=request,
             booking=booking,
             from_email=from_email,
             hotel_email=hotel_email,
         )
 
         send_webpush_notification_to_hotel(
-            request=request, booking=booking, hotel_email=hotel_email
+            booking=booking, hotel_email=hotel_email
         )
     send_confirmation_email(booking, from_email)
 
 
 class WebhookResponse(HttpResponse):
+    """
+    HttpResponse where additional function is called, after response
+    has been sent to the client.
+    """
 
-    def __init__(self, request, booking, **kwargs):
+    def __init__(self, booking, **kwargs):
         super().__init__(**kwargs)
-        self.request = request
         self.booking = booking
 
     def close(self):
         super().close()
-        handle_sending_notifications_about_new_booking(
-            request=self.request, booking=self.booking
-        )
+        handle_sending_notifications_about_new_booking(booking=self.booking)

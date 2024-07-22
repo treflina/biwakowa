@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
@@ -31,9 +32,14 @@ urlpatterns = [
         ),
     ),
     path("sitemap.xml", sitemap),
-    path("", include("users.urls")),
     path("", include("bookings.urls")),
     path("", include("core.urls")),
+    path(
+        "wyloguj/",
+        auth_views.LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL),
+        name="logout",
+    ),
+    path("zaloguj/", auth_views.LoginView.as_view(), name="login"),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

@@ -26,7 +26,7 @@
         Kalendarz</a>
     </li>
     <li>
-        <a href="{% url 'users_app:logout' %}"
+        <a href="{% url 'logout' %}"
            class="menu-close flex items-center gap-1">
             <svg class="w-6 h-6 inline-block">
                 <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
@@ -35,7 +35,7 @@
     </li>
 {% else %}
     <li>
-        <a href="{% url 'users_app:user-login' %}"
+        <a href="{% url 'login' %}"
            class="menu-close flex items-center gap-1">
             <svg class="w-6 h-6 inline-block">
                 <use xlink:href="{% static 'img/sprite.svg#logout' %}" href="{% static 'img/sprite.svg#logout' %}" />
