@@ -93,6 +93,7 @@
 
     const handleFilters = () => {
         collapsible?.classList.toggle("show");
+        collapsible?.classList.toggle("not-shown");
     };
     filtersBtn?.addEventListener("click", handleFilters);
 })();

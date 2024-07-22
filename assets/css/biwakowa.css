@@ -249,6 +249,20 @@
     opacity: 1;
 }
 
+.not-shown {
+    max-height: 0;
+    visibility: hidden;
+    opacity: 0;
+}
+
+@media (min-width: 1024px) {
+    .not-shown {
+        max-height: 100%;
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
 .hide {
     display: none;
     opacity: 0;

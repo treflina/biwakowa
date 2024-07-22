@@ -23,8 +23,8 @@
         </button>
     </div>
     {% include 'includes/notifications-modal.html' %}
-    <div class="collapsible max-h-0 opacity-0 invisible lg:visible lg:opacity-100 lg:max-h-full flex flex-wrap justify-center
-            items-center gap-2  mb-3 px-1 md:px-2 lg:px-4 min-w-[155px]">
+    <div class="collapsible not-shown lg:visible lg:opacity-100 lg:max-h-full flex flex-wrap justify-center
+            items-center gap-2  mb-3 px-1 md:px-2 lg:px-4">
         <a href="{% url 'bookings_app:upcoming_bookings' %}"
             class="btn-admin cursor-pointer"
             {% if upcoming %}
