@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack --mode development --watch",
         "build": "webpack",
-        "postcss": "postcss --use postcss-cssnext --output biwakowa/static/css/biwakowa2.css assets/css/biwakowa.css"
+        "postcss": "postcss --use postcss-cssnext --use cssnano --output biwakowa/static/css/biwakowa.min.css assets/css/biwakowa.css"
     },
     "author": "",
     "license": "ISC",
