@@ -33,7 +33,9 @@
             {% endif %}
         <p>Pokaż nadchodzące</p>
         </a>
-        <form method="get" hx-get="{% url 'bookings_app:bookings' %}" hx-target="#bookings-table"
+        <form method="get" {% if upcoming %} hx-get="{% url 'bookings_app:upcoming_bookings' %}"
+            {% else %} hx-get="{% url 'bookings_app:bookings' %}" {% endif %}
+            hx-target="#bookings-table"
             class="flex flex-wrap justify-center gap-2">
             {{ filter.form.as_p }}
             <button type="submit" class="btn-admin">Filtruj</button>
