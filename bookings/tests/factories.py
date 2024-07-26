@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import datetime as dt
 
 from apartments.models import Apartment, ApartmentType, Price
+from home.models import PhoneSnippet
 
 from ..models import Booking
 from .base import faker
@@ -65,3 +66,10 @@ class BookingFactory(factory.django.DjangoModelFactory):
 
     class Params:
         duration = timedelta(days=3)
+
+
+class PhoneFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PhoneSnippet
+
+    phone = "000-000-001"

@@ -24,13 +24,14 @@ from home.models import PhoneSnippet
 
 from .filters import BookingsFilter
 from .forms import (
-    BookingForm,
-    BookingUpdateForm,
-    OnlineBookingDetailsForm,
+    BookingForm, BookingUpdateForm, OnlineBookingDetailsForm,
     OnlineBookingForm,
 )
 from .models import Booking
-from .utils import WebhookResponse, calculated_price, handle_error_notification
+from .utils import (
+    WebhookResponse, calculated_price, fulfill_order, get_available_apartments,
+    handle_error_notification, handle_sending_notifications_about_new_booking,
+)
 
 logger = logging.getLogger("django")
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -67,28 +68,11 @@ def booking_search(request, year=None, month=None):
             departure = datetime.strptime(
                 request.GET.get("departure"), "%d.%m.%Y"
             ).date()
-
-            available_apartments = []
-            apartments = Apartment.objects.all().order_by("name")
-
             session_email = request.session.get("email", None)
 
-            for apartment in apartments:
-                if session_email:
-                    qs = Booking.objects.bookings_periods(
-                        apartment, arrival, departure
-                    ).exclude(
-                        Q(email=session_email)
-                        & Q(stripe_transaction_status="pending")
-                    )
-                else:
-                    qs = Booking.objects.bookings_periods(
-                        apartment, arrival, departure
-                    )
-                if not qs.exists():
-                    price = calculated_price(apartment, arrival, departure)
-                    apartment.price = price
-                    available_apartments.append(apartment)
+            available_apartments = get_available_apartments(
+                session_email, arrival, departure
+            )
 
             context["available_apartments"] = available_apartments
             context["arrival"] = arrival
@@ -285,7 +269,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                 messages.error(
                     request, _("Booking this apartment is not possible now.")
                 )
-                err_subject = str(_("Error. No stripe product_id"))
+                err_subject = "Error. No stripe product_id"
                 err_msg = (
                     f"No stripe id for apartment {ap_to_book.name}. "
                     f"Booking details: {guest} {guest_phone} {email} "
@@ -339,11 +323,13 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
                 messages.error(
                     request,
-                    f"Bardzo nam przykro, ale wystąpił problem \
-                    z połączeniem internetowym podczas \
-                    próby utworzenia płatności. \n \
-                    Spróbuj ponownie lub zarezerwuj \
-                    telefonicznie pod nr {phone}.",
+                    (
+                        f"Bardzo nam przykro, ale wystąpił problem "
+                        f"z połączeniem internetowym podczas "
+                        f"próby utworzenia płatności. \n "
+                        f"Spróbuj ponownie lub zarezerwuj "
+                        f"telefonicznie pod nr {phone}."
+                    ),
                 )
                 return redirect("bookings_app:booking-search")
 
@@ -353,19 +339,23 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
 
                 messages.error(
                     request,
-                    f"Bardzo nam przykro, ale wystąpił problem \
-                    podczas próby utworzenia płatności. \n \
-                    Spróbuj ponownie lub zarezerwuj \
-                    telefonicznie pod nr {phone}.",
+                    (
+                        f"Bardzo nam przykro, ale wystąpił problem "
+                        f"podczas próby utworzenia płatności. \n"
+                        f"Spróbuj ponownie lub zarezerwuj "
+                        f"telefonicznie pod nr {phone}."
+                    ),
                 )
                 err_subject = (
                     "Error while creating checkout session or db saving"
                 )
-                err_msg = f"{repr(ex)} while booking apartment \
-                    {ap_to_book.name}. \
-                    Booking details: {guest} {guest_phone} {email} \
-                    from {arrival} to {departure} \
-                    notes: {guest_notes}"
+                err_msg = (
+                    f"{repr(ex)} while booking apartment "
+                    f"{ap_to_book.name}. "
+                    f"Booking details: {guest} {guest_phone} {email} "
+                    f"from {arrival} to {departure} "
+                    f"notes: {guest_notes}"
+                )
                 handle_error_notification(err_subject, err_msg)
                 return redirect("bookings_app:booking-search")
 
@@ -380,8 +370,15 @@ def success(request):
     for key in list(request.session.keys()):
         if key == "email":  # skip keys set by the django system
             del request.session[key]
-    # stripe.api_key = settings.STRIPE_SECRET_KEY
-    # checkout_session_id = request.GET.get('session_id', None)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    checkout_session_id = request.GET.get("session_id", None)
+
+    if checkout_session_id is not None:
+        new_booking = fulfill_order(checkout_session_id)
+        if new_booking:
+            handle_sending_notifications_about_new_booking(new_booking)
+
     return render(request, "bookings/success.html")
 
 
@@ -425,24 +422,9 @@ def stripe_webhook(request):
         handle_error_notification(err_subj, err_msg)
 
     if event["type"] == "checkout.session.completed":
-        try:
-            booking = Booking.objects.get(stripe_checkout_id=session_id)
-        except Booking.DoesNotExist:
-            booking = None
-            err_subj = str(_("Session completed, booking not found"))
-            err_msg = (
-                f"Session completed (session id: {session_id}) "
-                f"webhook was sent, but related booking was not found "
-                f"in the database."
-            )
-            handle_error_notification(err_subj, err_msg)
-
-        if booking and session.payment_status == "paid":
-            booking.stripe_transaction_status = "success"
-            booking.paid = True
-            booking.save()
-
-            return WebhookResponse(booking=booking, status=200)
+        new_booking = fulfill_order(session_id)
+        if new_booking:
+            return WebhookResponse(booking=new_booking, status=200)
 
     elif event["type"] == "checkout.session.expired":
         try:

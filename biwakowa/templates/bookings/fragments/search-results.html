@@ -27,13 +27,7 @@
             Dostępne apartamenty w terminie
             <span class="text-amber-600">{{ arrival|date:'d.m.Y' }}</span> do
             <span class="text-amber-600">{{ departure|date:'d.m.Y' }}</span>
-            ({{ num_nights }}
-            {% if num_nights == 3 or num_nights == 4 %}
-                &nbsp;noclegi
-            {% else %}
-                &nbsp;noclegów
-            {% endif %}
-            ):
+            ({{ num_nights }}{% if num_nights == 3 or num_nights == 4 %}&nbsp;noclegi{% else %}&nbsp;noclegów{% endif %}):
         </h2>
         {% for apartment in available_apartments %}
             <div class="flex flex-wrap sm:flex-nowrap mx-2 p-2 gap-4 border-2 border-gray-300 rounded-md">

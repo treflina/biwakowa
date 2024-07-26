@@ -2,6 +2,7 @@ import calendar
 import logging
 from datetime import timedelta
 
+import stripe
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,7 +15,10 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from webpush import send_user_notification
 
+from apartments.models import Apartment
 from home.models import AdminEmail, PhoneSnippet
+
+from .models import Booking
 
 logger = logging.getLogger("django")
 
@@ -55,6 +59,33 @@ def calculated_price(apartment, arrival, departure):
         get_price(apartment, date) for date in daterange(arrival, departure)
     ]
     return sum(price_list)
+
+
+def get_available_apartments(session_email, arrival, departure):
+    """
+    List apartments with corresponding prices
+    that are available in the given period of time.
+    """
+    available_apartments = []
+    apartments = Apartment.objects.all().order_by("name")
+
+    for apartment in apartments:
+        if session_email:
+            qs = Booking.objects.bookings_periods(
+                apartment, arrival, departure
+            ).exclude(
+                Q(email=session_email) & Q(stripe_transaction_status="pending")
+            )
+        else:
+            qs = Booking.objects.bookings_periods(
+                apartment, arrival, departure
+            )
+        if not qs.exists():
+            price = calculated_price(apartment, arrival, departure)
+            apartment.price = price
+            available_apartments.append(apartment)
+
+    return available_apartments
 
 
 def booking_dates_assignment(apartment, year, month):
@@ -129,9 +160,6 @@ def handle_error_notification(err_subj, err_msg):
         admin_email = settings.ADMIN_EMAIL
         admin = User.objects.filter(email=admin_email).first()
         send_user_notification(user=admin, payload=payload, ttl=1000)
-    except User.DoesNotExist:
-        admin = None
-        logger.error("Notification not sent. User doesn't exist.")
     except Exception as e:
         logger.error(f"{e}")
     # email notification
@@ -186,9 +214,6 @@ def send_webpush_notification_to_hotel(booking, hotel_email):
             "icon": static("favicon/android-chrome-96x96.png"),
         }
         send_user_notification(user=hotel, payload=payload, ttl=1000)
-    except User.DoesNotExist:
-        hotel = None
-        logger.error("Notification not sent. User doesn't exist.")
     except Exception as e:
         handle_error_notification(
             "Error while sending webpush confirmation to hotel",
@@ -234,6 +259,39 @@ def handle_sending_notifications_about_new_booking(booking):
             booking=booking, hotel_email=hotel_email
         )
     send_confirmation_email(booking, from_email)
+
+
+def fulfill_order(session_id):
+    try:
+        booking = Booking.objects.get(stripe_checkout_id=session_id)
+    except Booking.DoesNotExist:
+        booking = None
+        err_subj = "Session completed, booking not found"
+        err_msg = (
+            f"Session completed (session id: {session_id}), "
+            f"related booking was not found in the database."
+        )
+        handle_error_notification(err_subj, err_msg)
+        return None
+
+    if booking.stripe_transaction_status != "success":
+        try:
+            checkout_session = stripe.checkout.Session.retrieve(session_id)
+
+            if checkout_session.payment_status == "paid":
+                booking.stripe_transaction_status = "success"
+                booking.paid = True
+                booking.save()
+
+                return booking
+
+        except Exception as e:
+            err_subj = "Error while retrieving session_id"
+            err_msg = (
+                f"{repr(e)}. Booking id:{booking.id}, session_id: {session_id}"
+            )
+            handle_error_notification(err_subj, err_msg)
+    return None
 
 
 class WebhookResponse(HttpResponse):

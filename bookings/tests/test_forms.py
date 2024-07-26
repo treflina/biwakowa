@@ -4,9 +4,7 @@ import pytest
 from django.core.exceptions import NON_FIELD_ERRORS
 
 from ..forms import (
-    BookingForm,
-    BookingUpdateForm,
-    OnlineBookingDetailsForm,
+    BookingForm, BookingUpdateForm, OnlineBookingDetailsForm,
     OnlineBookingForm,
 )
 from .base import faker

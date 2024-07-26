@@ -3,16 +3,15 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 
 import pytest
+from django.conf import settings
 from django.core import mail
+from webpush import send_user_notification
 
 from ..utils import (
-    WebhookResponse,
-    booking_dates_assignment,
-    calculated_price,
-    daterange,
-    get_next_prev_month,
-    get_price,
-    send_confirmation_email,
+    WebhookResponse, booking_dates_assignment, calculated_price, daterange,
+    get_available_apartments, get_next_prev_month, get_price,
+    send_confirmation_email, send_email_about_booking_to_hotel,
+    send_webpush_notification_to_hotel,
 )
 
 logger = logging.getLogger("django")
@@ -151,3 +150,67 @@ def test_send_confirmation_email(booking_factory):
     assert mail.outbox[0].from_email == "test@example.com"
     assert mail.outbox[0].to == ["guest@example.com"]
     assert mail.outbox[0].subject == "Potwierdzenie rezerwacji B4B"
+
+
+@pytest.mark.parametrize(
+    "s_email, arrival, departure, validity, count",
+    [
+        ("test@example.com", date(2044, 7, 8), date(2044, 7, 18), True, 3),
+        ("test@example.com", date(2044, 7, 8), date(2044, 7, 19), False, 2),
+        ("test@example.com", date(2044, 7, 7), date(2044, 7, 18), True, 3),
+        (None, date(2044, 7, 7), date(2044, 7, 18), False, 2),
+    ],
+)
+@pytest.mark.django_db
+def test_get_available_apartments(
+    apartment_factory,
+    booking_factory,
+    s_email,
+    arrival,
+    departure,
+    validity,
+    count,
+):
+    ap1 = apartment_factory(name=1)
+    ap2 = apartment_factory(name=2)
+    ap3 = apartment_factory(name=3)
+
+    b1 = booking_factory(
+        apartment=ap1,
+        date_from=date(2044, 7, 1),
+        date_to=date(2044, 7, 8),
+        email="test@example.com",
+        stripe_transaction_status="pending",
+    )
+    booking_factory(
+        apartment=ap1,
+        date_from=date(2044, 7, 18),
+        date_to=date(2044, 7, 25),
+        email="test2@example.com",
+    )
+
+    available_aparts = get_available_apartments(s_email, arrival, departure)
+    assert (ap1 in available_aparts) is validity
+    assert len(available_aparts) == count
+
+
+@pytest.mark.django_db
+def test_send_email_about_booking_to_hotel(booking):
+    from_email = settings.EMAIL_HOST_USER
+    hotel_email = "hotel@example.com"
+    send_email_about_booking_to_hotel(booking, from_email, hotel_email)
+
+    assert len(mail.outbox) > 0
+    assert booking.apartment.name in mail.outbox[0].subject
+    assert booking.guest in mail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_send_webpush_notification_to_hotel(booking, user_factory):
+    user_factory(email="hotel@email.com")
+
+    with patch(
+        "bookings.utils.send_user_notification", MagicMock()
+    ) as mock_func:
+        send_webpush_notification_to_hotel(booking, "hotel@email.com")
+        mock_func.assert_called()

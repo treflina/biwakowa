@@ -1,5 +1,4 @@
 import pytest
-
 from django.core import mail
 
 from ..utils.log import CustomAdminEmailHandler

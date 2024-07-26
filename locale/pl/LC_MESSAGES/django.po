@@ -219,7 +219,7 @@ msgstr "status transakcji"
 
 #: .\bookings\views.py:292
 msgid "Booking this apartment is not possible now."
-msgstr "zarezerwowanie wybranego apartamentu nie jest obecnie możliwe"
+msgstr "Zarezerwowanie wybranego apartamentu nie jest obecnie możliwe"
 
 #: .\bookings\views.py:294
 msgid "Error. No stripe product_id"

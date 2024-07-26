@@ -1,7 +1,9 @@
 import json
 from datetime import date
+from unittest.mock import MagicMock, patch
 
 import pytest
+from django.core import mail
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
@@ -257,7 +259,7 @@ class TestSuccessPage(TestCase):
     def setUp(self):
         from django.contrib.sessions.middleware import SessionMiddleware
 
-        self.request = RequestFactory().get("/")
+        self.request = RequestFactory().get("/", {"session_id": "cs_num_test"})
         middleware = SessionMiddleware(lambda x: None)
         middleware.process_request(self.request)
         self.request.session["email"] = "test@example.com"
@@ -307,7 +309,11 @@ class TestStripeWebhook:
         assert resp.status_code == 400
 
     def test_valid_session_completed_webhook(
-        self, client, mock_stripe_verify_header, booking_factory
+        self,
+        client,
+        mock_stripe_verify_header,
+        mock_stripe_session_retrieve_paid,
+        booking_factory,
     ):
         booking = booking_factory(stripe_checkout_id="cs_test_a1r4DLKrmkYjW4N")
 
@@ -347,3 +353,112 @@ class TestStripeWebhook:
         assert not Booking.objects.filter(
             stripe_checkout_id="cs_test_a1j46z4"
         ).exists()
+
+
+@pytest.mark.django_db
+class TestOnlineBooking:
+
+    url = reverse(
+        "bookings_app:onlinebooking",
+        kwargs={"arrival": "2044-09-03", "departure": "2044-07-09", "pk": "1"},
+    )
+
+    data = {
+        "pk": 1,
+        "name": "Test Guest",
+        "email": "test@example.com",
+        "phone": "8709079070",
+        "arrival": date(2044, 9, 3),
+        "departure": date(2044, 9, 9),
+        "guest_notes": "my wish",
+        "consent": True,
+    }
+
+    def test_invalid_stripe_product_id_handled(
+        self, client, apartment_factory, mock_stripe_session_create_error
+    ):
+        apartment_factory(id=1, stripe_product_id="id_000")
+        resp = client.post(self.url, data=self.data, follow=True)
+
+        assert resp.status_code == 200
+        assertTemplateUsed("bookings/bookings-search.html")
+        assert len(mail.outbox) > 0
+        assert mail.outbox[0].subject == (
+            "Error while creating checkout session or db saving"
+        )
+
+    def test_no_stripe_product_id_handled(self, client, apartment_factory):
+        apartment_factory(id=1, stripe_product_id=None)
+        resp = client.post(self.url, data=self.data, follow=True)
+
+        assert resp.status_code == 200
+        assertTemplateUsed("bookings/bookings-search.html")
+        assert len(mail.outbox) > 0
+        assert mail.outbox[0].subject == ("Error. No stripe product_id")
+
+    def test_stripe_connection_error(
+        self,
+        client,
+        apartment_factory,
+        phone_snippet,
+        mock_stripe_connection_error,
+    ):
+        apartment_factory(id=1, stripe_product_id="id_000")
+        resp = client.post(self.url, data=self.data, follow=True)
+
+        assert resp.status_code == 200
+        assertTemplateUsed("bookings/bookings-search.html")
+        assert phone_snippet.phone in str(resp.content)
+
+    def test_booking_created(self, apartment_factory, client):
+        apartment_factory(id=1, stripe_product_id="id_000")
+
+        with patch("stripe.checkout.Session.create") as checkout_create:
+            mock_resp_obj = MagicMock(status_code=200)
+            mock_resp_obj.id = "cs_test_a11YY"
+            checkout_create.return_value = mock_resp_obj
+            client.post(self.url, data=self.data)
+
+        booking = Booking.objects.get(stripe_checkout_id="cs_test_a11YY")
+        assert booking.stripe_transaction_status == "pending"
+
+
+@pytest.mark.django_db
+class TestCancelPage:
+
+    url = reverse("bookings_app:cancel")
+
+    def test_cancel_page_loads(self, client, phone_snippet):
+
+        with patch("stripe.checkout.Session.retrieve") as mock_retrieve:
+            mock_resp = MagicMock()
+            mock_resp.url = "https://checkout/id_some"
+            mock_retrieve.return_value = mock_resp
+            resp = client.get(self.url, data={"session_id": "id_some"})
+
+        assert resp.status_code == 200
+        assert phone_snippet.phone in str(resp.content)
+        assert "https://checkout/id_some" in str(resp.content)
+
+
+@pytest.mark.django_db
+class TestBookingSearch:
+
+    url = reverse("bookings_app:booking-search")
+
+    def test_booking_search_loads(self, client):
+        resp = client.get(self.url)
+        assert resp.status_code == 200
+        assert "form" in resp.context
+
+    def test_booking_search_submitted(self, client):
+        resp = client.get(
+            self.url,
+            {"arrival": "18.08.2024", "departure": "25.08.2024", "submit": ""},
+        )
+        assert resp.status_code == 200
+        assert "available_apartments" in resp.context
+        assert "arrival" in resp.context
+        assert "departure" in resp.context
+        assert "num_nights" in resp.context
+        assert "results" in resp.context

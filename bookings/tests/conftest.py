@@ -1,22 +1,22 @@
+import json
 from datetime import date
 from unittest.mock import patch
 
 import pytest
+import stripe
 from pytest_factoryboy import register
 
 from .base import faker
 from .factories import (
-    ApartmentFactory,
-    ApartmentTypeFactory,
-    BookingFactory,
-    PriceFactory,
-    UserFactory,
+    ApartmentFactory, ApartmentTypeFactory, BookingFactory, PhoneFactory,
+    PriceFactory, UserFactory,
 )
 
 register(ApartmentFactory)
 register(ApartmentTypeFactory)
 register(BookingFactory)
 register(PriceFactory)
+register(PhoneFactory)
 register(UserFactory)
 
 
@@ -56,3 +56,38 @@ def mock_stripe_verify_header():
     with patch("stripe.WebhookSignature.verify_header") as mock_verify:
         mock_verify.return_value = None
         yield mock_verify
+
+
+@pytest.fixture
+def mock_stripe_session_retrieve_paid():
+    with patch("stripe.checkout.Session.retrieve") as mock_paid:
+        mock_paid.return_value.payment_status = "paid"
+        yield mock_paid
+
+
+@pytest.fixture
+def mock_stripe_session_retrieve_unpaid():
+    with patch("stripe.checkout.Session.retrieve") as mock_unpaid:
+        mock_unpaid.return_value.payment_status = "paid"
+        yield mock_unpaid
+
+
+@pytest.fixture
+def mock_stripe_session_create_error():
+    with patch("stripe.checkout.Session.create") as mock_create_error:
+        mock_create_error.side_effect = stripe._error.InvalidRequestError(
+            message="No such product: 'id_000'",
+            param="line_items[0][price_data][product]",
+            code="resource_missing",
+            http_status=400,
+        )
+        yield mock_create_error
+
+
+@pytest.fixture
+def mock_stripe_connection_error():
+    with patch("stripe.checkout.Session.create") as mock_conn_error:
+        mock_conn_error.side_effect = stripe._error.APIConnectionError(
+            message="connection error",
+        )
+        yield mock_conn_error
