@@ -231,7 +231,7 @@ class RegulationsPage(MetadataPageMixin, Page):
 
     heading = models.CharField(_("heading"), max_length=50)
     content = RichTextField(_("text"), features=[
-        "bold", "ol", "ul", "link"
+        "bold", "ol", "ul", "h2", "link"
         ], default="")
 
     content_panels = Page.content_panels + [
