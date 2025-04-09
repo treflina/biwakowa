@@ -4,6 +4,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import (
     FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel,
 )
+from wagtail.fields import RichTextField
 from wagtail.models import Orderable, Page
 from wagtail.snippets.models import register_snippet
 from wagtailmetadata.models import MetadataPageMixin
@@ -220,3 +221,23 @@ class LakeImage(Orderable):
         FieldPanel("image"),
         FieldPanel("alt_attr"),
     ]
+
+
+class RegulationsPage(MetadataPageMixin, Page):
+    template = "home/regulations_page.html"
+    subpage_types = []
+    parent_page_types = ["home.HomePage"]
+    max_count = 2
+
+    heading = models.CharField(_("heading"), max_length=50)
+    content = RichTextField(_("text"), features=[
+        "bold", "ol", "ul", "link"
+        ], default="")
+
+    content_panels = Page.content_panels + [
+        FieldPanel("heading"),
+        FieldPanel("content")
+    ]
+
+    class Meta:
+        verbose_name = _("Regulations Page")

@@ -79,6 +79,19 @@
     background-attachment: fixed;
 }
 
+.bg-header2 {
+    background:
+        linear-gradient(
+            to top right,
+            rgba(0, 0, 56, 0.4) 0%,
+            rgba(0, 0, 56, 0.4) 100%
+        ),
+        url("/static/img/treelg.jpg") no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
 .gallery-imglink {
     position: relative;
     display: block;
@@ -597,5 +610,39 @@
     }
     .flexbin.flexbin-margin {
         margin: 4px;
+    }
+}
+
+.regulations {
+    p,
+    ol,
+    ul {
+        font-size: 1.1rem;
+    }
+
+    p {
+        padding: 0.15rem 0;
+    }
+
+    ol {
+        list-style: decimal;
+    }
+
+    ul {
+        list-style-type: disc;
+    }
+
+    ol,
+    ul {
+        list-style-position: inside;
+        padding: 0.15rem 0;
+    }
+
+    li {
+        padding-top: 0.4rem;
+    }
+
+    b {
+        font-weight: 500;
     }
 }

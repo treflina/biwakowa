@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags i18n wagtailmetadata_tags %}
+{% block meta_tag %}
+    {% meta_tags %}
+{% endblock %}
+{% block extra_css %}
+{% endblock %}
+{% block content %}
+    {% include 'includes/cookies.html' %}
+    <div class="page flex-col">
+    {% include "includes/nav.html" %}
+    <header class="flex justify-center items-center bg-header2 h-64">
+        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+        {{ page.heading }}
+        </h1>
+    </header>
+    <main class="regulations bg-gray-50 py-6 md:py-14 px-2 md:px-6 lg:px-10">
+        <div class="max-w-6xl mx-auto list-decimal">
+        {{ page.content | richtext }}
+        </div>
+    </main>
+    <div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
+    </div>
+{% endblock %}
