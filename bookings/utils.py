@@ -229,7 +229,8 @@ def send_confirmation_email(booking, from_email):
         hotel_phone = PhoneSnippet.objects.last()
         subject = "Potwierdzenie rezerwacji B4B"
         html_message = render_to_string(
-            "bookings/confirmation-email.html",
+            # "bookings/confirmation-email.html",
+            "bookings/confirmation-email-no-payment.html",
             {"booking": booking, "phone": hotel_phone},
         )
         plain_message = strip_tags(html_message)
