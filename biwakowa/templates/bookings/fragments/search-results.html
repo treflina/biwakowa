@@ -6,7 +6,7 @@
         </div>
     {% endif %}
     {% if not results %}
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-[900px] mx-auto">
             {% if messages %}
                 <ul class="messages mb-4">
                     {% for message in messages %}
@@ -15,10 +15,14 @@
                 </ul>
             {% endif %}
             <p class="text-center">
-                Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
+                {% comment %} Minimalna długość pobytu wynosi <span class="font-semibold">3 doby</span>, a w
                 okresie
                 <span class="font-semibold">lipiec-sierpień 7 noclegów od niedzieli do niedzieli</span>
-                (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem).
+                (przy rezerwacjach dokonywanych ponad tydzień przed planowanym przyjazdem). {% endcomment %}
+                Na miesiące <span class="font-semibold">lipiec i sierpień</span> w pierwszej kolejności przyjmowane są
+                <span class="font-semibold">rezerwacje tygodniowe</span> i dłuższe.
+                Rezerwacji krótkich (<span class="font-semibold">min.3 doby</span>)
+                można dokonać w miarę dostępności apartamentów, najwcześniej na tydzień przed planowanym przyjazdem.
             </p>
         </div>
     {% endif %}
@@ -104,9 +108,9 @@
                     <p>
                         Cena: <span class="font-semibold text-xl md:text-2xl">{{ apartment.price }}&nbsp;zł</span>
                     </p>
-                    <form action="{% url 'bookings_app:onlinebooking' arrival departure apartment.id %}"
+                    <form action="{% url 'bookings_app:onlinebooking_without_payment' arrival departure apartment.id %}"
                           method="GET">
-                        <button type="submit" class="btn-cta mr-1 md:mr-4 text-center">Rezerwuję i płacę</button>
+                        <button type="submit" class="btn-cta mr-1 md:mr-4 text-center">Rezerwuję</button>
                     </form>
                 </div>
             </div>

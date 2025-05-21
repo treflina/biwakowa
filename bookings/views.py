@@ -3,6 +3,7 @@ import logging
 import time
 from datetime import date
 
+import after_response
 import stripe
 from django.conf import settings
 from django.contrib import messages
@@ -223,6 +224,78 @@ def delete_booking(request, pk):
         booking_to_delete = get_object_or_404(Booking, id=pk)
         booking_to_delete.delete()
     return HttpResponseRedirect(reverse("bookings_app:bookings"))
+
+def onlinebooking_without_payment(request, arrival=None, departure=None, pk=None):
+    form = OnlineBookingDetailsForm(request=request)
+
+    date_from = datetime.strptime(arrival, "%Y-%m-%d").date()
+    date_to = datetime.strptime(departure, "%Y-%m-%d").date()
+
+    context = {}
+    context["arrival"] = date_from
+    context["departure"] = date_to
+    context["form"] = form
+    context["form"].fields["arrival"].initial = arrival
+    context["form"].fields["departure"].initial = departure
+    context["form"].fields["pk"].initial = pk
+
+    try:
+        ap_to_book = Apartment.objects.get(id=pk)
+        context["apartment"] = ap_to_book
+    except Apartment.DoesNotExist:
+        messages.error(request, _(f"Apartment with id {pk} was not found"))
+        return render(
+            request, "bookings/onlinebookingdetails.html", context=context
+        )
+
+    total_price = calculated_price(ap_to_book, date_from, date_to)
+    context["price"] = total_price
+
+    if request.method == "POST":
+        form = OnlineBookingDetailsForm(request.POST, request=request)
+
+        if form.is_valid():
+            guest = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            guest_phone = form.cleaned_data["phone"]
+            arrival = form.cleaned_data["arrival"]
+            departure = form.cleaned_data["departure"]
+            guest_notes = form.cleaned_data["guest_notes"]
+            guest_notes = f"{guest_notes}" if guest_notes != "" else None
+
+            new_booking = Booking(
+                date_from=arrival,
+                date_to=departure,
+                apartment=ap_to_book,
+                total_price=total_price,
+                guest=guest,
+                phone=guest_phone,
+                email=email,
+                notes=guest_notes,
+            )
+            new_booking.save()
+            request.session["booking_id"] = new_booking.id
+            request.session["email"] = email
+            handle_sending_notifications_about_new_booking.after_response(new_booking)
+            return redirect('bookings_app:success_without_payment')
+
+        else:
+            context["form"] = form
+    return render(
+        request, "bookings/onlinebookingdetails2.html", context=context
+    )
+
+def success_without_payment(request):
+    booking_id = request.session.get("booking_id", None)
+    if booking_id is not None:
+        booking = Booking.objects.filter(id=booking_id).first()
+    if booking:
+        return render(
+        request, "bookings/success_without_payment.html", context={"booking": booking}
+        )
+    else:
+        logger.error(f"Błąd po dokonaniu wstępnej rezerwacji.")
+        return redirect("bookings_app:bookings")
 
 
 def onlinebooking(request, arrival=None, departure=None, pk=None):

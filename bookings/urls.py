@@ -3,7 +3,8 @@ from django.urls import path
 from .views import (
     BookingCreateView, BookingDetailView, BookingsListView, BookingUpdateView,
     UpcomingBookingsListView, booking_search, calendars, cancel,
-    delete_booking, onlinebooking, stripe_webhook, success,
+    delete_booking, onlinebooking, onlinebooking_without_payment, stripe_webhook, success,
+    success_without_payment
 )
 
 app_name = "bookings_app"
@@ -31,12 +32,18 @@ urlpatterns = [
         name="update_booking",
     ),
     path("rezerwacje/<pk>/", BookingDetailView.as_view(), name="booking"),
+    # path(
+    #     "rezerwacja/<arrival>/<departure>/<pk>/",
+    #     onlinebooking,
+    #     name="onlinebooking",
+    # ),
     path(
         "rezerwacja/<arrival>/<departure>/<pk>/",
-        onlinebooking,
-        name="onlinebooking",
+        onlinebooking_without_payment,
+        name="onlinebooking_without_payment",
     ),
     path("success/", success, name="success"),
+    path("sukces/", success_without_payment, name="success_without_payment"),
     path("cancel/", cancel, name="cancel"),
     path("stripe-webhook/", stripe_webhook, name="webhook"),
     path("calendars/<year>/<month>/", calendars, name="calendars"),

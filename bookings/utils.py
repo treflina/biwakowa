@@ -2,6 +2,7 @@ import calendar
 import logging
 from datetime import timedelta
 
+import after_response
 import stripe
 from django.apps import apps
 from django.conf import settings
@@ -150,7 +151,7 @@ def get_next_prev_month(year, month):
     return calendar_months
 
 
-def handle_error_notification(err_subj, err_msg):
+def handle_error_notification(err_subj, err_msg, email=True, push=True):
     """Send error messages to admin."""
 
     logger.error(f"{err_subj}: {err_msg}")
@@ -159,17 +160,19 @@ def handle_error_notification(err_subj, err_msg):
     try:
         admin_email = settings.ADMIN_EMAIL
         admin = User.objects.filter(email=admin_email).first()
-        send_user_notification(user=admin, payload=payload, ttl=1000)
+        if email:
+            send_mail(
+                subject=err_subj,
+                message=err_msg,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.ADMIN_EMAIL],
+                fail_silently=True,
+        )
+        if push:
+            send_user_notification(user=admin, payload=payload, ttl=1000)
+
     except Exception as e:
         logger.error(f"{e}")
-    # email notification
-    send_mail(
-        subject=err_subj,
-        message=err_msg,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[settings.ADMIN_EMAIL],
-        fail_silently=True,
-    )
 
 
 def send_email_about_booking_to_hotel(booking, from_email, hotel_email):
@@ -194,7 +197,7 @@ Zobacz: {url}"""
         error_subj = "Confirmation email not sent for booking"
         error_msg = f"Confirmation email not sent for booking num \
             {booking.id}. {repr(e)}"
-        handle_error_notification(error_subj, error_msg)
+        handle_error_notification(error_subj, error_msg, email=False)
 
 
 def send_webpush_notification_to_hotel(booking, hotel_email):
@@ -218,8 +221,8 @@ def send_webpush_notification_to_hotel(booking, hotel_email):
         handle_error_notification(
             "Error while sending webpush confirmation to hotel",
             repr(e),
+            push=False
         )
-
 
 def send_confirmation_email(booking, from_email):
     try:
@@ -241,9 +244,10 @@ def send_confirmation_email(booking, from_email):
     except Exception as e:
         error_subj = "Sending confirmation email failed"
         error_msg = f"Confirmation email not sent for {booking}. {repr(e)}"
-        handle_error_notification(error_subj, error_msg)
+        handle_error_notification(error_subj, error_msg, email=False)
 
 
+@after_response.enable
 def handle_sending_notifications_about_new_booking(booking):
     from_email = settings.EMAIL_HOST_USER
     hotel_email = AdminEmail.objects.last()

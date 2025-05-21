@@ -1894,6 +1894,10 @@ input[type="range"]::-ms-fill-lower {
   max-width: 800px;
 }
 
+.max-w-\[900px\] {
+  max-width: 900px;
+}
+
 .max-w-\[95\%\] {
   max-width: 95%;
 }
@@ -1988,12 +1992,12 @@ input[type="range"]::-ms-fill-lower {
   cursor: pointer;
 }
 
-.list-none {
-  list-style-type: none;
-}
-
 .list-decimal {
   list-style-type: decimal;
+}
+
+.list-none {
+  list-style-type: none;
 }
 
 .grid-cols-11 {
@@ -2034,6 +2038,12 @@ input[type="range"]::-ms-fill-lower {
 .content-start {
   -ms-flex-line-pack: start;
       align-content: flex-start;
+}
+
+.items-start {
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 
 .items-center {
@@ -2523,6 +2533,10 @@ input[type="range"]::-ms-fill-lower {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {
@@ -3392,6 +3406,11 @@ option {
   .md\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  .md\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .md\:py-14 {

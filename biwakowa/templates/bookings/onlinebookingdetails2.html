@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags %}
+{% block meta_tag %}<title>Formularz rezerwacyjny</title>{% endblock %}
+{% block content %}
+{% include "includes/nav.html" %}
+<main class="w-full min-h-[calc(100dvh-75px)] bg-gray-50">
+    <div class="flex flex-col  max-w-6xl mx-auto  px-2 gap-4 pb-8">
+        <h1 class="font-semibold items-center text-2xl md:text-3xl mt-10 mb-8 text-center">Formularz rezerwacyjny</h1>
+        <form method="POST"
+            hx-post="{{request.path}}"
+            hx-target="#body"
+            class="flex flex-wrap md:flex-nowrap gap-3 mx-auto">
+            {% csrf_token %}
+
+            <div class=" flex flex-col gap-3 basis-1/2 flex-grow max-w-xl mx-auto">
+
+                <div class="flex flex-wrap items-center gap-2 justify-between px-2">
+                    <p class="py-2">Apartament:</p>
+                    <p class="basis-3/5 flex-grow max-w-80 py-2 font-semibold text-lg">
+                        Apartament {{ apartment.apartment_type }} nr&nbsp;{{ apartment.name }}
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 justify-between px-2">
+                    <p class="py-2">Termin:</p>
+                    <p class="basis-3/5 flex-grow max-w-80 py-2 font-semibold text-lg">
+                        {{ arrival|date:"d.m.Y" }} - {{ departure|date:"d.m.Y" }}
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 justify-between px-2">
+                    <p class="py-2">Cena za pobyt:*</p>
+                    <p class="basis-3/5 flex-grow max-w-80 py-2 font-semibold text-lg">{{ price }} zł</p>
+                </div>
+                <div class="flex items-center ml-auto gap-2 my-2">
+                    {% if apartment.apartment_type.type_name == "2-osobowy" %}
+                    <p>
+                        * Cena dotyczy maks. 2 osób. Możliwość zakwaterowania dodatkowej osoby (rozkładana kanapa w
+                        salonie)
+                        za dopłatą 50&nbsp;zł os./doba, płatne na miejscu. Dzieci do lat 3 bezpłatnie.
+                    </p>
+                    {% elif apartment.apartment_type.type_name == "4-osobowy" %}
+                    <p>
+                        * Cena dotyczy maks. 4 osób. Możliwość zakwaterowania dodatkowych 2 osób (rozkładana kanapa w
+                        salonie)
+                        za dopłatą 50&nbsp;zł os./doba, płatne na miejscu. Dzieci do lat 3 bezpłatnie.
+                    </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <p>
+                        Aby dokonać pełnej rezerwacji, prosimy wypełnić formularz z danymi osobowymi, które posłużą
+                        do przyszłego kontaktu, a następnie dokonać przelewu
+                        na konto ośrodka za cały pobyt. <span class="font-semibold">Rezerwacja wstępna zostanie
+                        anulowana po 24&nbsp;godzinach,
+                        jeśli opłata nie wpłynie na konto.</span>
+                    </p>
+                    {% if phone %}
+                    <p class="mt-4">Chętnie odpowiemy na Państwa pytania pod nr telefonu: </p>
+                    <a href="tel:+48{{ phone }}" class="sm:mb-2">{{ phone }}</a>
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="flex flex-col gap-3 basis-1/2 border-2 border-gray-300 rounded-md shadow-lg p-2 md:p-4 bg-white
+                            flex-grow max-w-xl mx-auto">
+                <div class="flex flex-wrap items-center gap-2 justify-between p-2">
+                    <label for="id_name">Imię i nazwisko:</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                    <div class="text-red-700 font-semibold text-center ml-auto">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="flex flex-wrap items-center gap-2 justify-between px-2">
+                    <label for="id_email">E-mail:</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="text-red-700 font-semibold text-center ml-auto">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 px-2">
+                    <label for="id_phone">Telefon:</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                    <div class="text-red-700 font-semibold text-center ml-auto">{{ form.phone.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 px-2">
+                    <label for="id_phone">Uwagi:</label>
+                    {{ form.guest_notes }}
+                    {% if form.guest_notes.errors %}
+                    <div class="text-red-700 font-semibold text-center ml-auto">{{ form.guest_notes.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="flex items-center ml-auto gap-2 mt-2">
+                    {{ form.consent }}
+                    {% if form.consent.errors %}
+                    <div class="text-red-700 font-semibold text-center ml-auto">{{ form.consent.errors }}</div>
+                    {% endif %}
+                    <label for="id_consent">
+                        Przeczytałam/em i akceptuję
+                        <a href="{% slugurl 'regulamin' %}"
+                               class="font-semibold text-blue-700 underline hover:decoration-transparent hover:text-blue-600
+                                    focus:decoration-transparent focus:text-blue-600 transition-all duration-300">regulamin korzystania z apartamentów</a>
+                        oraz
+                        <a href="{% slugurl 'polityka' %}"
+                               class="font-semibold text-blue-700 underline hover:text-blue-600 hover:decoration-transparent
+                                    focus:decoration-transparent focus:text-blue-600 transition-all duration-300">politykę prywatności</a>
+                    </label>
+                </div>
+                {{ form.arrival }}
+                {{ form.departure }}
+                {{ form.pk }}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="text-red-700 font-semibold mt-2 text-center">{{ message|safe }}</div>
+                {% endfor %}
+                {% endif %}
+                {% if form.non_field_errors %}
+                <div class="my-4 text-red-700 font-semibold text-center">{{ form.non_field_errors }}</div>
+                {% endif %}
+                <button type="submit" class="btn-cta cursor-pointer my-4">
+                    <span class="btn-text inline-block txt-content">Potwierdzam rezerwację</span>
+                    <span class="loader hx-indicator"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <input type="hidden"
+        class="focus:outline-none focus:border-2 focus:border-blue-200 hidden  w-5 h-5 text-blue-600 bg-gray-100
+           border-gray-300 rounded focus:ring-blue-500 focus:ring-2 basis-3/5 max-w-full xsm:max-w-[350px] bg-gray-50 border-2
+           border-blue-300 text-gray-900 rounded-md focus:ring-amber-300 focus:border-amber-300 block ps-10 p-2.5  dark:bg-gray-700
+           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+</main>
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
+{% endblock %}
