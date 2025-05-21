@@ -201,7 +201,7 @@ Zobacz: {url}"""
 
 
 def send_webpush_notification_to_hotel(booking, hotel_email):
-    hotel = User.objects.filter(email=hotel_email).last()
+    hotel = User.objects.filter(email=hotel_email).first()
     subject = (
         f"Rezerwacja Ap. nr {booking.apartment.name} "
         f"od {booking.date_from}"
@@ -216,7 +216,7 @@ def send_webpush_notification_to_hotel(booking, hotel_email):
             "url": url,
             "icon": static("favicon/android-chrome-96x96.png"),
         }
-        send_user_notification(user=hotel, payload=payload, ttl=1000)
+        send_user_notification(user=hotel, payload=payload, ttl=160000)
     except Exception as e:
         handle_error_notification(
             "Error while sending webpush confirmation to hotel",

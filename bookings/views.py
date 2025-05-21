@@ -297,6 +297,7 @@ def success_without_payment(request):
         logger.error(f"Błąd po dokonaniu wstępnej rezerwacji.")
         return redirect("bookings_app:bookings")
 
+# views for online payment
 
 def onlinebooking(request, arrival=None, departure=None, pk=None):
     form = OnlineBookingDetailsForm(request=request)

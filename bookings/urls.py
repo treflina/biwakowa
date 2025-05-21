@@ -32,21 +32,23 @@ urlpatterns = [
         name="update_booking",
     ),
     path("rezerwacje/<pk>/", BookingDetailView.as_view(), name="booking"),
-    # path(
-    #     "rezerwacja/<arrival>/<departure>/<pk>/",
-    #     onlinebooking,
-    #     name="onlinebooking",
-    # ),
+    path("calendars/<year>/<month>/", calendars, name="calendars"),
+    path("calendars/", calendars, name="calendars"),
+    path("wyszukaj/", booking_search, name="booking-search"),
+    # views for online reservation without payment
     path(
         "rezerwacja/<arrival>/<departure>/<pk>/",
         onlinebooking_without_payment,
         name="onlinebooking_without_payment",
     ),
-    path("success/", success, name="success"),
     path("sukces/", success_without_payment, name="success_without_payment"),
-    path("cancel/", cancel, name="cancel"),
-    path("stripe-webhook/", stripe_webhook, name="webhook"),
-    path("calendars/<year>/<month>/", calendars, name="calendars"),
-    path("calendars/", calendars, name="calendars"),
-    path("wyszukaj/", booking_search, name="booking-search"),
+    # views for online payment
+    # path(
+    #     "rezerwacja/<arrival>/<departure>/<pk>/",
+    #     onlinebooking,
+    #     name="onlinebooking",
+    # ),
+    # path("success/", success, name="success"),
+    # path("cancel/", cancel, name="cancel"),
+    # path("stripe-webhook/", stripe_webhook, name="webhook"),
 ]
