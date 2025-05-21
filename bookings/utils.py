@@ -17,7 +17,7 @@ from django.utils.html import strip_tags
 from webpush import send_user_notification
 
 from apartments.models import Apartment
-from home.models import AdminEmail, PhoneSnippet
+from home.models import AdminEmail, BankAccountNumberSnippet, PhoneSnippet
 
 from .models import Booking
 
@@ -227,11 +227,12 @@ def send_webpush_notification_to_hotel(booking, hotel_email):
 def send_confirmation_email(booking, from_email):
     try:
         hotel_phone = PhoneSnippet.objects.last()
+        bank_account = BankAccountNumberSnippet.objects.last()
         subject = "Potwierdzenie rezerwacji B4B"
         html_message = render_to_string(
             # "bookings/confirmation-email.html",
             "bookings/confirmation-email-no-payment.html",
-            {"booking": booking, "phone": hotel_phone},
+            {"booking": booking, "phone": hotel_phone, "bank_account": bank_account},
         )
         plain_message = strip_tags(html_message)
         to = booking.email
