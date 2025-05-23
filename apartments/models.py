@@ -2,9 +2,10 @@ from datetime import datetime
 
 from django.db import models
 from django.utils.translation import gettext as _
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from modelcluster.fields import ParentalKey
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, MultipleChooserPanel
 from wagtail.fields import RichTextField
-from wagtail.models import Page
+from wagtail.models import Page, Orderable
 from wagtail.snippets.models import register_snippet
 from wagtailmetadata.models import MetadataPageMixin
 
@@ -143,6 +144,12 @@ class ApartmentPage(MetadataPageMixin, Page):
             ],
             heading=_("Description part II"),
         ),
+        MultipleChooserPanel(
+            'gallery_images1', label="Zdjęcia pierwszy apartament", chooser_field_name="image"
+        ),
+        MultipleChooserPanel(
+            'gallery_images2', label="Zdjęcia drugi apartament", chooser_field_name="image"
+        ),
     ]
 
     class Meta:
@@ -156,3 +163,25 @@ class ApartmentPage(MetadataPageMixin, Page):
         context["apartment1"] = apartments.first()
         context["apartment2"] = apartments.last()
         return context
+
+
+class ApartmentPageGalleryImage1(Orderable):
+    page = ParentalKey(ApartmentPage, on_delete=models.CASCADE, related_name='gallery_images1')
+    image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+'
+    )
+
+    panels = [
+        FieldPanel('image'),
+    ]
+
+
+class ApartmentPageGalleryImage2(Orderable):
+    page = ParentalKey(ApartmentPage, on_delete=models.CASCADE, related_name='gallery_images2')
+    image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+'
+    )
+
+    panels = [
+        FieldPanel('image'),
+    ]

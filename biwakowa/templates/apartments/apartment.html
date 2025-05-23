@@ -126,78 +126,21 @@
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="{% static 'img/sypialnia.jpg' %}"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/500/600"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/300/300"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/600/400"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/400/500"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="{% static 'img/sypialnia.jpg' %}"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/500/300"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/300/400"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                    {% for gallery_image in page.gallery_images1.all %}
+                        {% image gallery_image.image width-500 as img %}
+                        {% image gallery_image.image original as img_full %}
+                        <a href="{{img_full.url}}"
+                        data-fslightbox="gallery"
+                        data-alt="{{img.alt}}"
+                        class="gallery-imglink">
+                            <img src="{{img.url}}"
+                                alt="{{img.alt}}"
+                                loading="lazy"
+                                class="rounded-md">
+                            <span class="sr-only">Link do powiększonego zdjęcia</span>
+                        </a>
+                    {% endfor %}
+
                 </div>
                 <div data-aos="fade-up"
                      class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
@@ -207,78 +150,21 @@
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="{% static 'img/sypialnia.jpg' %}"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/500/600"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/300/300"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/600/400"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/400/500"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="{% static 'img/sypialnia.jpg' %}"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/500/300"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
-                    <a href="{% static 'img/sypialnia.jpg' %}"
-                       data-fslightbox="gallery2"
-                       data-alt=""
-                       class="gallery-imglink">
-                        <img src="https://picsum.photos/300/400"
-                             alt=""
-                             loading="lazy"
-                             class="rounded-md">
-                        <span class="sr-only">Link do powiększonego zdjęcia</span></a>
+                    {% for gallery_image in page.gallery_images2.all %}
+                        {% image gallery_image.image width-500 as img %}
+                        {% image gallery_image.image original as img_full %}
+                        <a href="{{img_full.url}}"
+                        data-fslightbox="gallery"
+                        data-alt="{{img.alt}}"
+                        class="gallery-imglink">
+                            <img src="{{img.url}}"
+                                alt="{{img.alt}}"
+                                loading="lazy"
+                                class="rounded-md">
+                            <span class="sr-only">Link do powiększonego zdjęcia</span>
+                        </a>
+                    {% endfor %}
+                  >Link do powiększonego zdjęcia</span></a>
                 </div>
             </section>
         </main>
