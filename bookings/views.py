@@ -127,6 +127,7 @@ def calendars(request, year=None, month=None):
         "next_year": cal_months["next_year"],
         "num_days": range(1, num_days + 1),
         "first_day": first_day,
+        "today": date.today(),
     }
 
     return render(
@@ -258,6 +259,7 @@ def onlinebooking_without_payment(request, arrival=None, departure=None, pk=None
             guest = form.cleaned_data["name"]
             email = form.cleaned_data["email"]
             guest_phone = form.cleaned_data["phone"]
+            address = form.cleaned_data["address"]
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
             guest_notes = form.cleaned_data["guest_notes"]
@@ -271,6 +273,7 @@ def onlinebooking_without_payment(request, arrival=None, departure=None, pk=None
                 guest=guest,
                 phone=guest_phone,
                 email=email,
+                address=address,
                 notes=guest_notes,
             )
             new_booking.save()
@@ -332,6 +335,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
             guest = form.cleaned_data["name"]
             email = form.cleaned_data["email"]
             guest_phone = form.cleaned_data["phone"]
+            address = form.cleaned_data["address"]
             arrival = form.cleaned_data["arrival"]
             departure = form.cleaned_data["departure"]
             guest_notes = form.cleaned_data["guest_notes"]
@@ -383,6 +387,7 @@ def onlinebooking(request, arrival=None, departure=None, pk=None):
                     guest=guest,
                     phone=guest_phone,
                     email=email,
+                    address=address,
                     notes=guest_notes,
                     stripe_checkout_id=checkout_session.id,
                     stripe_transaction_status="pending",

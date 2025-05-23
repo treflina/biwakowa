@@ -4,22 +4,31 @@
     <div class="flex flex-col sm:flex-row w-full justify-center items-center gap-4 pt-6 pb-10 relative">
         <h2 class="font-semibold text-2xl text-center ">Kalendarz rezerwacji:</h2>
         <div class="flex flex-row gap-3 items-center justify-between min-w-[275px] border-2 border-gray-300 rounded-md bg-gray-50">
-            <div hx-get="/calendars/{{ previous_year }}/{{ previous_month }}/"
+            {% if not user.is_authenticated and today >= displayed_month %}
+            <div class="cal-link inline-block text-3xl text-gray-600 pb-1 border-r-2 px-2  bg-gray-50">
+                <p>&laquo;<span class="sr-only">Poprzedni miesiąc</span></p>
+            </div>
+            {% else %}
+            <button hx-get="/calendars/{{ previous_year }}/{{ previous_month }}/"
                  hx-target="#booking-calendar"
                  hx-swap="innerHTML"
+                 tabindex="0"
                  class="cal-link inline-block text-3xl pb-1 border-r-2 px-2  bg-gray-300 cursor-pointer hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
-                <p>&laquo;</p>
-            </div>
+                <p>&laquo;<span class="sr-only">Poprzedni miesiąc</span></p>
+            </button>
+            {% endif %}
             <p class="font-semibold text-xl text-center text-gray-800 uppercase">
                 {% language 'pl' %}
                     {{ displayed_month|date:"F Y" }}{% endlanguage %}
                 </p>
-                <div hx-get="/calendars/{{ next_year }}/{{ next_month }}/"
+                <button hx-get="/calendars/{{ next_year }}/{{ next_month }}/"
                      hx-target="#booking-calendar"
                      hx-swap="innerHTML"
-                     class="cal-link inline-block text-3xl pb-1 border-l-2 px-2 bg-gray-300 cursor-pointer hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
-                    <p>&raquo;</p>
-                </div>
+                     tabindex="0"
+                     class="cal-link inline-block text-3xl pb-1 border-l-2 px-2 bg-gray-300
+                      hover:bg-amber-300 focus:bg-amber-300 transition-all duration-300">
+                    <p>&raquo;<span class="sr-only">Następny miesiąc</span></p>
+                </button>
             </div>
         </div>
         <div class="calendars flex flex-wrap flex-col sm:flex-row w-full justify-center gap-3"

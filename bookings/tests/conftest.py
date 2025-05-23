@@ -41,6 +41,7 @@ def booking_data(apartment):
         "phone": "+48/609 000 000",
         "guest_notes": faker.text(max_nb_chars=10),
         "consent": True,
+        "address": faker.address(),
     }
 
 

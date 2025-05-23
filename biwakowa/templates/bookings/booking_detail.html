@@ -35,6 +35,10 @@
                 {% if booking.phone %}{{ booking.phone }}{% endif %}
             </p>
             <p>
+                <span class="font-semibold">Adres:</span>
+                {% if booking.address %}{{ booking.address }}{% endif %}
+            </p>
+            <p>
                 <span class="font-semibold">Cena:</span>
                 {% if booking.total_price %}{{ booking.total_price }} zł{% endif %}
                 </p>

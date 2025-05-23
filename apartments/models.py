@@ -68,11 +68,20 @@ class Apartment(models.Model):
         default="0",
         max_length=10,
     )
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="image",
+    )
 
     panels = [
         FieldPanel("name"),
         FieldPanel("apartment_type"),
         FieldPanel("floor"),
+        FieldPanel("image"),
         FieldPanel("stripe_product_id"),
         FieldPanel("base_price"),
     ]

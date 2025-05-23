@@ -67,6 +67,7 @@ class BookingBaseForm(forms.ModelForm):
             "guest",
             "phone",
             "email",
+            "address",
             "total_price",
             "paid",
             "notes",
@@ -102,6 +103,9 @@ class BookingBaseForm(forms.ModelForm):
                     "placeholder": "Email",
                     "type": "email",
                 }
+            ),
+            "address": TextInput(
+                attrs={"class": "rounded-md", "placeholder": "Adres"}
             ),
             "total_price": NumberInput(
                 attrs={
@@ -187,6 +191,9 @@ class OnlineBookingDetailsForm(forms.Form):
         required=True, widget=forms.TextInput(attrs={"class": input_class})
     )
     phone = forms.CharField(
+        required=True, widget=forms.TextInput(attrs={"class": input_class})
+    )
+    address = forms.CharField(
         required=True, widget=forms.TextInput(attrs={"class": input_class})
     )
     guest_notes = forms.CharField(

@@ -29,6 +29,9 @@ class Booking(models.Model):
         _("phone number"), max_length=255, blank=True, null=True
     )
     email = models.EmailField(_("email"), blank=True, null=True)
+    address = models.CharField(
+        "Adres", max_length=255, blank=True, null=True
+    )
     total_price = models.DecimalField(
         _("total price"), decimal_places=2, max_digits=7, null=True, blank=True
     )
