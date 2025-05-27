@@ -4,14 +4,16 @@
 {% meta_tags %}
 {% endblock %} {% endcomment %}
 {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}" />
 {% endblock %}
 {% block content %}
 {% include 'includes/cookies.html' %}
 <div class="page flex-col">
     {% include "includes/nav.html" %}
+    {% image page.header_image original as img %}
     <header class="flex justify-center items-center bg-header2 h-64" {% if page.header_image %}
         style="background-image:  url(' {{ img.url }}');" {% endif %}>
-        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+        <h1 class="text-4xl sm:text-4xl md:text-5xl font-['Rozha_One']  text-center text-white p-2">
             {{ page.title }}
         </h1>
     </header>
@@ -20,12 +22,15 @@
             {{ page.introduction|richtext }}
         </div>
         {% for block in page.body %}
-        <div class="mb-4">
+        <div class="md:mb-4"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            >
             <h2 class="text-3xl sm:text-3xl md:text-4xl font-['Rozha_One'] my-8 text-left w-full">
                 {{block.value.heading}}
             </h2>
             <div class="flex flex-col md:flex-row w-full gap-4 lg:gap-8 pb-2">
-                <div class="md:mr-auto md:max-w-[620px] basis-1/2  text-lg pr-3 pl-3 md:pl-0 order-2">
+                <div class="md:mr-auto md:max-w-[620px] basis-1/2  text-lg md:pl-0 order-2">
                     {{ block.value.text|richtext }}
                 </div>
                 <figure
@@ -46,3 +51,6 @@
 <div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
 
 {% endblock content %}
+{% block extra_js %}
+    <script src="{% static 'js/aos.js' %}"></script>
+{% endblock %}
