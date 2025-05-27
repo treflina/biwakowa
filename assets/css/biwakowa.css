@@ -655,3 +655,25 @@
         font-weight: 500;
     }
 }
+
+.surroundings {
+    b,
+    a {
+        font-weight: 600;
+    }
+
+    p {
+        padding: 0.25rem 0;
+    }
+
+    a {
+        cursor: pointer;
+        color: #0089c7;
+        text-decoration: underline;
+        text-decoration-color: #a2dffb;
+    }
+    a:hover,
+    a:focus {
+        opacity: 0.7;
+    }
+}

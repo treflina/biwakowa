@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags i18n wagtailmetadata_tags %}
+{% comment %} {% block meta_tag %}
+{% meta_tags %}
+{% endblock %} {% endcomment %}
+{% block extra_css %}
+{% endblock %}
+{% block content %}
+{% include 'includes/cookies.html' %}
+<div class="page flex-col">
+    {% include "includes/nav.html" %}
+    <header class="flex justify-center items-center bg-header2 h-64" {% if page.header_image %}
+        style="background-image:  url(' {{ img.url }}');" {% endif %}>
+        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+            {{ page.title }}
+        </h1>
+    </header>
+    <main class="surroundings flex flex-col justify-center items-center max-w-[1200px] mx-auto px-2">
+        <div class="pt-8 pb-2 text-lg leading-relaxed">
+            {{ page.introduction|richtext }}
+        </div>
+        {% for block in page.body %}
+        <div class="mb-4">
+            <h2 class="text-3xl sm:text-3xl md:text-4xl font-['Rozha_One'] my-8 text-left w-full">
+                {{block.value.heading}}
+            </h2>
+            <div class="flex flex-col md:flex-row w-full gap-4 lg:gap-8 pb-2">
+                <div class="md:mr-auto md:max-w-[620px] basis-1/2  text-lg pr-3 pl-3 md:pl-0 order-2">
+                    {{ block.value.text|richtext }}
+                </div>
+                <figure
+                    class="relative basis-1/2 rounded-md grow-0 overflow-hidden order-1
+                    {% if forloop.counter == 1 or forloop.counter == 3 or forloop.counter == 5 %} md:order-3 {% endif %} shadow-md">
+                    {% image block.value.photo width-800 as img %}
+                    <img class="w-full h-full object-cover object-center" src="{{img.url}}" alt="{{img.alt}}">
+                    <figcaption class="flex items-center absolute top-[90%] sm:top-[92%] left-0 w-full h-[10%] sm:h-[8%]
+                                                bg-gray-800 opacity-60 z-20">
+                        <p class="text-white text-lg relative z-30 ml-4">{{block.value.photo_description}}</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+</div>
+<div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
+
+{% endblock content %}

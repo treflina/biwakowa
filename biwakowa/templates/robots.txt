@@ -1,6 +1,7 @@
 User-Agent: *
 Disallow: /admin/
 Disallow: /django-admin/
+Disallow: /static/
 Disallow: /rezerwacje
 Disallow: /rezerwacja
 Disallow: /success

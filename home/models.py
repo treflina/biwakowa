@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail import blocks
 from wagtail.admin.panels import (
     FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel,
 )
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
+from wagtail.images.blocks import ImageBlock
 from wagtail.models import Orderable, Page
 from wagtail.snippets.models import register_snippet
 from wagtailmetadata.models import MetadataPageMixin
@@ -241,3 +243,41 @@ class RegulationsPage(MetadataPageMixin, Page):
 
     class Meta:
         verbose_name = _("Regulations Page")
+
+
+class ContentBlock(blocks.StructBlock):
+    heading = blocks.CharBlock(label="Nagłówek", max_length=50)
+    text = blocks.RichTextBlock(label="Tekst", features=["bold", "link", "ol"])
+    photo = ImageBlock(label="Zdjęcie")
+    photo_description = blocks.CharBlock(label="Podpis pod zdjęciem", max_length=50)
+
+    class Meta:
+        icon = 'edit'
+        label = "Akapit"
+
+
+class SurroundingsPage(MetadataPageMixin, Page):
+    template = "home/surroundings_page.html"
+    subpage_types = []
+    parent_page_types = ["home.HomePage"]
+    max_count = 1
+
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        verbose_name="Zdjęcie nagłówkowe w tle",
+    )
+    introduction = RichTextField("Wprowadzenie", features=["bold"], default="")
+    body = StreamField([('content', ContentBlock()),], verbose_name="Główna treść")
+
+    content_panels = Page.content_panels + [
+        FieldPanel("header_image"),
+        FieldPanel("introduction"),
+        FieldPanel("body")
+    ]
+
+    class Meta:
+        verbose_name = _("Sourroundings Page")
