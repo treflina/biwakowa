@@ -171,7 +171,7 @@ class OnlineBookingForm(forms.Form):
 
 
 class OnlineBookingDetailsForm(forms.Form):
-    input_class = """basis-3/5 flex-grow w-full xsm:max-w-[350px]
+    input_class = """xssm:basis-3/5 flex-grow w-full xssm:max-w-[350px]
         rounded-md border-2
         focus:outline-none border-2 border-blue-300 text-gray-900
         rounded-md focus:ring-amber-300 focus:border-amber-300
