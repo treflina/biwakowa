@@ -1,4 +1,4 @@
-import calendar
+from calendar import Calendar
 import logging
 from datetime import timedelta
 
@@ -88,47 +88,50 @@ def get_available_apartments(session_email, arrival, departure):
 
     return available_apartments
 
-
 def booking_dates_assignment(apartment, year, month):
-    """Assign booking dates as a first, in the middle or last day of stay.
-    Necessary for display purposes in calendars."""
+    """
+    Assign booking dates into categories for calendar display:
+    - 'dates': days that are in the middle of a booking
+    - 'arr_dates': arrival days (start of a booking)
+    - 'dep_dates': departure days (end of a booking)
+    """
 
     Booking = apps.get_model("bookings", "Booking")
-    bookings_list = Booking.objects.bookings_per_month(apartment, year, month)
+    bookings = Booking.objects.bookings_per_month(apartment, year, month)
 
-    cal = calendar.Calendar()
-    month_dates = [
-        date for date in cal.itermonthdates(year, month) if date.month == month
-    ]
+    cal = Calendar()
+    month_days = [d for d in cal.itermonthdates(year, month) if d.month == month]
 
-    dates = []
-    arrival_dates = []
-    departure_dates = []
+    middle_days = set()
+    arrival_days = set()
+    departure_days = set()
 
-    for d in month_dates:
-        for booking in bookings_list:
-            if d > booking.date_from and d < booking.date_to:
-                dates.append(d.day)
-            elif d == booking.date_from:
-                arrival_dates.append(d.day)
-            elif d == booking.date_to:
-                departure_dates.append(d.day)
+    for booking in bookings:
+        start = booking.date_from
+        end = booking.date_to
 
-    dates.extend(list(set(arrival_dates) & set(departure_dates)))
-    dates = sorted(set(dates))
-    arrival_dates_list = sorted(
-        set([day for day in arrival_dates if day not in dates])
-    )
-    departure_dates_list = sorted(
-        set([day for day in departure_dates if day not in dates])
-    )
-    bookings_dates_dict = {
+        for day in month_days:
+            if start < day < end:
+                middle_days.add(day.day)
+            elif day == start:
+                arrival_days.add(day.day)
+            elif day == end:
+                departure_days.add(day.day)
+
+    # Handle overlap: if a day is both arrival and departure, treat it as a middle day
+    overlapping_days = arrival_days & departure_days
+    middle_days.update(overlapping_days)
+
+    # Remove overlaps from arrival and departure sets
+    arrival_days.difference_update(middle_days)
+    departure_days.difference_update(middle_days)
+
+    return {
         "apartment": apartment,
-        "dates": dates,
-        "arr_dates": arrival_dates_list,
-        "dep_dates": departure_dates_list,
+        "dates": sorted(middle_days),
+        "arr_dates": sorted(arrival_days),
+        "dep_dates": sorted(departure_days),
     }
-    return bookings_dates_dict
 
 
 def get_next_prev_month(year, month):

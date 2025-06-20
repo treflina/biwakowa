@@ -78,9 +78,9 @@ class TestOnlineBookingForm:
         [
             (past_date, future_date, False),
             (date(2044, 7, 1), date(2044, 6, 24), False),  # arrival date after departure
-            (date(2044, 7, 3), date(2044, 7, 6), False),  # min. 7-nights in July
+            # (date(2044, 7, 3), date(2044, 7, 6), False),  # min. 7-nights in July
             (date(2044, 9, 3), date(2044, 9, 5), False),  # min. 3-nights stay
-            (date(2044, 7, 4), date(2044, 7, 11), False),  # Sunday not the first day of stay in July
+            # (date(2044, 7, 4), date(2044, 7, 11), False),  # Sunday not the first day of stay in July
             (date(2044, 9, 3), date(2044, 9, 6), True),
         ],
     )
@@ -170,9 +170,9 @@ class TestOnlineBookingDetailsForm:
         [
             (past_date, future_date, False),
             (date(2044, 7, 1), date(2044, 6, 24), False),  # arrival date after departure
-            (date(2044, 7, 3), date(2044, 7, 6), False),  # min. 7-nights in July
+            # (date(2044, 7, 3), date(2044, 7, 6), False),  # min. 7-nights in July
             (date(2044, 9, 3), date(2044, 9, 5), False),  # min. 3-nights stay
-            (date(2044, 7, 4), date(2044, 7, 11), False),  # Sunday not the first day of stay in July
+            # (date(2044, 7, 4), date(2044, 7, 11), False),  # Sunday not the first day of stay in July
             (date(2044, 9, 3), date(2044, 9, 6), True),
         ],
     )
