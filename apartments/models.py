@@ -28,9 +28,9 @@ class ApartmentType(models.Model):
 @register_snippet
 class Price(models.Model):
     amount = models.DecimalField(_("price"), max_digits=6, decimal_places=2)
-    apartment_type = models.ForeignKey(ApartmentType, on_delete=models.CASCADE)
-    start_date = models.DateField(_("start date"))
-    end_date = models.DateField(default=None, null=True, blank=True)
+    apartment_type = models.ForeignKey(ApartmentType, verbose_name="Typ apartamentu", on_delete=models.CASCADE)
+    start_date = models.DateField("Od")
+    end_date = models.DateField("Do", default=None, null=True, blank=True)
 
     panels = [
         FieldPanel("amount"),
@@ -55,7 +55,7 @@ class Price(models.Model):
 @register_snippet
 class Apartment(models.Model):
     name = models.CharField(_("apartment's name"), max_length=50, unique=True)
-    apartment_type = models.ForeignKey(ApartmentType, on_delete=models.PROTECT)
+    apartment_type = models.ForeignKey(ApartmentType, verbose_name="Typ apartamentu", on_delete=models.PROTECT)
     stripe_product_id = models.CharField(
         _("stripe product id"), max_length=255, null=True, blank=True
     )
@@ -74,7 +74,7 @@ class Apartment(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name="image",
+        verbose_name="zdjęcie",
     )
 
     panels = [
@@ -107,7 +107,7 @@ class ApartmentPage(MetadataPageMixin, Page):
         related_name="apartment_type",
         null=True,
         blank=True,
-        verbose_name="apartaments' type",
+        verbose_name="Typ apartamentu",
     )
     # TODO  remove null=True
 
@@ -119,7 +119,7 @@ class ApartmentPage(MetadataPageMixin, Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name="image",
+        verbose_name="Zdjęcie",
     )
     caption_1 = models.CharField(_("caption"), max_length=50, null=True)
 
@@ -130,7 +130,7 @@ class ApartmentPage(MetadataPageMixin, Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name="image",
+        verbose_name="Zdjęcie",
     )
     caption_2 = models.CharField(_("caption"), max_length=50, null=True)
 

@@ -48,11 +48,11 @@ def validate_arrival_and_departure_dates(arrival, departure):
             )
         if arrival < today or departure < today:
             raise ValidationError(_("Selected date can't be a past date."))
-        if arrival.month in [7, 8] and departure.month in [7, 8]:
-            if (departure - arrival).days < 7 and ((arrival - today).days > 7):
-                raise ValidationError(error_msg("MIN_7_NIGHTS"))
-            if (arrival - today).days > 7 and arrival.weekday() != 6:
-                raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
+        # if arrival.month in [7, 8] and departure.month in [7, 8]:
+        #     if (departure - arrival).days < 7 and ((arrival - today).days > 7):
+        #         raise ValidationError(error_msg("MIN_7_NIGHTS"))
+        #     if (arrival - today).days > 7 and arrival.weekday() != 6:
+        #         raise ValidationError(error_msg("FIRST_DAY_SUNDAY"))
         if (departure - arrival).days < 3:
             raise ValidationError(_("Minimum 3-nights stay required."))
 
