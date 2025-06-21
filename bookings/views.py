@@ -5,6 +5,7 @@ from datetime import date
 
 import after_response
 import stripe
+from django_htmx.http import trigger_client_event
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,11 +17,13 @@ from django.urls import reverse, reverse_lazy
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, DetailView, UpdateView
 from django_filters import views
 
 from apartments.models import Apartment
 from bookings.utils import booking_dates_assignment, get_next_prev_month
+from core.utils.permissions import login_required_htmx
 from home.models import PhoneSnippet
 
 from .filters import BookingsFilter
@@ -217,14 +220,29 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-@login_required(login_url="login")
-def delete_booking(request, pk):
-    """Delete booking."""
+# @login_required(login_url="login")
+# def delete_booking(request, pk):
+#     """Delete booking."""
 
-    if request.method == "POST":
-        booking_to_delete = get_object_or_404(Booking, id=pk)
-        booking_to_delete.delete()
-    return HttpResponseRedirect(reverse("bookings_app:bookings"))
+#     if request.method == "POST":
+#         booking_to_delete = get_object_or_404(Booking, id=pk)
+#         booking_to_delete.delete()
+#     return HttpResponseRedirect(reverse("bookings_app:bookings"))
+
+@login_required_htmx
+@require_http_methods(["DELETE"])
+def delete_booking(request, pk):
+    if request.htmx:
+        booking_to_delete = Booking.objects.filter(pk=pk).last()
+        if booking_to_delete:
+            booking_to_delete.delete()
+            resp = HttpResponse("")
+            msg = "Rezerwacja została usunięta."
+            trigger_client_event(resp, "bookingDeleted")
+            return trigger_client_event(resp, "showToast", {"msg": msg})
+    resp = HttpResponse(status=200)
+    return trigger_client_event(resp, "htmx:abort")
+
 
 def onlinebooking_without_payment(request, arrival=None, departure=None, pk=None):
     form = OnlineBookingDetailsForm(request=request)

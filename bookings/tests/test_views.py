@@ -179,7 +179,8 @@ class TestDeleteBooking:
     def test_delete_booking_succeed(self, booking, client, user):
         url = reverse("bookings_app:delete_booking", kwargs={"pk": booking.id})
         client.force_login(user)
-        client.post(url, follow=True)
+        headers = {"HTTP_HX_REQUEST": "true"}
+        client.delete(url, **headers, follow=True)
 
         assertTemplateUsed("bookings/bookings.html")
         assert Booking.objects.filter(id=booking.id).exists() is not True

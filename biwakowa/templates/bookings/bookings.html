@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 {% include "includes/nav.html" %}
-<main class="flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
+<main class="modal-wrapper flex flex-col items-center min-h-[calc(100dvh-55px)] w-full">
     <div class="flex items-center my-6 md:my-10 gap-3">
         <h1 class="text-2xl font-semibold text-center">Lista rezerwacji</h1>
         <button type="button" class="openModal btn-admin" data-toggle="modal" data-target="#notificationsModal">
@@ -50,7 +50,6 @@
         class="table-wrapper w-full relative overflow-x-auto lg:max-w-[1100px] md:max-w-[90%] px-2 mb-10 ">
          {% include "bookings/fragments/booking-table.html" %}
     </div>
-
 </main>
 <script src="{% static 'js/modal.js' %}"></script>
 <script>

@@ -51,8 +51,16 @@
                             </svg>
                             <span class="sr-only">Edytuj</span>
                         </a>
-                    <button type="button" class="openModal" data-toggle="modal"
-                        data-target="#deleteModal-{{ booking.id }}">
+                    <button type="button"
+                        hx-delete="{% url 'bookings_app:delete_booking' booking.id %}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML"
+                        confirm-swal="rezerwację
+                        <br>
+                        w Apartamencie {{ booking.apartment.name }}
+                        <br>
+                        od {{ booking.date_from|date:'d.m.y' }} do
+                        {{ booking.date_to|date:'d.m.y' }}?">
                         <svg class="w-6 h-6 inline-block fill-gray-700 mx-1">
                             <use xlink:href="{% static 'img/sprite.svg#trash' %}"
                                 href="{% static 'img/sprite.svg#trash' %}" />
@@ -60,7 +68,7 @@
                         <span class="sr-only">Usuń</span>
                     </button>
                     <!-- Delete modal -->
-                    <!-- <div class="modal hide" id="deleteModal-{{ booking.id }}" tabindex="-1"
+                    {% comment %} <div class="modal hide" id="deleteModal-{{ booking.id }}" tabindex="-1"
                         aria-labelledby="deleteModalLabel{{ booking.id }}" aria-hidden="true">
                         <div class="modal-dialog modal__content">
                             <div class="modal-content">
@@ -90,8 +98,8 @@
                                     </form>
                                 </div>
                             </div>
-                        </div> -->
-                    <!-- </div> -->
+                        </div>
+                    </div> {% endcomment %}
                 </div>
             </td>
         </tr>
