@@ -109,9 +109,16 @@ class ApartmentPage(MetadataPageMixin, Page):
         blank=True,
         verbose_name="Typ apartamentu",
     )
-    # TODO  remove null=True
 
     heading = models.CharField(_("heading"), max_length=50, null=True)
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        verbose_name="Zdjęcie nagłówkowe w tle",
+    )
     text_1 = RichTextField(_("text"), features=["bold"], default="")
     image_1 = models.ForeignKey(
         "wagtailimages.Image",
@@ -136,6 +143,7 @@ class ApartmentPage(MetadataPageMixin, Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("apartment_type"),
+        FieldPanel("header_image"),
         MultiFieldPanel(
             [
                 FieldPanel("heading"),

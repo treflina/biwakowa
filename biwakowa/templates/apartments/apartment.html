@@ -9,10 +9,15 @@
 {% block content %}
     <div class="page flex-col">
         {% include "includes/nav.html" %}
-        <header class="flex justify-center items-center bg-header h-64">
-            <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+        {% image page.header_image scale-100 as img %}
+        <header class="relative flex justify-center items-center bg-header h-64"
+        {% if page.header_image %}
+        style="background-image:  url('{{ img.url }}');" {% endif %}>
+            <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2 z-10"
+            >
                 Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>
             </h1>
+            <div class="absolute inset-0 w-full h-full bg-black opacity-40"></div>
         </header>
         <main class="bg-gray-50">
             <section id="description" class="apartment-description">

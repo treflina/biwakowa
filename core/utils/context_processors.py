@@ -11,5 +11,6 @@ def biwakowa_phone(request):
 def bank_account_number(request):
     bank_account = BankAccountNumberSnippet.objects.last()
     return {
-        "bank_account": bank_account,
+        "bank_account": bank_account.bank_account if bank_account else "",
+        "owner_name": bank_account.owner_name if bank_account else "",
     }

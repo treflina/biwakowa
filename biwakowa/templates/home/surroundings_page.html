@@ -10,12 +10,13 @@
 {% include 'includes/cookies.html' %}
 <div class="page flex-col mb-4">
     {% include "includes/nav.html" %}
-    {% image page.header_image original as img %}
+    {% image page.header_image scale-100 as img %}
     <header class="flex justify-center items-center bg-header2 h-64" {% if page.header_image %}
-        style="background-image:  url(' {{ img.url }}');" {% endif %}>
-        <h1 class="text-4xl sm:text-4xl md:text-5xl font-['Rozha_One']  text-center text-white p-2">
+        style="background-image:  url('{{ img.url }}');" {% endif %}>
+        <h1 class="text-4xl sm:text-4xl md:text-5xl font-['Rozha_One']  z-10 text-center text-white p-2">
             {{ page.title }}
         </h1>
+        <div class="absolute inset-0 w-full h-full bg-black opacity-30"></div>
     </header>
     <main class="surroundings flex flex-col justify-center items-center max-w-[1200px] mx-auto px-2">
         <div class="pt-8 pb-2 text-lg leading-relaxed">

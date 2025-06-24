@@ -15,6 +15,9 @@ from wagtailmetadata.models import MetadataPageMixin
 @register_snippet
 class BankAccountNumberSnippet(models.Model):
     bank_account = models.CharField(_("bank account number"), max_length=42)
+    owner_name = models.CharField(
+        "Właściciel rachunku", max_length=255, null=True, blank=True
+        )
 
     def __str__(self):
         return self.bank_account
