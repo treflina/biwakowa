@@ -76,7 +76,6 @@
         url("/static/img/sypialnialg.jpg") no-repeat;
     background-position: bottom;
     background-size: cover;
-    background-attachment: fixed;
 }
 
 .bg-header2 {

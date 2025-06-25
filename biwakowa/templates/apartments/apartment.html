@@ -10,7 +10,7 @@
     <div class="page flex-col">
         {% include "includes/nav.html" %}
         {% image page.header_image scale-100 as img %}
-        <header class="relative flex justify-center items-center bg-header h-64"
+        <header class="relative flex justify-center items-center bg-header lg:bg-fixed h-64"
         {% if page.header_image %}
         style="background-image:  url('{{ img.url }}');" {% endif %}>
             <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2 z-10"
