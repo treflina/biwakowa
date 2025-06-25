@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     #
     "after_response",
+    "anymail",
     "django_browser_reload",
     "django_dump_load_utf8",
     "django_filters",
@@ -203,7 +204,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILADMIN_BASE_URL = env("BASE_URL")
 
 # Allowed file extensions for documents in the document library.
 # This can be omitted to allow all files, but note that this may present a security risk
@@ -235,15 +236,21 @@ LOGIN_REDIRECT_URL = "/rezerwacje"
 
 ADMINS = [("Admin", env("ADMIN_EMAIL"))]
 ADMIN_EMAIL = env("ADMIN_EMAIL")
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = env("EMAIL_BACKEND")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Anymail settings for sending emails via Mailersend
+ANYMAIL = {
+    'MAILERSEND_API_TOKEN': env("MAILERSEND_API_TOKEN"),
+    "MAILERSEND_SENDER_DOMAIN": env("MAILERSEND_DOMAIN")
+}
 
 # for online booking with stripe payment
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")

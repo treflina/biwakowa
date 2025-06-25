@@ -254,18 +254,18 @@ def send_confirmation_email(booking, from_email):
 
 @after_response.enable
 def handle_sending_notifications_about_new_booking(booking):
-    from_email = settings.EMAIL_HOST_USER
+    from_email = settings.DEFAULT_FROM_EMAIL
     hotel_email = AdminEmail.objects.last()
 
     if hotel_email:
         send_email_about_booking_to_hotel(
             booking=booking,
             from_email=from_email,
-            hotel_email=hotel_email,
+            hotel_email=hotel_email.email,
         )
 
         send_webpush_notification_to_hotel(
-            booking=booking, hotel_email=hotel_email
+            booking=booking, hotel_email=hotel_email.email
         )
     send_confirmation_email(booking, from_email)
 

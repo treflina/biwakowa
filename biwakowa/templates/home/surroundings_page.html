@@ -11,7 +11,7 @@
 <div class="page flex-col mb-4">
     {% include "includes/nav.html" %}
     {% image page.header_image scale-100 as img %}
-    <header class="flex justify-center items-center bg-header2 h-64" {% if page.header_image %}
+    <header class="relative flex justify-center items-center bg-header2 h-64" {% if page.header_image %}
         style="background-image:  url('{{ img.url }}');" {% endif %}>
         <h1 class="text-4xl sm:text-4xl md:text-5xl font-['Rozha_One']  z-10 text-center text-white p-2">
             {{ page.title }}
