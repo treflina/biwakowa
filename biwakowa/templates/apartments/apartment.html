@@ -10,14 +10,15 @@
     <div class="page flex-col">
         {% include "includes/nav.html" %}
         {% image page.header_image scale-100 as img %}
-        <header class="relative flex justify-center items-center bg-header lg:bg-fixed h-64"
+        <header class="relative flex justify-center items-center bg-header
+        bg-center bg-cover lg:bg-fixed h-64"
         {% if page.header_image %}
-        style="background-image:  url('{{ img.url }}');" {% endif %}>
+        style="background:  url('{{ img.url }}');" {% endif %}>
             <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2 z-10"
             >
                 Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>
             </h1>
-            <div class="absolute inset-0 w-full h-full bg-black opacity-40"></div>
+            <div class="absolute inset-0 w-full h-full bg-black opacity-30"></div>
         </header>
         <main class="bg-gray-50">
             <section id="description" class="apartment-description">
@@ -126,8 +127,8 @@
                 <div data-aos="fade-up"
                      class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                     <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">
-                        Apartament nr {{ apartment1 }}
-                        - Galeria&nbsp;zdjęć
+                        {% if page.gallery_images1.count > 1 %}Apartament nr {{ apartment1 }}
+                        - {% endif %}Galeria&nbsp;zdjęć
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
@@ -147,6 +148,7 @@
                     {% endfor %}
 
                 </div>
+                {% if page.gallery_images1.count > 1 %}
                 <div data-aos="fade-up"
                      class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                     <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">
@@ -170,6 +172,7 @@
                         </a>
                     {% endfor %}
                 </div>
+                {% endif %}
             </section>
         </main>
         <div class="bg-gradient-to-tl to-gray-200 from-blue-200">{% include "includes/footer.html" %}</div>
