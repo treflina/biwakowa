@@ -236,7 +236,7 @@ LOGIN_REDIRECT_URL = "/rezerwacje"
 
 ADMINS = [("Admin", env("ADMIN_EMAIL"))]
 ADMIN_EMAIL = env("ADMIN_EMAIL")
-EMAIL_BACKEND = env("EMAIL_BACKEND")
+
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
@@ -246,11 +246,15 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-# Anymail settings for sending emails via Mailersend
-ANYMAIL = {
-    'MAILERSEND_API_TOKEN': env("MAILERSEND_API_TOKEN"),
-    "MAILERSEND_SENDER_DOMAIN": env("MAILERSEND_DOMAIN")
-}
+if env("DEVIL"):
+    EMAIL_BACKEND = env("EMAIL_BACKEND")
+    ANYMAIL = {
+        'MAILERSEND_API_TOKEN': env("MAILERSEND_API_TOKEN"),
+        "MAILERSEND_SENDER_DOMAIN": env("MAILERSEND_DOMAIN")
+    }
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 
 # for online booking with stripe payment
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")

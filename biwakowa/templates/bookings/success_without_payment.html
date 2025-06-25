@@ -7,12 +7,12 @@
         <h1 class="font-semibold text-xl sm:text-2xl mb-4">Wstępna rezerwacja przebiegła pomyślnie.</h1>
         <p class="text-lg">Dziękujemy za zarezerwowanie pobytu w&nbsp;naszym apartamencie!</p>
         <p class="text-lg">Prosimy o niezwłoczne dokonanie opłaty za zarezerwowany pobyt. Rezerwacja wstępna zostanie
-            anulowana po 24&nbsp;godzinach (nie dotyczy weekendów i świąt) w przypadku nieodnotowania wpłaty na nasze konto.</p>
+            anulowana po 24&nbsp;godzinach w przypadku nieodnotowania wpłaty na nasze konto (nie dotyczy weekendów i świąt).</p>
         <div class="flex flex-col text-left items-start gap-2 border-2 rounded-md px-2 py-4 md:px-8">
             <p class="text-lg"><span class="font-semibold">Dane do przelewu:</span></p>
             <p class="text-lg">Nr konta bankowego: <span class="font-semibold">{{bank_account}}</span></p>
             <p class="text-lg">Właściciel rachunku:</p>
-            <p class="text-lg font-semibold">Jarosław Duda, ul.&nbsp;Biwakowa&nbsp;4B, 46-045&nbsp;Turawa</p>
+            <p class="text-lg font-semibold">{{ owner_name }}</p>
             <p class="text-lg">Kwota: <span class="font-semibold">{{booking.total_price}} zł</span></p>
             <p class="text-lg">Tytułem: <span class="font-semibold">{{booking.guest}}, {{booking.date_from|date:"d.m."}}-{{booking.date_to|date:"d.m.y"}}, apartament {{booking.apartment.name}}</span></p>
         </div>

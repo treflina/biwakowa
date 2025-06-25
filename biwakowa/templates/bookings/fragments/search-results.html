@@ -48,18 +48,9 @@
                         łazienka z
                         prysznicem,
                         {% if apartment.floor == "0" %}
-                            taras
-                        {% else %}
-                            balkon
-                        {% endif %}
-                        .
+                            taras{% else %}balkon{% endif %}.
                         Położony na <span class="font-semibold">
-                        {% if apartment.floor == "0" %}
-                            parterze
-                        {% else %}
-                            I&nbsp;piętrze
-                        {% endif %}
-                    </span>.
+                        {% if apartment.floor == "0" %}parterze{% else %}I&nbsp;piętrze{% endif %}</span>.
                     <br>
                     Możliwość zakwaterowania
                     {% if apartment.apartment_type.type_name == "2-osobowy" %}
