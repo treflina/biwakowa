@@ -13,7 +13,7 @@
         <header class="relative flex justify-center items-center bg-header
         bg-center bg-cover lg:bg-fixed h-64"
         {% if page.header_image %}
-        style="background:  url('{{ img.url }}');" {% endif %}>
+        style="background:  url('{{ img.url }}'); background-position: center; background-size:cover;" {% endif %}>
             <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2 z-10"
             >
                 Apartamenty <span class="whitespace-nowrap">{{ page.apartment_type.type_name.0 }}-osobowe</span>
@@ -124,15 +124,16 @@
                 </div>
             </section>
             <section id="photogallery">
+                {% if page.gallery_images1.count > 0 %}
                 <div data-aos="fade-up"
                      class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                     <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">
-                        {% if page.gallery_images1.count > 1 %}Apartament nr {{ apartment1 }}
+                        {% if page.gallery_images2.count > 0 %}Apartament nr {{ apartment1 }}
                         - {% endif %}Galeria&nbsp;zdjęć
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
-                    {% for gallery_image in page.gallery_images1.all %}
+                    {% for gallery_image in page.gallery_images2.all %}
                         {% image gallery_image.image width-500 as img %}
                         {% image gallery_image.image original as img_full %}
                         <a href="{{img_full.url}}"
@@ -148,12 +149,13 @@
                     {% endfor %}
 
                 </div>
-                {% if page.gallery_images1.count > 1 %}
+                {% endif %}
+                {% if page.gallery_images2.count > 0 %}
                 <div data-aos="fade-up"
                      class="py-8 px-2 bg-gradient-to-tl to-gray-200  from-blue-200 ">
                     <h3 class="text-3xl my-6 font-['Rozha_One'] text-center">
-                        Apartament nr {{ apartment2 }}
-                        - Galeria&nbsp;zdjęć
+                        {% if page.gallery_images1.count > 0 %}Apartament nr {{ apartment2 }}
+                        - {% endif %}Galeria&nbsp;zdjęć
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
