@@ -133,7 +133,7 @@
                     </h3>
                 </div>
                 <div data-aos="fade-up" class="flexbin flexbin-margin">
-                    {% for gallery_image in page.gallery_images2.all %}
+                    {% for gallery_image in page.gallery_images1.all %}
                         {% image gallery_image.image width-500 as img %}
                         {% image gallery_image.image original as img_full %}
                         <a href="{{img_full.url}}"

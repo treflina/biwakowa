@@ -256,6 +256,10 @@ else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 
+SMS_TOKEN = env("SMS_TOKEN")
+HOTEL_PHONE_NUMBER = env("HOTEL_PHONE_NUMBER")
+
+
 # for online booking with stripe payment
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY_TEST")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY_TEST")

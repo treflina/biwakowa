@@ -1,5 +1,7 @@
 from calendar import Calendar
 import logging
+import requests
+import time
 from datetime import timedelta
 
 import after_response
@@ -256,6 +258,14 @@ def send_confirmation_email(booking, from_email):
 def handle_sending_notifications_about_new_booking(booking):
     from_email = settings.DEFAULT_FROM_EMAIL
     hotel_email = AdminEmail.objects.last()
+    url = settings.BASE_URL + str(
+        reverse("bookings_app:booking", kwargs={"pk": booking.id})
+    )
+    msg = (
+        f"Nowa rezerwacja apart. {booking.apartment.name} "
+        f"od {booking.date_from} do {booking.date_to}.\n"
+        f"Zobacz: {url}"
+    )
 
     if hotel_email:
         send_email_about_booking_to_hotel(
@@ -268,6 +278,65 @@ def handle_sending_notifications_about_new_booking(booking):
             booking=booking, hotel_email=hotel_email.email
         )
     send_confirmation_email(booking, from_email)
+    send_sms_with_retry(
+        from_name="Biwakowa_4B",
+        to_number=settings.HOTEL_PHONE_NUMBER,
+        message=msg
+    )
+
+
+SMS_API_URL = "https://api2.smsplanet.pl/sms"
+SMS_API_TOKEN = settings.SMS_TOKEN
+MAX_DURATION_SECONDS = 600
+INITIAL_WAIT = 5
+
+@after_response.enable
+def send_sms_with_retry(from_name, to_number, message):
+    start_time = time.time()
+    wait = INITIAL_WAIT
+
+    while True:
+        try:
+            response = requests.post(
+                SMS_API_URL,
+                headers={
+                    "Authorization": f"Bearer {SMS_API_TOKEN}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                data={
+                    "from": from_name,
+                    "to": to_number,
+                    "msg": message,
+                },
+                timeout=10,
+            )
+
+            if response.status_code == 200:
+                try:
+                    data = response.json()
+                    if "messageId" in data:
+                        break
+                    else:
+                        logger.error("Sending SMS failed: 200 OK but no messageId:", data)
+                except ValueError:
+                    logger.error("Invalid JSON in SMS API response.")
+                    data = {}
+
+            else:
+                logger.error(f"Sending SMS failed: HTTP {response.status_code}:", response.text)
+
+        except Exception as e:
+            logger.error(f"Sending SMS failed: {e}")
+
+        # Check if max time reached
+        if time.time() - start_time > MAX_DURATION_SECONDS:
+            logger.error("SMS sending failed. Gave up after 10 minutes.")
+            break
+
+        logger.info(f"SMS API: Retrying in {wait} seconds...")
+        time.sleep(wait)
+
+        wait = min(wait * 2, 60)
 
 
 def fulfill_order(session_id):
