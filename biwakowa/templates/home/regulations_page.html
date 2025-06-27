@@ -9,10 +9,24 @@
     {% include 'includes/cookies.html' %}
     <div class="page flex-col">
     {% include "includes/nav.html" %}
-    <header class="flex justify-center items-center bg-header2 h-64">
-        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2">
+    {% image page.header_image fill-1900x400 as img_large %}
+    {% image page.header_image fill-800x300 as img_medium %}
+    {% image page.header_image fill-480x300 as img_small %}
+    <header class="relative flex justify-center items-center h-64
+        {% if not page.header_image %}
+        bg-header2
+        {% endif %}">
+        <h1 class="text-5xl sm:text-5xl md:text-6xl font-['Rozha_One'] text-white text-center p-2 z-10">
         {{ page.heading }}
         </h1>
+        {% if page.header_image %}
+        <picture>
+            <source media='(min-width: 1024px)' srcset='{{img_large.url}}'>
+            <source media='(min-width: 640px)' srcset='{{img_medium.url}}'>
+            <img src='{{img_small.url}}' alt='{{img_small.alt}}' class='absolute inset-0 w-full h-full object-cover'>
+        </picture>
+        {% endif %}
+        <div class="absolute inset-0 w-full h-full bg-black opacity-30 z-0"></div>
     </header>
     <main class="regulations bg-gray-50 py-6 md:py-14 px-2 md:px-6 lg:px-10">
         <div class="max-w-6xl mx-auto list-decimal">

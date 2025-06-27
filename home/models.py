@@ -235,12 +235,21 @@ class RegulationsPage(MetadataPageMixin, Page):
     max_count = 2
 
     heading = models.CharField(_("heading"), max_length=50)
+    header_image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        verbose_name="Zdjęcie nagłówkowe w tle",
+    )
     content = RichTextField(_("text"), features=[
         "bold", "ol", "ul", "h2", "link"
         ], default="")
 
     content_panels = Page.content_panels + [
         FieldPanel("heading"),
+        FieldPanel("header_image"),
         FieldPanel("content")
     ]
 
