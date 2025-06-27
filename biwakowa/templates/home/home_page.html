@@ -125,7 +125,8 @@
                          width="{{ img.width }}"
                          height="{{ img.height }}"
                          alt="{{ page.image1_alt }}"
-                         class="w-full h-full object-cover object-center rounded-md z-10">
+                         class="w-full h-full object-cover object-center rounded-md z-10"
+                         loading="lazy">
                     </picture>
                 </div>
             </div>
@@ -142,7 +143,8 @@
                              width="{{ img_ap1.width }}"
                              height="{{ img_ap1.height }}"
                              alt="{{ page.image_ap1_alt }}"
-                             class="ssm:w-2/5 shrink-0 inline-block object-cover object-center">
+                             class="ssm:w-2/5 shrink-0 inline-block object-cover object-center"
+                             loading="lazy">
                         <div class="px-4 pt-4 pb-6 flex flex-col">
                             <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap1|richtext }}</h4>
                             <p>{{ page.description_ap1 }}</p>
@@ -158,7 +160,8 @@
                              width="{{ img_ap2.width }}"
                              height="{{ img_ap2.height }}"
                              alt="{{ page.image_ap2_alt }}"
-                             class="ssm:w-2/5 shrink-0  inline-block object-cover object-center">
+                             class="ssm:w-2/5 shrink-0  inline-block object-cover object-center"
+                             loading="lazy">
                         <div class="px-4 pt-4 pb-6 flex flex-col">
                             <h4 class="font-['Rozha_One'] text-2xl mb-4 mt-2">{{ page.heading_ap2|richtext }}</h4>
                             <p>{{ page.description_ap2 }}</p>
@@ -184,10 +187,11 @@
                    href="{{ img_full0.url }}"
                    data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
                 <img class="object-fit object-cover w-full h-full rounded-md"
-                     src="{{ img0.url }}"
-                     alt="{{ header_imgs.0.alt_attr }}"
-                     width="{{ img0.width }}"
-                     height="{{ img0.height }}">
+                    src="{{ img0.url }}"
+                    alt="{{ header_imgs.0.alt_attr }}"
+                    width="{{ img0.width }}"
+                    height="{{ img0.height }}"
+                    loading="lazy">
             </a>
             {% image lake_imgs.1.image width-500 as img1 %}
             {% image lake_imgs.1.image original as img_full1 %}
@@ -195,10 +199,11 @@
            href="{{ img_full1.url }}"
            data-fslightbox><span class="sr-only inline-block">Powiększ zdjęcie</span>
         <img class="object-fit object-cover w-full h-full rounded-md"
-             src="{{ img1.url }}"
-             alt="{{ header_imgs.1.alt_attr }}"
-             width="{{ img1.width }}"
-             height="{{ img1.height }}">
+            src="{{ img1.url }}"
+            alt="{{ header_imgs.1.alt_attr }}"
+            width="{{ img1.width }}"
+            height="{{ img1.height }}"
+            loading="lazy">
     </a>
 </div>
 <div class="h-48 sm:hidden md:h-auto md:basis-1/3 md:block">
@@ -208,10 +213,11 @@
    data-fslightbox
    href="{{ img_full2.url }}"><span class="sr-only inline-block">Powiększ zdjęcie</span>
 <img class="object-fit object-cover object-right w-full h-full rounded-md"
-     src="{{ img_full2.url }}"
-     alt="{{ header_imgs.2.alt_attr }}"
-     width="{{ img_full2.width }}"
-     height="{{ img_full2.height }}">
+    src="{{ img_full2.url }}"
+    alt="{{ header_imgs.2.alt_attr }}"
+    width="{{ img_full2.width }}"
+    height="{{ img_full2.height }}"
+    loading="lazy">
 </a>
 </div>
 <div class="h-[300px] sm:h-auto flex sm:basis-2/3 md:basis-1/3 grow-1">
