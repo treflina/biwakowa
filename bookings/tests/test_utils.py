@@ -149,7 +149,7 @@ def test_send_confirmation_email(booking_factory):
     assert len(mail.outbox) == 1
     assert mail.outbox[0].from_email == "test@example.com"
     assert mail.outbox[0].to == ["guest@example.com"]
-    assert mail.outbox[0].subject == "Potwierdzenie rezerwacji B4B"
+    assert mail.outbox[0].subject == "Potwierdzenie wstępnej rezerwacji B4B"
 
 
 @pytest.mark.parametrize(

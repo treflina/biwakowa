@@ -3,75 +3,98 @@
 {% load static %}
 {% block content %}
     {% include "includes/nav.html" %}
-    <main class="relative flex flex-col items-center min-h-[calc(100dvh-55px)] w-full bg-gradient-to-tl to-gray-300 from-blue-300">
-        <div class="p-2 bg-gray-50 rounded-md m-2 my-6 pb-8 sm:m-6 sm:px-6 md:px-10 max-w-xl lg:max-w-5xl md:w-3/4">
-            <h1 class="text-2xl text-center font-semibold my-6">
+    <main class="relative flex flex-col items-center min-h-[calc(100dvh-55px)] w-full bg-gradient-to-tl to-gray-300 from-blue-300 px-2 md:px-10">
+        <div class="bg-gray-50 rounded-md mx-2 my-6 sm:m-6 pt-6 pb-10 px-2 sm:px-6 md:px-10  w-full max-w-[1200px]">
+            <h1 class="text-2xl text-center font-semibold mb-6 mt-2">
                 {% if updating %}
                     Edytuj rezerwację
                 {% else %}
                     Nowa rezerwacja
                 {% endif %}
             </h1>
-            {% for error in form.non_field_errors %}<div class="text-red-600 my-2 text-center" role="alert">{{ error }}</div>{% endfor %}
+            {% for error in form.non_field_errors %}<div class="text-red-600 text-center font-semibold mb-2" role="alert">{{ error }}</div>{% endfor %}
             <form method="post"
-                  class="flex flex-wrap gap-3 md:gap-5 lg:gap-10 w-full justify-center">
+                  class="flex flex-col flex-wrap gap-3 w-full mt-4">
                 {% csrf_token %}
-                <div class="flex flex-col gap-5">
-                    <div class="flex flex-row flex-wrap sm:no-wrap justify-around w-full gap-3">
-                        <div class="flex flex-col w-full">
+                    <div class="flex flex-row flex-wrap gap-2 md:gap-4 w-full justify-between">
+                        <div class="flex flex-col grow w-full sm:w-auto">
                             <label for="id_apartment">Apartament</label>
                             {{ form.apartment }}
                         </div>
-                        <div class="flex flex-row flex-wrap gap-2 w-full justify-between">
-                            <div class="flex flex-col basis-1 shrink-1 min-w-[47%]">
-                                <label for="id_date_from">Zameldowanie</label>
-                                {{ form.date_from }}
-                            </div>
-                            <div class="flex flex-col basis-1 shrink-1 min-w-[47%]">
-                                <label for="id_date_to">Wymeldowanie</label>
-                                {{ form.date_to }}
-                            </div>
+                        <div class="flex flex-col grow">
+                            <label for="id_date_from">Zameldowanie</label>
+                            {{ form.date_from }}
+                        </div>
+                        <div class="flex flex-col grow">
+                            <label for="id_date_to">Wymeldowanie</label>
+                            {{ form.date_to }}
                         </div>
                     </div>
-                    <div class="flex flex-col gap-3">
-                        <div class="flex flex-col w-full">
-                            <label for="id_guest">Dane gościa</label>
-                            {{ form.guest }}
+                    <div class="flex flex-col w-full">
+                        <label for="id_guest">Dane gościa</label>
+                        {{ form.guest }}
+                    </div>
+                    <div class="flex flex-wrap justify-between w-full gap-2 lg:gap-4">
+                        <div class="flex flex-col grow">
+                            <label for="id_email">E-mail</label>
+                            {{ form.email }}
                         </div>
-                        <div class="flex flex-wrap justify-between w-full gap-2">
-                            <div class="flex flex-col w-full">
-                                <label for="id_email">E-mail</label>
-                                {{ form.email }}
-                            </div>
-                            <div class="flex flex-col w-full">
-                                <label for="id_phone">Telefon</label>
-                                {{ form.phone }}
-                            </div>
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <label for="id_guest">Adres</label>
-                            {{ form.address }}
+                        <div class="flex flex-col grow">
+                            <label for="id_phone">Telefon</label>
+                            {{ form.phone }}
                         </div>
                     </div>
-                    <div class="flex flex-col gap-5 ">
-                        <div class="flex flex-row gap-3">
-                            <div class="flex flex-col w-full justify-between">
-                                <label for="id_total_price">Cena za pobyt</label>
-                                {{ form.total_price }}
-                            </div>
-                            <div class="flex w-full items-center gap-2 justify-center">
-                                {{ form.paid }}
-                                <label for="id_paid">Zapłacone</label>
-                            </div>
-                        </div>
-                        <div class="flex flex-col w-full">
-                            <label for="id_notes">Dodatkowe informacje</label>
-                            {{ form.notes }}
-                        </div>
-                        <button class="btn-admin uppercase" type="submit" value="Dodaj">Gotowe</button>
+                    <div class="flex flex-col w-full">
+                        <label for="id_guest">Adres</label>
+                        {{ form.address }}
                     </div>
-                </div>
+                    <div class="flex flex-row gap-4 flex-wrap w-full">
+                        <div class="flex flex-col grow">
+                            <label for="id_total_price">Cena za pobyt</label>
+                            {{ form.total_price }}
+                        </div>
+                        <div class="flex flex-col grow">
+                            <label for="id_status">Status</label>
+                            {{ form.status }}
+                        </div>
+                        {% if updating %}
+                        <div class="flex flex-col grow">
+                            <label for="id_status">Powiadomiono:</label>
+                            {{ form.notification }}
+                        </div>
+                        {% endif %}
+                        <div class="flex flex-col grow">
+                            <label for="id_paid">Zapłacone</label>
+                            {{ form.paid }}
+                        </div>
+                    </div>
+                    <div class="flex flex-col w-full">
+                        <label for="id_notes">Dodatkowe informacje</label>
+                        {{ form.notes }}
+                    </div>
+                    <button class="btn-admin uppercase w-64 max-w-full ml-auto mt-2" type="submit" value="Dodaj">Gotowe</button>
             </form>
         </div>
     </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const statusField = document.getElementById("id_status");
+            const notificationField = document.getElementById("id_notification");
+
+            function toggleNotificationField() {
+                const status = statusField.value;
+                if (status === "confirmed" || status === "cancelled") {
+                    notificationField.disabled = false;
+                    notificationField.style.backgroundColor = "white";
+                } else {
+                    notificationField.disabled = true;
+                    notificationField.value = "no";
+                    notificationField.style.backgroundColor = "#f3f3f3";
+                }
+            }
+
+            statusField.addEventListener("change", toggleNotificationField);
+            toggleNotificationField();
+        });
+        </script>
 {% endblock %}

@@ -60,6 +60,9 @@ class BookingFactory(factory.django.DjangoModelFactory):
     date_to = factory.LazyAttribute(lambda o: o.date_from + o.duration)
     total_price = 0
     paid = False
+    status = "pending"
+    cancellation_email_sent = False
+    confirmation_email_sent = False
     address = factory.LazyAttribute(lambda _: faker.address())
     notes = ""
     stripe_checkout_id = None

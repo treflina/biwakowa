@@ -243,14 +243,14 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-if env("DEVIL"):
-    EMAIL_BACKEND = env("EMAIL_BACKEND")
-    ANYMAIL = {
-        'MAILERSEND_API_TOKEN': env("MAILERSEND_API_TOKEN"),
-        "MAILERSEND_SENDER_DOMAIN": env("MAILERSEND_DOMAIN")
-    }
-else:
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# if env("DEVIL"):
+#     EMAIL_BACKEND = env("EMAIL_BACKEND")
+#     ANYMAIL = {
+#         'MAILERSEND_API_TOKEN': env("MAILERSEND_API_TOKEN"),
+#         "MAILERSEND_SENDER_DOMAIN": env("MAILERSEND_DOMAIN")
+#     }
+# else:
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 
 SMS_TOKEN = env("SMS_TOKEN")

@@ -16,12 +16,13 @@ class BookingManager(models.Manager):
             apartment__id=apartment.id,
             date_from__lte=month_end,
             date_to__gte=month_start
-            )
+            ).exclude(status='cancelled')
 
     def bookings_periods(self, apartment, arrival, departure):
         result = self.filter(
             Q(apartment__id=apartment.id)
             & Q(date_from__lt=departure)
             & Q(date_to__gt=arrival)
-        )
+            ).exclude(status='cancelled')
+
         return result

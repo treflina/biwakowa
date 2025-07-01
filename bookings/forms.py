@@ -58,6 +58,28 @@ def validate_arrival_and_departure_dates(arrival, departure):
 
 
 class BookingBaseForm(forms.ModelForm):
+
+    YES_NO_CHOICES = (
+        # ('none', '-----'),
+        ('yes', 'Tak'),
+        ('no', 'Nie'),
+    )
+
+    paid = forms.TypedChoiceField(
+        required=False,
+        coerce=lambda x: x =='True',
+        choices=((False, 'Nie'), (True, 'Tak')), widget=Select(
+        attrs={"class": "rounded-md"})
+        )
+    notification = forms.ChoiceField(
+        choices=YES_NO_CHOICES,
+        label='Wysłano powiadomienie',
+        required=False,
+        widget=Select(
+            attrs={"class": "rounded-md"}
+        )
+    )
+
     class Meta:
         model = Booking
         fields = [
@@ -69,6 +91,8 @@ class BookingBaseForm(forms.ModelForm):
             "email",
             "address",
             "total_price",
+            "status",
+            "notification",
             "paid",
             "notes",
         ]
@@ -107,12 +131,13 @@ class BookingBaseForm(forms.ModelForm):
             "address": TextInput(
                 attrs={"class": "rounded-md", "placeholder": "Adres"}
             ),
+
             "total_price": NumberInput(
                 attrs={
                     "class": "rounded-md",
                 }
             ),
-            "paid": CheckboxInput(
+            "status": Select(
                 attrs={
                     "class": "rounded-md",
                 }
@@ -126,13 +151,88 @@ class BookingBaseForm(forms.ModelForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance:
+            if instance.status == "confirmed":
+                self.fields['notification'].choices = self.YES_NO_CHOICES
+                if instance.confirmation_email_sent:
+                    self.fields['notification'].initial = 'yes'
+                else:
+                    self.fields['notification'].initial = 'no'
+
+            elif instance.status == "cancelled":
+                self.fields['notification'].choices = self.YES_NO_CHOICES
+                if instance.cancellation_email_sent:
+                    self.fields['notification'].initial = 'yes'
+                else:
+                    self.fields['notification'].initial = 'no'
+            else:
+                self.fields['notification'].widget.attrs['style'] = "background-color: #f3f3f3;"
+                self.fields['notification'].initial = 'no'
+        else:
+            self.fields['notification'].initial = 'no'
+            self.fields['notification'].widget.attrs['disabled'] = True
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        notification = self.cleaned_data.get('notification')
+
+        if instance.status == "confirmed":
+            instance.confirmation_email_sent = (notification == 'yes')
+            instance.cancellation_email_sent = False
+        elif instance.status == "cancelled":
+            instance.cancellation_email_sent = (notification == 'yes')
+            instance.confirmation_email_sent = False
+        else:  # pending
+            instance.confirmation_email_sent = False
+            instance.cancellation_email_sent = False
+
+        if commit:
+            instance.save()
+        return instance
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.fields['notification'].widget.attrs.get('disabled'):
+            cleaned_data['notification'] = 'no'
+
+        notification = cleaned_data.get('notification')
+        if not notification:
+            cleaned_data['notification'] = 'no'
+        return cleaned_data
+
+    #     status = cleaned_data.get("status")
+    #     notification = cleaned_data.get("notification")
+
+    #     if not status or not notification or notification == 'none':
+    #         return cleaned_data
+
+    #     if status == "confirmed" and notification == "cancellation":
+    #         raise ValidationError(
+    #             "Nie można zapisać powiadomienia o anulowaniu przy rezerwacji o statusie 'potwierdzone'"
+    #             )
+
+    #     if status == "cancelled" and notification == "confirmation":
+    #         raise ValidationError(
+    #             "Nie można zapisać powiadomienia o potwierdzeniu przy rezerwacji o statusie 'anulowane'"
+    #             )
+
+    #     if status == "pending" and (
+    #         notification == "cancellation" or notification == "confirmation"
+    #     ):
+    #         raise ValidationError(
+    #             "Nie można zapisać powiadomienia o potwierdzeniu ani anulowaniu przy rezerwacji o statusie 'oczekuje'."
+    #         )
+
 
 class BookingForm(BookingBaseForm):
     def clean(self):
-        super().clean()
-        date_from = self.cleaned_data.get("date_from")
-        date_to = self.cleaned_data.get("date_to")
-        apartment = self.cleaned_data.get("apartment")
+        cleaned_data = super().clean()
+        date_from = cleaned_data.get("date_from")
+        date_to = cleaned_data.get("date_to")
+        apartment = cleaned_data.get("apartment")
         if date_from and date_to:
             if date_from >= date_to:
                 raise ValidationError(
@@ -145,17 +245,19 @@ class BookingForm(BookingBaseForm):
                 raise ValidationError(
                     _("There is already a booking in the given date range.")
                 )
+            return cleaned_data
 
 
 class BookingUpdateForm(BookingBaseForm):
     def clean(self):
-        super().clean()
-        date_from = self.cleaned_data.get("date_from")
-        date_to = self.cleaned_data.get("date_to")
+        cleaned_data = super().clean()
+        date_from = cleaned_data.get("date_from")
+        date_to = cleaned_data.get("date_to")
         if date_from and date_to and date_from >= date_to:
             raise ValidationError(
                 _("Start date cannot be later or the same as end date")
             )
+        return cleaned_data
 
 
 class OnlineBookingForm(forms.Form):
@@ -258,7 +360,7 @@ class OnlineBookingDetailsForm(forms.Form):
                 Q(apartment__id=apartment_id)
                 & Q(date_to__gt=arrival)
                 & Q(date_from__lt=departure)
-            )
+            ).exclude(status="cancelled")
 
             if session_email:
                 qs_check = qs.exclude(

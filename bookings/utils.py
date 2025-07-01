@@ -233,11 +233,16 @@ def send_confirmation_email(booking, from_email):
     try:
         hotel_phone = PhoneSnippet.objects.last()
         bank_account = BankAccountNumberSnippet.objects.last()
-        subject = "Potwierdzenie rezerwacji B4B"
+        subject = "Potwierdzenie wstępnej rezerwacji B4B"
         html_message = render_to_string(
             # "bookings/confirmation-email.html",
             "bookings/confirmation-email-no-payment.html",
-            {"booking": booking, "phone": hotel_phone, "bank_account": bank_account},
+            {
+            "booking": booking,
+            "phone": hotel_phone,
+            "bank_account": bank_account,
+            "url": settings.BASE_URL
+            },
         )
         plain_message = strip_tags(html_message)
         to = booking.email
@@ -253,6 +258,45 @@ def send_confirmation_email(booking, from_email):
         error_msg = f"Confirmation email not sent for {booking}. {repr(e)}"
         handle_error_notification(error_subj, error_msg, email=False)
 
+
+def send_final_confirmation_email(booking, action):
+    hotel_email = AdminEmail.objects.last()
+    hotel_phone = PhoneSnippet.objects.last()
+
+    if not hotel_email or not booking.email:
+        raise ValueError("Brakuje adresu e-mail nadawcy lub odbiorcy.")
+
+    if action == "confirm":
+        template = "bookings/confirmation-final-email.html"
+        subject = "Rezerwacja w Apartamenty Biwakowa 4B"
+    elif action == "cancel":
+        template = "bookings/cancellation-email.html"
+        subject = "Anulowanie rezerwacji w Apartamenty Biwakowa 4B"
+    else:
+        raise ValueError(f"Nieznane działanie: {action}")
+
+    try:
+        html_message = render_to_string(template,
+            {
+            "booking": booking,
+            "phone": hotel_phone,
+            "url": settings.BASE_URL
+        },
+        )
+        plain_message = strip_tags(html_message)
+        to = booking.email
+        send_mail(
+            subject,
+            plain_message,
+            hotel_email.email,
+            [to],
+            html_message=html_message,
+        )
+    except Exception as e:
+        error_subj = "Sending final confirmation email failed"
+        error_msg = f"Final Confirmation email not sent for {booking}. {repr(e)}"
+        handle_error_notification(error_subj, error_msg, email=False)
+        raise
 
 @after_response.enable
 def handle_sending_notifications_about_new_booking(booking):

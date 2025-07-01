@@ -3,7 +3,8 @@ from django.urls import path
 from .views import (
     BookingCreateView, BookingDetailView, BookingsListView, BookingUpdateView,
     UpcomingBookingsListView, booking_search, calendars, cancel,
-    delete_booking, onlinebooking, onlinebooking_without_payment, stripe_webhook, success,
+    delete_booking, onlinebooking, onlinebooking_without_payment,
+    send_final_status_email_view, stripe_webhook, success,
     success_without_payment
 )
 
@@ -42,6 +43,7 @@ urlpatterns = [
         name="onlinebooking_without_payment",
     ),
     path("sukces/", success_without_payment, name="success_without_payment"),
+    path("email_status/<pk>/", send_final_status_email_view, name="email_status"),
     # views for online payment
     # path(
     #     "rezerwacja/<arrival>/<departure>/<pk>/",

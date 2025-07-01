@@ -122,12 +122,12 @@ import Swal from "sweetalert2";
     });
 
     document.addEventListener("showToast", function (evt) {
-        const message = evt.detail.msg;
-        const bcg = evt.detail.err && "rgb(254 226 226)";
+        const { msg, err } = evt.detail || {};
+        const isError = Boolean(err);
 
         Toast.fire({
-            background: bcg || "#e0f6e2",
-            text: message || "Data has been successfully changed.",
+            background: isError ? "rgb(254 226 226)" : "#e0f6e2",
+            text: msg || err || "Data has been successfully changed.",
         });
     });
 })();

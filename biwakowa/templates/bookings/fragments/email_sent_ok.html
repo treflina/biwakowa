@@ -1,0 +1,11 @@
+{% load static %}
+<p class="inline-block {% if action == 'cancel' %}fill-red-700 {% elif action == 'confirm' %} fill-green-500 {% endif %}">
+    <svg class="w-6 h-6 inline-block">
+        <use xlink:href="{% static 'img/sprite.svg#check2' %}" href="{% static 'img/sprite.svg#check2' %}" />
+    </svg>
+    {% if action == 'cancel' %}
+    <span class="sr-only">Powiadomiono o anulowaniu rezerwacji</span>
+    {% elif action == 'confirm' %}
+    <span class="sr-only">Powiadomiono o potwierdzeniu rezerwacji</span>
+    {% endif %}
+</p>

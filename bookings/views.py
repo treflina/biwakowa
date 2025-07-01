@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
@@ -35,6 +36,7 @@ from .models import Booking
 from .utils import (
     WebhookResponse, calculated_price, fulfill_order, get_available_apartments,
     handle_error_notification, handle_sending_notifications_about_new_booking,
+    send_final_confirmation_email
 )
 
 logger = logging.getLogger("django")
@@ -50,7 +52,7 @@ class BookingsListView(LoginRequiredMixin, views.FilterView):
     login_url = reverse_lazy("login")
     filterset_class = BookingsFilter
     paginate_by = 20
-    ordering = ["-date_from"]
+    ordering = ["-date_from", "apartment"]
 
     def get_template_names(self):
         if self.request.htmx and not self.request.htmx.history_restore_request:
@@ -242,6 +244,47 @@ def delete_booking(request, pk):
             return trigger_client_event(resp, "showToast", {"msg": msg})
     resp = HttpResponse(status=200)
     return trigger_client_event(resp, "htmx:abort")
+
+@login_required_htmx
+@require_http_methods(["POST"])
+def send_final_status_email_view(request, pk):
+    if not request.htmx:
+        return HttpResponse(status=400)
+
+    booking = Booking.objects.filter(pk=pk).last()
+    if not booking:
+        return trigger_client_event(HttpResponse(status=404), "showToast", {
+            "err": "Rezerwacja nie została znaleziona."
+        })
+
+    if booking.status == "confirmed":
+        booking.confirmation_email_sent = True
+        booking.cancellation_email_sent = False
+        action = "confirm"
+    elif booking.status == "cancelled":
+        booking.confirmation_email_sent = False
+        booking.cancellation_email_sent = True
+        action = "cancel"
+    else:
+        return trigger_client_event(HttpResponse(status=400), "showToast", {
+            "err": """Nie można wysłać powiadomienia dla rezerwacji o statusie innym
+niż 'potwierdzona' lub 'anulowana'."""
+        })
+
+    try:
+        send_final_confirmation_email(booking, action=action)
+        booking.save()
+    except Exception as e:
+        msg = f"Błąd podczas wysyłania powiadomienia: {e}"
+        return trigger_client_event(HttpResponse(status=500), "showToast", {"err": msg})
+
+    html = render_to_string(
+        "bookings/fragments/email_sent_ok.html",
+        {"action": action}
+    )
+    return trigger_client_event(HttpResponse(html), "showToast", {
+        "msg": "Powiadomienie o rezerwacji zostało wysłane."
+    })
 
 
 def onlinebooking_without_payment(request, arrival=None, departure=None, pk=None):

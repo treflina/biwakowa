@@ -7,16 +7,19 @@ from .managers import BookingManager
 class Booking(models.Model):
     TRANSACTION_STATUS = [
         ("unpaid", _("unpaid")),
-        (
-            "success",
-            _("success"),
-        ),
+        ("success",_("success"),),
         ("failed", _("failed")),
         ("pending", _("pending")),
     ]
 
+    BOOKING_STATUS = [
+        ("pending", _("pending")),
+        ("confirmed", _("confirmed")),
+        ("cancelled", _("cancelled")),
+    ]
+
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    # TODO remove null True
+    # TODO remove null True,
     apartment = models.ForeignKey(
         "apartments.Apartment", on_delete=models.PROTECT
     )
@@ -35,7 +38,20 @@ class Booking(models.Model):
     total_price = models.DecimalField(
         _("total price"), decimal_places=2, max_digits=7, null=True, blank=True
     )
-    paid = models.BooleanField(_("paid"), default=False)
+    paid = models.BooleanField(_("paid"), default=False, blank=True)
+    status = models.CharField(
+        "status",
+        max_length=255,
+        default="pending",
+        blank=True,
+        choices=BOOKING_STATUS,
+    )
+    cancellation_email_sent = models.BooleanField(
+        _("cancellation email sent"), default=False
+        )
+    confirmation_email_sent = models.BooleanField(
+        _("confirmation email sent"), default=False
+    )
     notes = models.TextField(
         _("additional information"), null=True, blank=True
     )
@@ -48,6 +64,7 @@ class Booking(models.Model):
         default="unpaid",
         choices=TRANSACTION_STATUS,
     )
+
     objects = BookingManager()
 
     @property
