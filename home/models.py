@@ -185,6 +185,7 @@ class HomePage(MetadataPageMixin, Page):
         context = super().get_context(request, *args, **kwargs)
         context["header_imgs"] = self.header_images.all()
         context["lake_imgs"] = self.lake_images.all()
+        context["hotel_email"] = AdminEmail.objects.last()
         return context
 
 
