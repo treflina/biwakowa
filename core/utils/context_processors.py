@@ -1,4 +1,4 @@
-from home.models import BankAccountNumberSnippet, PhoneSnippet
+from home.models import AdminEmail, BankAccountNumberSnippet, PhoneSnippet
 
 
 def biwakowa_phone(request):
@@ -7,6 +7,11 @@ def biwakowa_phone(request):
         "phone": phone,
     }
 
+def biwakowa_email(request):
+    email = AdminEmail.objects.last()
+    return {
+        "hotel_email": email,
+    }
 
 def bank_account_number(request):
     bank_account = BankAccountNumberSnippet.objects.last()

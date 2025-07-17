@@ -88,6 +88,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "core.utils.context_processors.biwakowa_phone",
+                "core.utils.context_processors.biwakowa_email",
                 "core.utils.context_processors.bank_account_number",
             ],
         },
