@@ -13,9 +13,9 @@ class Booking(models.Model):
     ]
 
     BOOKING_STATUS = [
-        ("pending", _("pending")),
-        ("confirmed", _("confirmed")),
-        ("cancelled", _("cancelled")),
+        ("pending", "niepotwierdzono"),
+        ("confirmed", "potwierdzono"),
+        ("cancelled", "anulowano"),
     ]
 
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)

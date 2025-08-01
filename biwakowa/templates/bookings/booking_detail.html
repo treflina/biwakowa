@@ -43,12 +43,12 @@
                 {% if booking.total_price %}{{ booking.total_price }} zł{% endif %}
             </p>
             <p>
-                <span class="font-semibold">Adres:</span>
-                {% if booking.address %}{{ booking.address }}{% endif %}
-            </p>
-            <p>
                 <span class="font-semibold">Status:</span>
-                {{ booking.status }}
+                {% if booking.status == "pending" %} niepotwierdzono
+                {% elif booking.status == "confirmed" %} potwierdzono
+                {% elif booking.status == "cancelled" %} anulowano
+                {% else %} {{booking.status}}
+                {% endif %}
             </p>
             <p>
                 <span class="font-semibold">Zapłacone:</span>
