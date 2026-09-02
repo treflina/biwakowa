@@ -34,24 +34,24 @@ def daterange(start_date, end_date, end_include=0):
 
 def get_price(apartment, date):
     """Get apartment price for a given date"""
-    Apartment = apps.get_model("apartments", "Apartment")
-    Price = apps.get_model("apartments", "Price")
+
+    Price = apps.get_model("base", "Price")
 
     price_obj = (
-        Price.objects.order_by("start_date")
+        Price.objects.order_by("-start_date")
         .filter(
             Q(apartment_type=apartment.apartment_type)
             & (
-                Q(start_date__lte=date) & Q(end_date__gte=date)
-                | Q(start_date__lte=date) & Q(end_date=None)
+                (Q(start_date__lte=date) & Q(end_date__gte=date))
+                | (Q(start_date__lte=date) & Q(end_date__isnull=True))
             )
         )
-        .last()
+        .first()
     )
     if price_obj:
         price_per_day = price_obj.amount
     else:
-        price_per_day = Apartment.objects.get(id=apartment.id).base_price
+        price_per_day = apartment.base_price
 
     return price_per_day
 
